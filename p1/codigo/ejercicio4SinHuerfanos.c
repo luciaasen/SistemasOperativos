@@ -19,10 +19,10 @@ int main(){
             printf("Este proceso es el %d con padre %d\n",actual,padre);
         }
     }
-    /*El proceso con mas hijos tiene 3, con esto nos aseguramos que todos*/
+    /*El proceso con mas hijos tiene NUM_PROC, con esto nos aseguramos que todos*/
     /*los procesos finalizan antes de terminar la ejecucion de cualquiera*/
-    wait(NULL);
-    wait(NULL);
-    wait(NULL);
+    for(i=0;i<NUM_PROC;i++){
+        wait(NULL);
+    }
     exit(EXIT_FAILURE);
 }
