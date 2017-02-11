@@ -20,7 +20,7 @@ int main(){
         }
     }
     /*El proceso con mas hijos tiene 3, con esto nos aseguramos que todos*/
-    /*los procesos finalizan antes de terminar la ejecucion de cualquier*/
+    /*los procesos finalizan antes de terminar la ejecucion de cualquiera*/
     wait(NULL);
     wait(NULL);
     wait(NULL);
