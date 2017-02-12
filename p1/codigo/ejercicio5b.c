@@ -19,8 +19,8 @@ int main (void){
         }
     }
     /*Esperamos a que los procesos hijo para cierren para cerrar el padre*/
-    wait(NULL);
-    wait(NULL);
-    wait(NULL);
+    for(i=0;i<NUM_PROC ;i++){
+        wait(NULL);
+    }
     exit(EXIT_SUCCESS);
 }
