@@ -1,4 +1,4 @@
-all: ejercicio4a ejercicio4b ejercicio4SinHuerfanos ejercicio5a ejercicio5b ejercicio6 ejercicio8
+all: ejercicio4a ejercicio4b ejercicio4SinHuerfanos ejercicio5a ejercicio5b ejercicio6 ejercicio8 ejercicio9
 
 ejercicio4a: ejercicio4a.c
 	gcc -o ejercicio4a $^
@@ -21,4 +21,6 @@ ejercicio6: ejercicio6.c
 ejercicio8: ejercicio8.c
 	gcc -o ejercicio8 $^
 
+ejercicio9: ejercicio9.c
+	gcc -o ejercicio9 $^
 
