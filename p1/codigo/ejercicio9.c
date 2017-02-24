@@ -9,10 +9,17 @@
 
 void operation(int x, int y, int op,int handle);
 
+
+/**
+*   Esta es la funcion principal del ejercicio 9.
+*   Pedira por pantalla dos valores que se les seran
+*   pasados a sus hijos para realizar ciertas operaciones. Una vez realizadas
+*   imprimiran el resultado de la operacion.
+*
+*   Los numeros han de ser enteros n tal que : 0<n<10
+*/
 int main (int argc, char *argv[]){
-    /*
-        Two pipes for each child
-    */
+    /*Two pipes for each child*/
     int pipes[2*2*NUM];
     int i,j,x,y;
     char argus[4];
@@ -69,7 +76,15 @@ int main (int argc, char *argv[]){
 
 }
 
-/* devuelve el resultado de la operacion indicada*/
+/**
+*   Devuelve el resultado (string) de la operacion indicada a traves del handle
+*   dado.
+*   @param x es uno de los operandos.
+*   @param y es el segundo operando.
+*   @param op indica la operacion.
+*   @param handle es el descriptor del fichero al que se enviara el string.
+*
+*/
 void operation(int x, int y, int op,int handle){
     char s[140];
     switch(op){
