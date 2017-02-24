@@ -3,21 +3,25 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define NUM_PROC 3
+#define NUM_PROC    3
 
-int main (void){
-    int pid=0;
+/**
+ * Un proceso padre genera un hijo que a su vez genera otro y asi NUM_PROC
+ * veces, cada proceso hijo imprimira su informacion.
+ */
+int main(void){
+    int pid = 0;
     int i;
     /*Agregamos la condicion de que un proceso no tenga hijo para mantenerse*/
-    for (i=0; i < NUM_PROC && pid==0; i++){
-        if ((pid=fork()) <0 ){
+    for (i = 0; i < NUM_PROC && pid == 0; i++) {
+        if ((pid = fork()) < 0) {
             printf("Error al emplear fork\n");
             exit(EXIT_FAILURE);
-        }else if (pid ==0){
-            printf("Este es el proceso %d con padre %d\n",getpid(),getppid());
+        }else if (pid == 0) {
+            printf("Este es el proceso %d con padre %d\n", getpid(), getppid());
         }
     }
-    /*Esperamos al proceso hijo para cerrar el proceso padre*/
+    /*Cada proceso espera a su hijo para cerrarse*/
     wait(NULL);
     exit(EXIT_SUCCESS);
 }
