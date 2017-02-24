@@ -24,6 +24,7 @@ int main(int argc, char**argv){
     }
 
     i = 0;
+    pflag = 1;
     do{
         f[i] = fork();
 
@@ -32,7 +33,10 @@ int main(int argc, char**argv){
             return -1;
         }else if(f[i] == 0){
             pflag = 0;
-            ret = llama_exec(argv[i + 1], argv[argc - 1]
+            ret = llama_exec(argv[i + 1], argv[argc - 1]);
+            if(ret < 0){
+                perror("Llamada a exec fallida.\n");
+            }
         }
         i++;
     }while( (i < argc-2) && (pflag==1));
@@ -44,22 +48,28 @@ int main(int argc, char**argv){
 }
 
 int llama_exec(char *file, char *opcion){
-    char lista[2];
+    char *lista[2];
     if(file == NULL || opcion == NULL){
         return -1;
     }
-    switch(opcion){
-        case "-l":
-            return  execl(file, NULL);
-        case "-lp":
-            return execlp(file, NULL);
-        case "-v":
-            lista[0] = file;
-            lista[1] = NULL;
-            return execv(file, lista);
-        case "-vp":
-            lsta[0] = file;
-            lista[1] = NULL;
-            return execv(file, lista);
-    }
 
+    if(strcmp("-l", opcion) == 0){
+        return  execl(file, file, (char*)NULL);
+    
+    }else if (strcmp("-lp", opcion) == 0){
+        return execlp(file, file, (char*)NULL);
+
+    }else if(strcmp("-v", opcion) == 0){
+        lista[0] = file;
+        lista[1] = NULL;
+        return execv(file, lista);
+
+    }else if(strcmp("-lp", opcion) == 0){
+        lista[0] = file;
+        lista[1] = NULL;
+        return execvp(file, lista);
+
+    }else{
+        perror("Ningun exec asociado con la opcion");
+    }
+}
