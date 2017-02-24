@@ -19,6 +19,11 @@
        un wait devuelve algo < 0 (es decir, no ha podido esperar a nadie)
 */
 
+/**
+*   Proceso padre genera NUM_PROC procesos hijos, y espera a todos ellos.
+*   Se muestra opr pantalla el pid y ppid de cada hijo, y el pid del padre.
+*/
+
 int main(){
     int pid;
     int i;

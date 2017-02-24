@@ -7,6 +7,13 @@
 
 #define NUM_PROC 3
 
+/**
+*   Cada proceso genera un hijo, independientemente de si tiene ya o no,
+*   hasta que el padre alcanza NUM_PROC hijos.
+*   Cada hijo imprime pid y ppid.
+*   Para controlar huerfanos, cada padre imprime su pid.
+*/
+
 int main(){
     int pid;
     int i;

@@ -5,6 +5,12 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+/**
+*   Este main reserva memoria antes de hacer un fork().
+*   Tanto el padre como el hijo alteran el contenido de esta memoria,
+*   y se comprueba que ambos deben liberarla despues.
+*/
+
 int main(){
     int pid, status;
     char *cad = NULL;
@@ -15,12 +21,9 @@ int main(){
     }
     pid = fork();
     if(pid == 0){
-        printf("La cadena del hijo esta en %p\n", cad);
         printf("Introduce un nombre: ");
         scanf("%s", cad);
         printf("Has introducido %s\n", cad);
-    }else{
-        printf("La cadena del padre esta en %p\n", cad);
     }
     free(cad);
     wait(&status);

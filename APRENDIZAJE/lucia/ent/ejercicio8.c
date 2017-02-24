@@ -8,6 +8,17 @@
 
 int llama_exec(char *file, char* opcion);
 
+
+
+/**
+*   Main encargado de crear tantos hijos de un mismo padre como programas a ejecutar
+*   se pasen como argumento de entrada.
+*   Cada hijo realiza una llamada a llama_exec con la opcion y el programa adecuado.
+*   @param argv: lista de programas a ejecutar + opcion de exec a ejecutar (-l/-lp/-v/-vp)
+*   OJO: Si se llama con las opciones -vp/-lp, la lista de programas debe contener
+*   el path completo a cada programa.
+*/
+
 int main(int argc, char**argv){
     int *f;
     int i;
@@ -47,6 +58,13 @@ int main(int argc, char**argv){
     }while(pid != -1);
 }
 
+/**
+*    Funcion que llama al exec apropiado segun opcion y ejecuta el contenido de file.
+*    @param file: fichero con el programa a ejecutar.
+*    @param opcion: '-l' para execl, '-lp' para execlp, '-v' para execv, '-vp' para execvp
+*    
+*/
+
 int llama_exec(char *file, char *opcion){
     char *lista[2];
     if(file == NULL || opcion == NULL){
@@ -64,7 +82,7 @@ int llama_exec(char *file, char *opcion){
         lista[1] = NULL;
         return execv(file, lista);
 
-    }else if(strcmp("-lp", opcion) == 0){
+    }else if(strcmp("-vp", opcion) == 0){
         lista[0] = file;
         lista[1] = NULL;
         return execvp(file, lista);
