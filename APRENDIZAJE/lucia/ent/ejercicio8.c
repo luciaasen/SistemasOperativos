@@ -15,7 +15,7 @@ int llama_exec(char *file, char* opcion);
 *   se pasen como argumento de entrada.
 *   Cada hijo realiza una llamada a llama_exec con la opcion y el programa adecuado.
 *   @param argv: lista de programas a ejecutar + opcion de exec a ejecutar (-l/-lp/-v/-vp)
-*   OJO: Si se llama con las opciones -vp/-lp, la lista de programas debe contener
+*   OJO: Si se llama con las opciones -v/-l, la lista de programas debe contener
 *   el path completo a cada programa.
 */
 

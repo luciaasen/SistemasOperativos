@@ -24,9 +24,11 @@ int main(){
         printf("Introduce un nombre: ");
         scanf("%s", cad);
         printf("Has introducido %s\n", cad);
+    }else{
+        wait(&status);
+        printf("Esta es la cadena que lee el padre tras el exit del hijo: %s\n", cad);
     }
     free(cad);
-    wait(&status);
     exit(EXIT_SUCCESS);
 }
 

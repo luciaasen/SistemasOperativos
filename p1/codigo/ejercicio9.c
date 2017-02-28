@@ -1,108 +1,96 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <string.h>
-
-#define NUM    4
-
-void operation(int x, int y, int op, int handle);
-
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <sys/wait.h>
+ #include <string.h>
+ #include <sys/types.h>
 
 /**
- *   Esta es la funcion principal del ejercicio 9.
- *   Pedira por pantalla dos valores que se les seran
- *   pasados a sus hijos para realizar ciertas operaciones. Una vez realizadas
- *   imprimiran el resultado de la operacion.
- *
- *   Los numeros han de ser enteros n.
- */
-int main(int argc, char *argv[]){
-    /*dos pipes por cada hijo*/
-    int  pipes[2 * 2 * NUM];
-    int  i, j, x, y;
-    char argus[4];
-    char desc[140];
-    /*inicializamos pipes*/
-    for (i = 0; i < NUM; i++) {
-        /*Pipe para que el hijo lea*/
-        pipe(pipes + i * 4);
-        /*Pipe para que el padre lea*/
-        pipe(pipes + i * 4 + 2);
-    }
+ *  Funcion main del ejercicio 9
+    Pide por pantalla dos valores double que seran almacenados por el proceso padre.
+    El proceso padre genera cuatro hijos, a los que envua los valores escaneados a traves de un pipe.
+    Cada hijo realiza una operacion y envia el resultado al padre a traves de otro pipe.
+    El padre imprime cada uno de los resultados extraidos del pipe.
 
-    for (i = 0; i < NUM; i++) {
-        if (fork() == 0) {
-            close(pipes[1 + i * 4]);
-            close(pipes[2 + i * 4]);
-            /*Cerramos los pipes que no corresponden a este hijo*/
-            for (j = 0; j < NUM; j++) {
-                if (j != i) {
-                    close(pipes[0 + j * 4]);
-                    close(pipes[1 + j * 4]);
-                    close(pipes[2 + j * 4]);
-                    close(pipes[3 + j * 4]);
-                }
+*/
+ int main(){
+    pid_t hijos[4];
+    int i, nbytes, status;
+    int fd1[4][2], fd2[4][2];
+    double op1, op2, res;
+    char operandos[10], resultado[150], operacion[10];
+
+    printf("Introduce tus dos operandos separados por una coma, por ejemplo '5,6'\n");
+    scanf("%s", operandos);
+    
+    for(i = 0; i < 4; i ++){
+        if(pipe(fd1[i]) < 0 || pipe(fd2[i]) < 0){
+            perror("Tuberia fallida");
+            exit(EXIT_FAILURE);
+        }
+
+        if((hijos[i]= fork()) == -1){
+            perror("Error en fork 1");
+            exit(EXIT_FAILURE);
+
+        }else if(hijos[i] == 0){
+
+            /*Hijo escribe en fd2, lee de fd1*/
+            close(fd1[i][1]);
+            close(fd2[i][0]);
+
+            if(read(fd1[i][0], operandos, 10) < 0){
+                perror("Error al leer operandos en 1"),
+                exit(EXIT_FAILURE);
             }
-            /*Leemos los argumentos pasados por el padre*/
-            read(pipes[0 + i * 4], argus, sizeof(char) * 140);
-            /*parseamos los argumentos*/
-            sscanf(argus, "%d,%d", &x, &y);
-            /*realizamos la operacion y los enviamos al padre*/
-            operation(x, y, i, pipes[3 + i * 4]);
-            exit(EXIT_SUCCESS);
+            sscanf(operandos, "%lf,%lf", &op1, &op2);
+            switch(i){
+                case 0:
+                    res = op1 + op2;
+                    strcpy(operacion , "Suma");
+                    break;
+                case 1:
+                    res = op1 - op2;
+                    strcpy(operacion , "Resta");
+                    break;
+                case 2:
+                    res = op1 * op2;
+                    strcpy(operacion , "Producto");
+                    break;
+                default:
+                    res =  op1 / op2;
+                    strcpy(operacion , "Division");
+            }
+            sprintf(resultado, "Datos enviados a través de la tubería por el proces %d.\n Operando 1: %.3lf. Operando 2: %.3lf. %s:%.3lf",  getpid(), op1, op2, operacion, res);
+            nbytes = strlen(resultado) + 1;
+            if(write(fd2[i][1], resultado, nbytes) < nbytes){
+                perror("Escritura incorrecta del resultado");
+                exit(EXIT_FAILURE);
+            }else{
+                exit(EXIT_SUCCESS);
+            }
+                    
         }else{
-            /*Cerramos los pipes correspondientes por cada hijo*/
-            /*establecemos comunicacion entre padre e hijo*/
-            close(pipes[0 + i * 4]);
-            close(pipes[3 + i * 4]);
+
+            /*padre escribe en fd1, lee de fd2*/
+            close(fd1[i][0]);
+            close(fd2[i][1]);
+
+            nbytes = 1 + strlen(operandos);
+            if(write(fd1[i][1], operandos, nbytes) < 0){
+                perror("No se han escrito los operandos en 1");
+                exit(EXIT_FAILURE);
+            }
+            wait(&status);
+            if(read(fd2[i][0], resultado, 150) < 0){
+                perror("Error al leer resultado");
+                exit(EXIT_FAILURE);
+            }
+            printf("%s\n", resultado);
+                       
         }
     }
-    printf("Introduzca los numeros con el formato indicado: ");
-    scanf("%s", argus);
-    /*Enviamos a cada hijo los argumentos*/
-    /*esperamos el resultado del hijo y lo imprimimos*/
-    for (i = 0; i < NUM; i++) {
-        write(pipes[1 + i * 4], argus, sizeof(char) * 140);
-        read(pipes[2 + i * 4], desc, sizeof(char) * 140);
-        printf("%s\n", desc);
-    }
-    /*cerramos todos los hijos */
-    for (i = 0; i < NUM; i++)
-        wait(NULL);
-    exit(EXIT_SUCCESS);
-}
 
-/**
- *   Devuelve el resultado (string) de la operacion indicada a traves del handle
- *   dado.
- *   @param x es uno de los operandos.
- *   @param y es el segundo operando.
- *   @param op indica la operacion.
- *   @param handle es el descriptor del fichero al que se enviara el string.
- *
- */
-void operation(int x, int y, int op, int handle){
-    char s[140];
-    switch (op) {
-    case 0:
-        sprintf(s, "Datos enviados a traves de la tuberia con PID=%d. Operando 1: %d. Operando 2: %d. Suma: %d\n", getpid(), x, y, x + y);
-        break;
-    case 1:
-        sprintf(s, "Datos enviados a traves de la tuberia con PID=%d. Operando 1: %d. Operando 2: %d. Resta: %d\n", getpid(), x, y, x - y);
-        break;
-    case 2:
-        sprintf(s, "Datos enviados a traves de la tuberia con PID=%d. Operando 1: %d. Operando 2: %d. Multiplicacion: %d\n", getpid(), x, y, x * y);
-        break;
-    case 3:
-        sprintf(s, "Datos enviados a traves de la tuberia con PID=%d. Operando 1: %d. Operando 2: %d. Division: %f\n", getpid(), x, y, x / (float) y);
-        break;
-    default:
-        return;
-    }
-    /*Enviamos el string generado*/
-    write(handle, s, sizeof(char) * (strlen(s) + 1));
-    return;
-}
-
+    return 0;
+    
+ }
