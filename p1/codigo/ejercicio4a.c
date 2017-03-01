@@ -1,3 +1,10 @@
+/**
+* @file ejercicio4a.c
+* @author Lucia Asencio y Rodrigo de Pool
+* @date 28-2-2017
+* @brief fichero que contiene ej4a de la practica 1 de SOPER para el estudio de la existencia de hijos huerfanos.
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -8,7 +15,8 @@
 #define NUM_PROC 3
 
 /**
-*   Cada procesi genera un hijo, tenga ya hijos o no.
+*   Funcion main:
+*   Cada proceso genera un hijo, tenga ya hijos o no.
 *   Cada hijo imprime su pid y su ppid.
 *   Adicionalmente, para controlar posibles huerfanos, cada padre imprime pid.
 */
@@ -31,21 +39,4 @@ int main(){
     
     exit(EXIT_SUCCESS);
 }
-
-/***************************************************************************/
-/* 
-    Conclusion procesos huerfanos:
-   En este programa si existen procesos huerfanos, y esto se refleja en la
-   salida del programa.
-   Los ppid de los "Hijo N" deberian ser el pid de un "Hijo N-1" o "Padre N-1".
-   Sin embargo, hay algunos "Hijo N" cuyo ppid es, independientemente de
-   la ejecucion, 1518 (no correspondiente a ningun "Hijo N-1 o "Padre N-1").
-
-   Esto nos indica que su proceso padre finaliza antes que el hijo, por lo
-   cual los hijos quedan huerfanos y se les es reasignado otro padre, el 1518
-
-   (En nuestro programa puede tomarse N = 2, N = 1)
-
-*/
-/****************************************************************************/
 

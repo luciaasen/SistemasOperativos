@@ -1,3 +1,10 @@
+/**
+* @file ejercicio6.c
+* @author Lucia Asencio y Rodrigo de Pool
+* @date 28-2-2017
+* @brief fichero que contiene ej6 de la practica 1 de SOPER para el estudio del uso de memoria entre procesos padre e hijo.
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -6,9 +13,10 @@
 #include <stdlib.h>
 
 /**
+*   Funcion main:
 *   Este main reserva memoria antes de hacer un fork().
 *   Tanto el padre como el hijo alteran el contenido de esta memoria,
-*   y se comprueba que ambos deben liberarla despues.
+*   y se comprueba que ambos deben liberarla despues, y que uno no tiene acceso a la memoria del otro.
 */
 
 int main(){
@@ -31,10 +39,3 @@ int main(){
     free(cad);
     exit(EXIT_SUCCESS);
 }
-
-/**************************************************************/
-/*
-    Hay que liberar los recursos reservados en ambos procesos,
-    ya que el proceso padre y el hijo no comparten los bloques
-    de datos.
-*/

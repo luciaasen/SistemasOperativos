@@ -1,0 +1,48 @@
+\hypertarget{ejercicio4a_8c}{}\section{ejercicio4a.\+c File Reference}
+\label{ejercicio4a_8c}\index{ejercicio4a.\+c@{ejercicio4a.\+c}}
+
+
+fichero que contiene ej4a de la practica 1 de S\+O\+P\+ER para el estudio de la existencia de hijos huerfanos.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$sys/types.\+h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+Include dependency graph for ejercicio4a.\+c\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bfseries N\+U\+M\+\_\+\+P\+R\+OC}~3\hypertarget{ejercicio4a_8c_acee2369f62e4a096d243dec3cd7d0b00}{}\label{ejercicio4a_8c_acee2369f62e4a096d243dec3cd7d0b00}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{ejercicio4a_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+fichero que contiene ej4a de la practica 1 de S\+O\+P\+ER para el estudio de la existencia de hijos huerfanos. 
+
+\begin{DoxyAuthor}{Author}
+Lucia Asencio y Rodrigo de Pool 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+28-\/2-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\index{ejercicio4a.\+c@{ejercicio4a.\+c}!main@{main}}
+\index{main@{main}!ejercicio4a.\+c@{ejercicio4a.\+c}}
+\subsubsection[{\texorpdfstring{main()}{main()}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio4a_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{}\label{ejercicio4a_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}
+Funcion main\+: Cada proceso genera un hijo, tenga ya hijos o no. Cada hijo imprime su pid y su ppid. Adicionalmente, para controlar posibles huerfanos, cada padre imprime pid. 

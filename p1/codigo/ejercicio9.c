@@ -1,3 +1,10 @@
+/**
+* @file ejercicio9.c
+* @author Lucia Asencio y Rodrigo de Pool
+* @date 28-2-2017
+* @brief fichero que contiene ej9 de la practica 1 de SOPER para el estudio de la comunicacion entre procesos mediante pipes. 
+*/
+
  #include <stdio.h>
  #include <stdlib.h>
  #include <unistd.h>
@@ -7,13 +14,13 @@
 
 /**
  *  Funcion main del ejercicio 9
-    Pide por pantalla dos valores double que seran almacenados por el proceso padre.
-    El proceso padre genera cuatro hijos, a los que envua los valores escaneados a traves de un pipe.
-    Cada hijo realiza una operacion y envia el resultado al padre a traves de otro pipe.
-    El padre imprime cada uno de los resultados extraidos del pipe.
-
+ *  Pide por pantalla dos valores double que seran almacenados por el proceso padre.
+ *  El proceso padre genera cuatro hijos, a los que envua los valores escaneados a traves de un pipe.
+ *  Cada hijo realiza una operacion y envia el resultado al padre a traves de otro pipe.
+ *  El padre imprime cada uno de los resultados extraidos del pipe.
 */
- int main(){
+
+int main(){
     pid_t hijos[4];
     int i, nbytes, status;
     int fd1[4][2], fd2[4][2];
@@ -93,4 +100,4 @@
 
     return 0;
     
- }
+}

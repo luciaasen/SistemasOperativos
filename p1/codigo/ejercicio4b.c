@@ -1,3 +1,10 @@
+/**
+* @file ejercicio4b.c
+* @author Lucia Asencio y Rodrigo de Pool
+* @date 28-2-2017
+* @brief fichero que contiene ej4b de la practica 1 de SOPER para el estudio de la existencia de hijos huerfanos.
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -12,6 +19,7 @@
 *   hasta que el padre alcanza NUM_PROC hijos.
 *   Cada hijo imprime pid y ppid.
 *   Para controlar huerfanos, cada padre imprime su pid.
+*   Ademas, cada proceso hace un wait antes de terminar la ejecucion.
 */
 
 int main(){
@@ -35,16 +43,3 @@ int main(){
     exit(EXIT_SUCCESS);
 }
 
-/**************************************************************************/
-
-/*
-     Conclusion procesos huerfanos:
-    Todos los "Hijos N" tienen un padre cuyo pid es de un "Padre N-1" o un 
-    "Hijo N-1", parece ser que ningun hijo quedo huerfano.
-    Esto tiene una explicacion: con la sentencia wait(), cada proceso espera
-    a su proceso hijo para finalizar, de manera que en ningun proceso hijo
-    se encuentra con que su ppid ya no corresponde a ningun proceso.
-    Por tanto, este programa no genera hijos huerfanos.
-
-*/
-/**************************************************************************/
