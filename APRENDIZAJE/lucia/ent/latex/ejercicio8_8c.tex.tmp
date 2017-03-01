@@ -1,0 +1,64 @@
+\hypertarget{ejercicio8_8c}{}\section{ejercicio8.\+c File Reference}
+\label{ejercicio8_8c}\index{ejercicio8.\+c@{ejercicio8.\+c}}
+
+
+File containing exercise 8 about exec functions.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$sys/types.\+h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+Include dependency graph for ejercicio8.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{ejercicio8_8c_a84e0a2681677a718ef0a74bbd9386e05}{llama\+\_\+exec} (char $\ast$file, char $\ast$opcion)
+\item 
+int \hyperlink{ejercicio8_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+File containing exercise 8 about exec functions. 
+
+\begin{DoxyAuthor}{Author}
+Lucia Asencio y Rodrigo de P\+O\+OL 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+28-\/2-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\index{ejercicio8.\+c@{ejercicio8.\+c}!llama\+\_\+exec@{llama\+\_\+exec}}
+\index{llama\+\_\+exec@{llama\+\_\+exec}!ejercicio8.\+c@{ejercicio8.\+c}}
+\subsubsection[{\texorpdfstring{llama\+\_\+exec(char $\ast$file, char $\ast$opcion)}{llama_exec(char *file, char *opcion)}}]{\setlength{\rightskip}{0pt plus 5cm}int llama\+\_\+exec (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{file, }
+\item[{char $\ast$}]{opcion}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio8_8c_a84e0a2681677a718ef0a74bbd9386e05}{}\label{ejercicio8_8c_a84e0a2681677a718ef0a74bbd9386e05}
+Funcion que llama al exec apropiado segun opcion y ejecuta el contenido de file. 
+\begin{DoxyParams}{Parameters}
+{\em file} & fichero con el programa a ejecutar. \\
+\hline
+{\em opcion} & \textquotesingle{}-\/l\textquotesingle{} para execl, \textquotesingle{}-\/lp\textquotesingle{} para execlp, \textquotesingle{}-\/v\textquotesingle{} para execv, \textquotesingle{}-\/vp\textquotesingle{} para execvp \\
+\hline
+\end{DoxyParams}
+\index{ejercicio8.\+c@{ejercicio8.\+c}!main@{main}}
+\index{main@{main}!ejercicio8.\+c@{ejercicio8.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$$\ast$argv)}{main(int argc, char **argv)}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio8_8c_a3c04138a5bfe5d72780bb7e82a18e627}{}\label{ejercicio8_8c_a3c04138a5bfe5d72780bb7e82a18e627}
+Main encargado de crear tantos hijos de un mismo padre como programas a ejecutar se pasen como argumento de entrada. Cada hijo realiza una llamada a llama\+\_\+exec con la opcion y el programa adecuado. 
+\begin{DoxyParams}{Parameters}
+{\em argv} & lista de programas a ejecutar + opcion de exec a ejecutar (-\/l/-\/lp/-\/v/-\/vp) O\+JO\+: Si se llama con las opciones -\/v/-\/l, la lista de programas debe contener el path completo a cada programa. \\
+\hline
+\end{DoxyParams}

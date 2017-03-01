@@ -5,7 +5,14 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-
+/**
+ * @file ejercicio8.c
+ * @author Lucia Asencio y Rodrigo de POOL
+ * @date 28-2-2017
+ * @brief File containing exercise 8 about exec functions.
+ *
+ 
+ */
 int llama_exec(char *file, char* opcion);
 
 
