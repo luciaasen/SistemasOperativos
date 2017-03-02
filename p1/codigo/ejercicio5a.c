@@ -1,3 +1,9 @@
+/**
+ * @file ejercicio5a.c
+ * @author Lucia Asencio y Rodrigo de Pool
+ * @date 28-2-2017
+ * @brief fichero que contiene ej5a de la practica 1 de SOPER.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>

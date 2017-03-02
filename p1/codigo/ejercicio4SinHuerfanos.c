@@ -1,3 +1,10 @@
+/**
+ * @file ejercicio4SinHuerfanos.c
+ * @author Lucia Asencio y Rodrigo de Pool
+ * @date 28-2-2017
+ * @brief fichero que contiene una solucion alternativa para no tener procesos
+ *        hijos huerfanos. Practica 1 de SOPER
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>

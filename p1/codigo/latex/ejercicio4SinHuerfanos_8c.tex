@@ -1,0 +1,46 @@
+\hypertarget{ejercicio4SinHuerfanos_8c}{}\section{ejercicio4\+Sin\+Huerfanos.\+c File Reference}
+\label{ejercicio4SinHuerfanos_8c}\index{ejercicio4\+Sin\+Huerfanos.\+c@{ejercicio4\+Sin\+Huerfanos.\+c}}
+
+
+fichero que contiene una solucion alternativa para no tener procesos hijos huerfanos. Practica 1 de S\+O\+P\+ER  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+Include dependency graph for ejercicio4\+Sin\+Huerfanos.\+c\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bfseries N\+U\+M\+\_\+\+P\+R\+OC}~3\hypertarget{ejercicio4SinHuerfanos_8c_acee2369f62e4a096d243dec3cd7d0b00}{}\label{ejercicio4SinHuerfanos_8c_acee2369f62e4a096d243dec3cd7d0b00}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{ejercicio4SinHuerfanos_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+fichero que contiene una solucion alternativa para no tener procesos hijos huerfanos. Practica 1 de S\+O\+P\+ER 
+
+\begin{DoxyAuthor}{Author}
+Lucia Asencio y Rodrigo de Pool 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+28-\/2-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\index{ejercicio4\+Sin\+Huerfanos.\+c@{ejercicio4\+Sin\+Huerfanos.\+c}!main@{main}}
+\index{main@{main}!ejercicio4\+Sin\+Huerfanos.\+c@{ejercicio4\+Sin\+Huerfanos.\+c}}
+\subsubsection[{\texorpdfstring{main()}{main()}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio4SinHuerfanos_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{}\label{ejercicio4SinHuerfanos_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}
+Se prueba la funcion fork generando hijos exponencialmente. Cada proceso hijo imprimira su informacion. A diferencia de los otros dos ejercicios en este nos encargamos de no dejar a ningun proceso zombie. 

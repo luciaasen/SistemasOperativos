@@ -1,3 +1,10 @@
+/**
+ * @file ejercicio8.c
+ * @author Lucia Asencio y Rodrigo de Pool
+ * @date 28-2-2017
+ * @brief fichero que contiene ej8 de la practica 1 de SOPER. Ejercicio con el
+ *        objetivo de entender el funcionamiento de las funciones 'exec'.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>

@@ -1,0 +1,63 @@
+\hypertarget{ejercicio8_8c}{}\section{ejercicio8.\+c File Reference}
+\label{ejercicio8_8c}\index{ejercicio8.\+c@{ejercicio8.\+c}}
+
+
+fichero que contiene ej8 de la practica 1 de S\+O\+P\+ER. Ejercicio con el objetivo de entender el funcionamiento de las funciones \textquotesingle{}exec\textquotesingle{}.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+Include dependency graph for ejercicio8.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{ejercicio8_8c_abd418bf3ece081cbb8f0a3c83facea4b}{execute} (char $\ast$func, char $\ast$flag)
+\item 
+int \hyperlink{ejercicio8_8c_a0ddf1224851353fc92bfbff6f499fa97}{main} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+fichero que contiene ej8 de la practica 1 de S\+O\+P\+ER. Ejercicio con el objetivo de entender el funcionamiento de las funciones \textquotesingle{}exec\textquotesingle{}. 
+
+\begin{DoxyAuthor}{Author}
+Lucia Asencio y Rodrigo de Pool 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+28-\/2-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\index{ejercicio8.\+c@{ejercicio8.\+c}!execute@{execute}}
+\index{execute@{execute}!ejercicio8.\+c@{ejercicio8.\+c}}
+\subsubsection[{\texorpdfstring{execute(char $\ast$func, char $\ast$flag)}{execute(char *func, char *flag)}}]{\setlength{\rightskip}{0pt plus 5cm}void execute (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{func, }
+\item[{char $\ast$}]{flag}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio8_8c_abd418bf3ece081cbb8f0a3c83facea4b}{}\label{ejercicio8_8c_abd418bf3ece081cbb8f0a3c83facea4b}
+Esta funcion se encarga de ejecutar un comando con la funcion indicada a traves del flag. 
+\begin{DoxyParams}{Parameters}
+{\em func} & indica el nombre del comando a ejecutar o su path. \\
+\hline
+{\em flag} & indica que funcion se utilizara para ejecutar func. \\
+\hline
+\end{DoxyParams}
+\index{ejercicio8.\+c@{ejercicio8.\+c}!main@{main}}
+\index{main@{main}!ejercicio8.\+c@{ejercicio8.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$argv[])}{main(int argc, char *argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio8_8c_a0ddf1224851353fc92bfbff6f499fa97}{}\label{ejercicio8_8c_a0ddf1224851353fc92bfbff6f499fa97}
+Funcion principal que se encarga de crear procesos hijos para ejecutar los comandos pasados como argumentos. Nota importante\+: Si se quiere ejecutar un proceso dado solo su nombre debido a que esta en P\+A\+TH, se tiene que ejecutar con el comando correcto (execvp, execlp). 
+\begin{DoxyParams}{Parameters}
+{\em argv} & lista de comandos a ejecutar y de ultimo un indicador de la funcion que se quiere utilizar para ejecutar los comandos. \\
+\hline
+\end{DoxyParams}
