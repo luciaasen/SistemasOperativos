@@ -1,0 +1,34 @@
+\contentsline {chapter}{\numberline {1}File Index}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}File List}{1}{section.1.1}
+\contentsline {chapter}{\numberline {2}File Documentation}{3}{chapter.2}
+\contentsline {section}{\numberline {2.1}ejercicio4a.\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}c File Reference}{3}{section.2.1}
+\contentsline {section}{\numberline {2.2}ejercicio4b.\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}c File Reference}{3}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Detailed Description}{4}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Function Documentation}{4}{subsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.2.1}main()}{4}{subsubsection.2.2.2.1}
+\contentsline {section}{\numberline {2.3}ejercicio4\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Sin\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Huerfanos.\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}c File Reference}{4}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Detailed Description}{4}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}Function Documentation}{5}{subsection.2.3.2}
+\contentsline {subsubsection}{\numberline {2.3.2.1}main()}{5}{subsubsection.2.3.2.1}
+\contentsline {section}{\numberline {2.4}ejercicio5a.\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}c File Reference}{5}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Detailed Description}{5}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2.4.2}Function Documentation}{5}{subsection.2.4.2}
+\contentsline {subsubsection}{\numberline {2.4.2.1}main(void)}{5}{subsubsection.2.4.2.1}
+\contentsline {section}{\numberline {2.5}ejercicio5b.\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}c File Reference}{6}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Detailed Description}{6}{subsection.2.5.1}
+\contentsline {subsection}{\numberline {2.5.2}Function Documentation}{6}{subsection.2.5.2}
+\contentsline {subsubsection}{\numberline {2.5.2.1}main(void)}{6}{subsubsection.2.5.2.1}
+\contentsline {section}{\numberline {2.6}ejercicio6.\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}c File Reference}{6}{section.2.6}
+\contentsline {subsection}{\numberline {2.6.1}Detailed Description}{7}{subsection.2.6.1}
+\contentsline {subsection}{\numberline {2.6.2}Function Documentation}{7}{subsection.2.6.2}
+\contentsline {subsubsection}{\numberline {2.6.2.1}main()}{7}{subsubsection.2.6.2.1}
+\contentsline {section}{\numberline {2.7}ejercicio8.\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}c File Reference}{7}{section.2.7}
+\contentsline {subsection}{\numberline {2.7.1}Detailed Description}{8}{subsection.2.7.1}
+\contentsline {subsection}{\numberline {2.7.2}Function Documentation}{8}{subsection.2.7.2}
+\contentsline {subsubsection}{\numberline {2.7.2.1}execute(char $\ast $func, char $\ast $flag)}{8}{subsubsection.2.7.2.1}
+\contentsline {subsubsection}{\numberline {2.7.2.2}main(int argc, char $\ast $argv[])}{8}{subsubsection.2.7.2.2}
+\contentsline {section}{\numberline {2.8}ejercicio9.\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}c File Reference}{8}{section.2.8}
+\contentsline {subsection}{\numberline {2.8.1}Detailed Description}{9}{subsection.2.8.1}
+\contentsline {subsection}{\numberline {2.8.2}Function Documentation}{9}{subsection.2.8.2}
+\contentsline {subsubsection}{\numberline {2.8.2.1}main()}{9}{subsubsection.2.8.2.1}
+\contentsline {chapter}{Index}{11}{section*.13}

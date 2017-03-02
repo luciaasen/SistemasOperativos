@@ -1,0 +1,33 @@
+\begin{theindex}
+
+  \item {ejercicio4\+Sin\+Huerfanos.\+c}, \hyperpage{4}
+    \subitem {main}, \hyperpage{5}
+  \item {ejercicio4a.\+c}, \hyperpage{3}
+  \item {ejercicio4b.\+c}, \hyperpage{3}
+    \subitem {main}, \hyperpage{4}
+  \item {ejercicio5a.\+c}, \hyperpage{5}
+    \subitem {main}, \hyperpage{5}
+  \item {ejercicio5b.\+c}, \hyperpage{6}
+    \subitem {main}, \hyperpage{6}
+  \item {ejercicio6.\+c}, \hyperpage{6}
+    \subitem {main}, \hyperpage{7}
+  \item {ejercicio8.\+c}, \hyperpage{7}
+    \subitem {execute}, \hyperpage{8}
+    \subitem {main}, \hyperpage{8}
+  \item {ejercicio9.\+c}, \hyperpage{8}
+    \subitem {main}, \hyperpage{9}
+  \item {execute}
+    \subitem {ejercicio8.\+c}, \hyperpage{8}
+
+  \indexspace
+
+  \item {main}
+    \subitem {ejercicio4\+Sin\+Huerfanos.\+c}, \hyperpage{5}
+    \subitem {ejercicio4b.\+c}, \hyperpage{4}
+    \subitem {ejercicio5a.\+c}, \hyperpage{5}
+    \subitem {ejercicio5b.\+c}, \hyperpage{6}
+    \subitem {ejercicio6.\+c}, \hyperpage{7}
+    \subitem {ejercicio8.\+c}, \hyperpage{8}
+    \subitem {ejercicio9.\+c}, \hyperpage{9}
+
+\end{theindex}
