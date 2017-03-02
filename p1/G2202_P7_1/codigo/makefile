@@ -24,3 +24,5 @@ ejercicio8: ejercicio8.c
 ejercicio9: ejercicio9.c
 	gcc -o ejercicio9 $^
 
+clean:
+	rm -f *.o *~ ejercicio4a ejercicio4b ejercicio4SinHuerfanos ejercicio5a ejercicio5b ejercicio6 ejercicio8 ejercicio9
