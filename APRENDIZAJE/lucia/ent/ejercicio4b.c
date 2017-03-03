@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#define NUM_PROC 3
+#define NUM_PROC 7
 
 /**
 *   Cada proceso genera un hijo, independientemente de si tiene ya o no,
@@ -35,16 +35,3 @@ int main(){
     exit(EXIT_SUCCESS);
 }
 
-/**************************************************************************/
-
-/*
-     Conclusion procesos huerfanos:
-    Todos los "Hijos N" tienen un padre cuyo pid es de un "Padre N-1" o un 
-    "Hijo N-1", parece ser que ningun hijo quedo huerfano.
-    Esto tiene una explicacion: con la sentencia wait(), cada proceso espera
-    a su proceso hijo para finalizar, de manera que en ningun proceso hijo
-    se encuentra con que su ppid ya no corresponde a ningun proceso.
-    Por tanto, este programa no genera hijos huerfanos.
-
-*/
-/**************************************************************************/
