@@ -19,6 +19,14 @@ void escribirFichero(FILE *f, char * str){
     fwrite(str, NUM, sizeof(char), f);
 }
 
+/**
+ * Esta función imprime que se inicia una 'tanda' de lectura
+ * @param sig [description]
+ */
+void manejador(int sig){
+    printf("Inicia la siguiente tanda de lectura:\n");
+}
+
 
 /**
  * Se encarga de leer una linea del fichero y guardarla en str
@@ -49,14 +57,16 @@ int main(){
     int  numhijos = 1;
     FILE *f;
     int  randi;
+    int  flag         = 0;
     char str[13][NUM] = { "EL ", "PROCESO ", "A ", "ESCRIBE ", "EN ", "UN ", "FICHERO ", "HASTA ", "QUE ", "LEE ", "LA ", "CADENA ", "FIN " };
     char aux[NUM];
 
-//COSAS A TENER EN CUENTA:
-//LA ZONA CRITICA NO ESTA IMPLEMENTADA
-//LA FUNCION DE LECTURA DA ERROR SI NO SE HA ESCRITO NADA
-//ENTONCES PUEDE OCURRIR QUE NISIQUIERA SE ESCRIBA NADA EN EL fichero
-//hay que lograr de alguna forma implementar esta forma
+    /*Creamos o limpiamos el fichero*/
+    f = fopen(PATH, "w");
+    fclose(f);
+
+    signal(SIGUSR1, manejador);
+
     hpid = fork();
     if ((f = fopen(PATH, "r")) == NULL) {
         esperarHijos(numhijos);
@@ -79,17 +89,22 @@ int main(){
                 //
                 if (randi == 12) {
                     fclose(f);
+                    kill(getppid(), SIGUSR1);
                     exit(EXIT_SUCCESS);
                 }
             }
         }else{
-            sleep(5);
+            if (flag == 0) {
+                flag = 1;
+                pause();
+            }
             //zona critica
             leerFichero(f, aux);
-            printf("%s\n", aux);
             //
+            printf("%s\n", aux);
             if (strcmp(aux, str[12]) == 0) {
                 numhijos++;
+                flag = 0;
                 hpid = fork();
             }
         }
