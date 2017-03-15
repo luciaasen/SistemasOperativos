@@ -1,0 +1,7 @@
+El programa con threads tarda 0.1474
+El programa con threads tarda 0.1431
+El programa con threads tarda 0.3868
+El programa con threads tarda 0.34576
+El programa con threads tarda 0.611612
+El programa con threads tarda 13.505416
+El programa con threads tarda 353.117578

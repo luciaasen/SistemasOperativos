@@ -42,7 +42,6 @@ int *nPrimos(int n){
             tamanio ++;
         }
     }
-    /*printf("tamanio %d ", tamanio);*/
     return lista;
 }
 
@@ -50,31 +49,26 @@ int main(int argc, char **argv){
     pid_t hijos[100];
     int i, status, exitStatus;
     int *lista;
-    clock_t begin, end, chini, chend, chsum=0;
-    double time;
+    struct timeval tvini, tvend, tvresult;
 
     if(argc < 2 || atoi(argv[1]) < 1){
         perror("Error en el argumento de entrada nprimos (debe ser > 0)");
+        exit(EXIT_FAILURE);
     }
 
-    begin = clock();
+    gettimeofday(&tvini, NULL);
     for(i = 0; i < 100; i++){
         hijos[i] = fork();
         if(hijos[i] < 0){
             printf("Error en el fork %d\n", i);
             return -1;
         }else if(hijos[i] == 0){
-            chini = clock();
             lista = nPrimos(atoi(argv[1]));
             if(lista == NULL){
                 printf("Error en la ejecucion %d de nPrimos\n", i);
                 exit(EXIT_FAILURE);
             }
-            chend = clock(); 
-            printf("Child %d %ld\n", i, chend - chini);
-            chsum += chend - chini;
             free(lista);
-            /*printf(" hijo %d\n", i);*/
             exit(EXIT_SUCCESS);
         }else{
             waitpid(hijos[i], &status, 0);
@@ -87,8 +81,8 @@ int main(int argc, char **argv){
 
         }
     }
-    end = clock();
-    time = (end - begin);
-    printf("El programa con forks tarda %f, la suma de los hijos %ld\n", time, chsum);
-    return time;
+    gettimeofday(&tvend, NULL);
+    timersub(&tvend, &tvini, &tvresult);
+    printf("El programa con forks tarda %ld.%ld\n", (long int)tvresult.tv_sec, (long int)tvresult.tv_usec);
+    return 1;
 }
