@@ -5,9 +5,9 @@
 #include <sys/wait.h>
 #include <sys/time.h>
 #include <time.h>
+#define NDEBUG
 #include <assert.h>
 
-/*#define NDEBUG*/
 
 int isPrime(int num, int* lista, int tamanio);
 int *nPrimos(int n);
@@ -37,22 +37,25 @@ int *nPrimos(int n){
 
     for(tamanio = 0, num = 2;  tamanio < n; num ++){
         comprueba = isPrime(num, lista, tamanio);
-        //printf("Comprueba: %d %d\n", num, comprueba);
         if(comprueba == 1){
             lista[tamanio] = num;
             tamanio ++;
         }
     }
-    printf("tamanio %d ", tamanio);
+    /*printf("tamanio %d ", tamanio);*/
     return lista;
 }
 
-int main(){
+int main(int argc, char **argv){
     pid_t hijos[100];
     int i, status, exitStatus;
     int *lista;
-    time_t begin, end;
+    clock_t begin, end, chini, chend, chsum=0;
     double time;
+
+    if(argc < 2 || atoi(argv[1]) < 1){
+        perror("Error en el argumento de entrada nprimos (debe ser > 0)");
+    }
 
     begin = clock();
     for(i = 0; i < 100; i++){
@@ -61,12 +64,17 @@ int main(){
             printf("Error en el fork %d\n", i);
             return -1;
         }else if(hijos[i] == 0){
-            lista = nPrimos(1);
+            chini = clock();
+            lista = nPrimos(atoi(argv[1]));
             if(lista == NULL){
                 printf("Error en la ejecucion %d de nPrimos\n", i);
                 exit(EXIT_FAILURE);
             }
-            printf(" hijo %d\n", i);
+            chend = clock(); 
+            printf("Child %d %ld\n", i, chend - chini);
+            chsum += chend - chini;
+            free(lista);
+            /*printf(" hijo %d\n", i);*/
             exit(EXIT_SUCCESS);
         }else{
             waitpid(hijos[i], &status, 0);
@@ -81,6 +89,6 @@ int main(){
     }
     end = clock();
     time = (end - begin);
-    printf("El programa con forks tarda %f\n", time);
+    printf("El programa con forks tarda %f, la suma de los hijos %ld\n", time, chsum);
     return time;
 }
