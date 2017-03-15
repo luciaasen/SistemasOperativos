@@ -7,7 +7,7 @@
 #include <time.h>
 #include <assert.h>
 
-#define NDEBUG
+/*#define NDEBUG*/
 
 int isPrime(int num, int* lista, int tamanio);
 int *nPrimos(int n);
@@ -15,7 +15,7 @@ int *nPrimos(int n);
 int isPrime(int num, int* lista, int tamanio){
     int i;
 
-    assert(lista != NULL && tamanio >= 0 && num > 1);
+    assert(lista != NULL && tamanio >= 0 && num >= 1);
     for (i = 0; i < tamanio && lista[i] <= sqrt(num); i++){
         if(num%lista[i] == 0){
             return 0;
@@ -28,7 +28,7 @@ int *nPrimos(int n){
     int *lista = NULL;
     int tamanio, comprueba, num;
      
-    assert(n >1);
+    assert(n >=1);
     
     lista = (int*) malloc (n * sizeof(int));
     if(lista == NULL){
@@ -61,7 +61,7 @@ int main(){
             printf("Error en el fork %d\n", i);
             return -1;
         }else if(hijos[i] == 0){
-            lista = nPrimos(10000);
+            lista = nPrimos(1);
             if(lista == NULL){
                 printf("Error en la ejecucion %d de nPrimos\n", i);
                 exit(EXIT_FAILURE);

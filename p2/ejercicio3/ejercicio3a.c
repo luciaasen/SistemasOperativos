@@ -6,7 +6,7 @@
 #include <time.h>
 #include <assert.h>
 
-#define NDEBUG
+/*#define NDEBUG*/
 
 typedef struct _MyArg{
     int *lista;
@@ -19,7 +19,7 @@ void *nPrimos(void* n);
 int isPrime(int num, int* lista, int tamanio){
     int i;
 
-    assert(lista != NULL && tamanio >= 0 && num > 1);
+    assert(lista != NULL && tamanio >= 0 && num >= 1);
     for (i = 0; i < tamanio && lista[i] <= sqrt(num); i++){
         if(num%lista[i] == 0){
             return 0;
@@ -33,7 +33,7 @@ void *nPrimos(void* n){
     int tamanio, comprueba, num;
     MyArg *args = (MyArg *)n; 
    
-    assert(n != NULL && args->num >1);
+    assert(n != NULL && args->num >=1);
     
     lista = (int*) malloc (args->num * sizeof(int));
     if(lista == NULL){
@@ -67,7 +67,7 @@ int main(){
         printf("args reserva fallida\n");
         return -1;
     }
-    args->num = 10000;
+    args->num = 1;
     for(i = 0; i < 100; i++){
         if( pthread_create(threads + i, NULL, nPrimos, (void*)(args)) != 0){
             printf("Error creando hilo %d\n", i);
