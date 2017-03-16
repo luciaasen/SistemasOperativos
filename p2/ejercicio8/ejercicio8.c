@@ -30,6 +30,7 @@ int mytime(){
 * @param int sig senial a manejar
 */
 void sigtermHandler(int sig){
+    sleep(1);
     printf("Muere PID=%d\n", getpid());
 }
 
@@ -49,8 +50,8 @@ void sigusr1Handler(int sig){
 * el proceso raiz). Despues, repiten el mismo proceso para SIGTERM, antes de hacer 
 * exit(). El padre empieza enviando la senial al hijo, y este a su hijo, etc hasta
 * el ultimo hijo, que envia al padre.
-* @param: N>0 numero de hijos a crear
-* @param: V>0 numero de vueltas a dar por SIGUSR1
+* @param: N>0 numero de hijos a crear (primer argumento)
+* @param: V>0 numero de vueltas a dar por SIGUSR1 (segundo argumento)
 */
 int main(int argc, char **argv){
     int i, j, flag, V, N;
@@ -106,7 +107,6 @@ int main(int argc, char **argv){
         perror("Error en la ultima llamada a pause()");
         exit(EXIT_FAILURE);
     }
-    sleep(1);
     kill(child, SIGTERM);
     /*El root hace un ultimo pause() para ser matado*/
     if(getpid() == root){
