@@ -1,3 +1,10 @@
+/**
+ * @file ejercicio10conSleep.c
+ * @author Lucia Asencio y Rodrigo de Pool
+ * @date 17-3-2017
+ * @brief fichero que contiene el ej10 de la practica 2 de SOPER
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>

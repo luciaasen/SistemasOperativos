@@ -1,3 +1,9 @@
+/**
+ * @file ejercicio6.c
+ * @author Lucia Asencio y Rodrigo de Pool
+ * @date 17-3-2017
+ * @brief fichero que contiene ej6 de la practica 2 de SOPER
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
