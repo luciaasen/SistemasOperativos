@@ -1,3 +1,11 @@
+/**
+* @file ejercicio8.c
+* @author Lucia Asencio y Rodrigo de Pool
+* @date 16-3-2017
+* @brief fichero que contiene ej8 de la practica 2 de SOPER para el manejo y envio de seniales entre padres e hijos
+*/
+
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>

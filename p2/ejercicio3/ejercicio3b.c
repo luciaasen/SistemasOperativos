@@ -1,3 +1,10 @@
+/**
+* @file ejercicio3b.c
+* @author Lucia Asencio y Rodrigo de Pool
+* @date 16-3-2017
+* @brief fichero que contiene ej3b de la practica 2 de SOPER para el estudio forks vs threads
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -12,6 +19,13 @@
 int isPrime(int num, int* lista, int tamanio);
 int *nPrimos(int n);
 
+/**
+* Funcion que calcula si un numero es o no primo, cribandolo.
+* @param num: numero a comprobar.
+* @param lista: array de enteros con todos los primos anteriores a n
+* @param tamanio: numero de elementos de lista
+* @return 0 si no es primo, 1 en caso contrario
+*/
 int isPrime(int num, int* lista, int tamanio){
     int i;
 
@@ -23,6 +37,13 @@ int isPrime(int num, int* lista, int tamanio){
     }
     return 1;    
 }
+
+/**
+* nPrimos: reserva memoria para una lista de tamanio n, que devuelve con los n primeros numeros
+* primos.
+* @param n entero > 0, numero de primos a calcular
+* @return lista de primos o NULL en caso de error.
+*/
 
 int *nPrimos(int n){
     int *lista = NULL;
@@ -45,17 +66,19 @@ int *nPrimos(int n){
     return lista;
 }
 
-int main(int argc, char **argv){
+/**
+* Funcion main
+* Genera de manera secuencial 100 hijos, cada uno de los cuales calcula los 10000 numeros primos.
+* Cada hijo se lanzado cuando el anterior completa su ejecucion.
+* Imprime el tiempo total de ejecucion
+* @return -1 en caso de error, 0 en caso de exito.
+*/
+int main(){
     pid_t hijos[100];
     int i, status, exitStatus;
     int *lista;
     struct timeval tvini, tvend, tvresult;
-
-    if(argc < 2 || atoi(argv[1]) < 1){
-        perror("Error en el argumento de entrada nprimos (debe ser > 0)");
-        exit(EXIT_FAILURE);
-    }
-
+    
     gettimeofday(&tvini, NULL);
     for(i = 0; i < 100; i++){
         hijos[i] = fork();
@@ -63,7 +86,7 @@ int main(int argc, char **argv){
             printf("Error en el fork %d\n", i);
             return -1;
         }else if(hijos[i] == 0){
-            lista = nPrimos(atoi(argv[1]));
+            lista = nPrimos(10000);
             if(lista == NULL){
                 printf("Error en la ejecucion %d de nPrimos\n", i);
                 exit(EXIT_FAILURE);
@@ -84,5 +107,5 @@ int main(int argc, char **argv){
     gettimeofday(&tvend, NULL);
     timersub(&tvend, &tvini, &tvresult);
     printf("El programa con forks tarda %ld.%ld\n", (long int)tvresult.tv_sec, (long int)tvresult.tv_usec);
-    return 1;
+    return 0;
 }
