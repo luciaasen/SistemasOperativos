@@ -1,0 +1,93 @@
+\hypertarget{ejercicio3a_8c}{}\section{ejercicio3a.\+c File Reference}
+\label{ejercicio3a_8c}\index{ejercicio3a.\+c@{ejercicio3a.\+c}}
+
+
+fichero que contiene ej3a de la practica 2 de S\+O\+P\+ER para el estudio forks vs threads  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$pthread.\+h$>$}\\*
+{\ttfamily \#include $<$math.\+h$>$}\\*
+{\ttfamily \#include $<$sys/time.\+h$>$}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+Include dependency graph for ejercicio3a.\+c\+:
+% FIG 0
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__MyArg}{\+\_\+\+My\+Arg}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct__MyArg}{\+\_\+\+My\+Arg} {\bfseries My\+Arg}\hypertarget{ejercicio3a_8c_a9d876a1a1b0bd20dafa0f77c2a4701a5}{}\label{ejercicio3a_8c_a9d876a1a1b0bd20dafa0f77c2a4701a5}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{ejercicio3a_8c_a17e2ad086de00754139f9b4808dbdce4}{is\+Prime} (int num, int $\ast$lista, int tamanio)
+\item 
+void $\ast$ \hyperlink{ejercicio3a_8c_a4057490b7cc7d598e6a3b738853f9039}{n\+Primos} (void $\ast$n)
+\item 
+int \hyperlink{ejercicio3a_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+fichero que contiene ej3a de la practica 2 de S\+O\+P\+ER para el estudio forks vs threads 
+
+\begin{DoxyAuthor}{Author}
+Lucia Asencio y Rodrigo de Pool 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+16-\/3-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\index{ejercicio3a.\+c@{ejercicio3a.\+c}!is\+Prime@{is\+Prime}}
+\index{is\+Prime@{is\+Prime}!ejercicio3a.\+c@{ejercicio3a.\+c}}
+\subsubsection[{\texorpdfstring{is\+Prime(int num, int $\ast$lista, int tamanio)}{isPrime(int num, int *lista, int tamanio)}}]{\setlength{\rightskip}{0pt plus 5cm}int is\+Prime (
+\begin{DoxyParamCaption}
+\item[{int}]{num, }
+\item[{int $\ast$}]{lista, }
+\item[{int}]{tamanio}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio3a_8c_a17e2ad086de00754139f9b4808dbdce4}{}\label{ejercicio3a_8c_a17e2ad086de00754139f9b4808dbdce4}
+Funcion que calcula si un numero es o no primo, cribandolo. 
+\begin{DoxyParams}{Parameters}
+{\em num} & numero a comprobar. \\
+\hline
+{\em lista} & array de enteros con todos los primos anteriores a n \\
+\hline
+{\em tamanio} & numero de elementos de lista \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 si no es primo, 1 en caso contrario 
+\end{DoxyReturn}
+\index{ejercicio3a.\+c@{ejercicio3a.\+c}!main@{main}}
+\index{main@{main}!ejercicio3a.\+c@{ejercicio3a.\+c}}
+\subsubsection[{\texorpdfstring{main()}{main()}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio3a_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{}\label{ejercicio3a_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}
+Funcion main Genera de manera secuencial 100 hilos, cada uno de los cuales calcula los 10000 numeros primos. Cada hilo se lanzado cuando el anterior completa su ejecucion. Imprime el tiempo total de ejecucion \begin{DoxyReturn}{Returns}
+-\/1 en caso de error, 0 en caso de exito. 
+\end{DoxyReturn}
+\index{ejercicio3a.\+c@{ejercicio3a.\+c}!n\+Primos@{n\+Primos}}
+\index{n\+Primos@{n\+Primos}!ejercicio3a.\+c@{ejercicio3a.\+c}}
+\subsubsection[{\texorpdfstring{n\+Primos(void $\ast$n)}{nPrimos(void *n)}}]{\setlength{\rightskip}{0pt plus 5cm}void $\ast$ n\+Primos (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{n}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio3a_8c_a4057490b7cc7d598e6a3b738853f9039}{}\label{ejercicio3a_8c_a4057490b7cc7d598e6a3b738853f9039}
+n\+Primos\+: reserva memoria para una lista de tamanio n-\/$>$n, que asigna a n-\/$>$lista y devuelve con los n primeros numeros primos. 
+\begin{DoxyParams}{Parameters}
+{\em n} & void$\ast$, puntero a My\+Arg, donde n-\/$>$n $>$ 0 indica el numero de primos a calcular \\
+\hline
+\end{DoxyParams}

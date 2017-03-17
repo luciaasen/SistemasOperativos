@@ -1,5 +1,5 @@
 /**
- * @file ejercicio4a.c
+ * @file ejer4a.c
  * @author Lucia Asencio y Rodrigo de Pool
  * @date 17-3-2017
  * @brief fichero que contiene ej4a de la practica 2 de SOPER

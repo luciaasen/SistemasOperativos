@@ -1,0 +1,101 @@
+\hypertarget{ejercicio10conSleep_8c}{}\section{ejercicio10con\+Sleep.\+c File Reference}
+\label{ejercicio10conSleep_8c}\index{ejercicio10con\+Sleep.\+c@{ejercicio10con\+Sleep.\+c}}
+
+
+fichero que contiene el ej10 de la practica 2 de S\+O\+P\+ER  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$signal.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$sys/types.\+h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\+h$>$}\\*
+{\ttfamily \#include $<$time.\+h$>$}\\*
+Include dependency graph for ejercicio10con\+Sleep.\+c\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bfseries N\+UM}~50\hypertarget{ejercicio10conSleep_8c_aaf0952059602752258dccaa015d7b54a}{}\label{ejercicio10conSleep_8c_aaf0952059602752258dccaa015d7b54a}
+
+\item 
+\#define {\bfseries P\+A\+TH}~\char`\"{}fichero\char`\"{}\hypertarget{ejercicio10conSleep_8c_ab0139008fdda107456f13f837872b410}{}\label{ejercicio10conSleep_8c_ab0139008fdda107456f13f837872b410}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{ejercicio10conSleep_8c_a3a1b9a1806b9d4a5e3b3560488211e04}{escribir\+Fichero} (F\+I\+LE $\ast$f, char $\ast$str)
+\item 
+void \hyperlink{ejercicio10conSleep_8c_a7ba8651b3c67f7e8ce4ea8757091fb45}{leer\+Fichero} (F\+I\+LE $\ast$f, char $\ast$str)
+\item 
+void \hyperlink{ejercicio10conSleep_8c_a262cab9b2891df0f039a4a5c42ba9fb4}{esperar\+Hijos} (int num)
+\item 
+int \hyperlink{ejercicio10conSleep_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+fichero que contiene el ej10 de la practica 2 de S\+O\+P\+ER 
+
+\begin{DoxyAuthor}{Author}
+Lucia Asencio y Rodrigo de Pool 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+17-\/3-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\index{ejercicio10con\+Sleep.\+c@{ejercicio10con\+Sleep.\+c}!escribir\+Fichero@{escribir\+Fichero}}
+\index{escribir\+Fichero@{escribir\+Fichero}!ejercicio10con\+Sleep.\+c@{ejercicio10con\+Sleep.\+c}}
+\subsubsection[{\texorpdfstring{escribir\+Fichero(\+F\+I\+L\+E $\ast$f, char $\ast$str)}{escribirFichero(FILE *f, char *str)}}]{\setlength{\rightskip}{0pt plus 5cm}void escribir\+Fichero (
+\begin{DoxyParamCaption}
+\item[{F\+I\+LE $\ast$}]{f, }
+\item[{char $\ast$}]{str}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio10conSleep_8c_a3a1b9a1806b9d4a5e3b3560488211e04}{}\label{ejercicio10conSleep_8c_a3a1b9a1806b9d4a5e3b3560488211e04}
+Se encarga de escribir un string en el fichero 
+\begin{DoxyParams}{Parameters}
+{\em f} & puntero al fichero \\
+\hline
+{\em str} & str string a escribir \\
+\hline
+\end{DoxyParams}
+\index{ejercicio10con\+Sleep.\+c@{ejercicio10con\+Sleep.\+c}!esperar\+Hijos@{esperar\+Hijos}}
+\index{esperar\+Hijos@{esperar\+Hijos}!ejercicio10con\+Sleep.\+c@{ejercicio10con\+Sleep.\+c}}
+\subsubsection[{\texorpdfstring{esperar\+Hijos(int num)}{esperarHijos(int num)}}]{\setlength{\rightskip}{0pt plus 5cm}void esperar\+Hijos (
+\begin{DoxyParamCaption}
+\item[{int}]{num}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio10conSleep_8c_a262cab9b2891df0f039a4a5c42ba9fb4}{}\label{ejercicio10conSleep_8c_a262cab9b2891df0f039a4a5c42ba9fb4}
+Funcion que se encarga de esperar a un numero de terminado de hijos 
+\begin{DoxyParams}{Parameters}
+{\em num} & numero de hijos \\
+\hline
+\end{DoxyParams}
+\index{ejercicio10con\+Sleep.\+c@{ejercicio10con\+Sleep.\+c}!leer\+Fichero@{leer\+Fichero}}
+\index{leer\+Fichero@{leer\+Fichero}!ejercicio10con\+Sleep.\+c@{ejercicio10con\+Sleep.\+c}}
+\subsubsection[{\texorpdfstring{leer\+Fichero(\+F\+I\+L\+E $\ast$f, char $\ast$str)}{leerFichero(FILE *f, char *str)}}]{\setlength{\rightskip}{0pt plus 5cm}void leer\+Fichero (
+\begin{DoxyParamCaption}
+\item[{F\+I\+LE $\ast$}]{f, }
+\item[{char $\ast$}]{str}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio10conSleep_8c_a7ba8651b3c67f7e8ce4ea8757091fb45}{}\label{ejercicio10conSleep_8c_a7ba8651b3c67f7e8ce4ea8757091fb45}
+Se encarga de leer una linea del fichero y guardarla en str 
+\begin{DoxyParams}{Parameters}
+{\em f} & puntero al fichero \\
+\hline
+{\em str} & string donde se guarda el string leido \\
+\hline
+\end{DoxyParams}
+\index{ejercicio10con\+Sleep.\+c@{ejercicio10con\+Sleep.\+c}!main@{main}}
+\index{main@{main}!ejercicio10con\+Sleep.\+c@{ejercicio10con\+Sleep.\+c}}
+\subsubsection[{\texorpdfstring{main()}{main()}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio10conSleep_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{}\label{ejercicio10conSleep_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}
+Ejercicio 10 propuesto 

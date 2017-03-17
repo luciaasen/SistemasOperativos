@@ -1,0 +1,146 @@
+\hypertarget{ejer4b_8c}{}\section{ejer4b.\+c File Reference}
+\label{ejer4b_8c}\index{ejer4b.\+c@{ejer4b.\+c}}
+
+
+fichero que contiene ej4b de la practica 2 de S\+O\+P\+ER  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$pthread.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+Include dependency graph for ejer4b.\+c\+:
+% FIG 0
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__Info}{\+\_\+\+Info}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct__Info}{\+\_\+\+Info} \hyperlink{ejer4b_8c_a87e6f9144aa3369bbfcbca90e30cca43}{Info}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{ejer4b_8c_acadbc8f2ab0cb79a2d665433c671de74}{liberar\+Matriz} (int $\ast$$\ast$matriz, int dim)
+\item 
+int $\ast$$\ast$ \hyperlink{ejer4b_8c_a62a06579118e57101527159657bd5f84}{crear\+Matriz} (int dim)
+\item 
+int \hyperlink{ejer4b_8c_ae61fb5166886270676bfb26bd00ca0ff}{lectura\+De\+Datos} (\hyperlink{ejer4a_8c_a87e6f9144aa3369bbfcbca90e30cca43}{Info} $\ast$i1, \hyperlink{ejer4a_8c_a87e6f9144aa3369bbfcbca90e30cca43}{Info} $\ast$i2)
+\item 
+\hyperlink{ejer4a_8c_a87e6f9144aa3369bbfcbca90e30cca43}{Info} $\ast$ \hyperlink{ejer4b_8c_aeed26cab0a8ebc3e6bd734831a86d232}{crear\+Info} (int dim)
+\item 
+void \hyperlink{ejer4b_8c_a89a72cd2083248293b9dbcdd5e7e3a81}{liberar\+Info} (\hyperlink{ejer4a_8c_a87e6f9144aa3369bbfcbca90e30cca43}{Info} $\ast$i)
+\item 
+void $\ast$ \hyperlink{ejer4b_8c_a8bfc1e74d1b5b946fd05e50b53ab1c64}{operacion\+Print} (void $\ast$i1)
+\item 
+int \hyperlink{ejer4b_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+fichero que contiene ej4b de la practica 2 de S\+O\+P\+ER 
+
+\begin{DoxyAuthor}{Author}
+Lucia Asencio y Rodrigo de Pool 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+17-\/3-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Typedef Documentation}
+\index{ejer4b.\+c@{ejer4b.\+c}!Info@{Info}}
+\index{Info@{Info}!ejer4b.\+c@{ejer4b.\+c}}
+\subsubsection[{\texorpdfstring{Info}{Info}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+\+Info} {\bf Info}}\hypertarget{ejer4b_8c_a87e6f9144aa3369bbfcbca90e30cca43}{}\label{ejer4b_8c_a87e6f9144aa3369bbfcbca90e30cca43}
+Definimos la estructura info que contendra toda la informacion que necesita cada una de las funciones de nuestros hilos. 
+
+\subsection{Function Documentation}
+\index{ejer4b.\+c@{ejer4b.\+c}!crear\+Info@{crear\+Info}}
+\index{crear\+Info@{crear\+Info}!ejer4b.\+c@{ejer4b.\+c}}
+\subsubsection[{\texorpdfstring{crear\+Info(int dim)}{crearInfo(int dim)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Info}$\ast$ crear\+Info (
+\begin{DoxyParamCaption}
+\item[{int}]{dim}
+\end{DoxyParamCaption}
+)}\hypertarget{ejer4b_8c_aeed26cab0a8ebc3e6bd734831a86d232}{}\label{ejer4b_8c_aeed26cab0a8ebc3e6bd734831a86d232}
+Funcion que se encarga de incilizar la estructura info dada la dimension, tambien inicializa la matriz de dentro 
+\begin{DoxyParams}{Parameters}
+{\em dim} & dimension de la matriz que contiene info \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Puntero al info creado o null en caso de error 
+\end{DoxyReturn}
+\index{ejer4b.\+c@{ejer4b.\+c}!crear\+Matriz@{crear\+Matriz}}
+\index{crear\+Matriz@{crear\+Matriz}!ejer4b.\+c@{ejer4b.\+c}}
+\subsubsection[{\texorpdfstring{crear\+Matriz(int dim)}{crearMatriz(int dim)}}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$$\ast$ crear\+Matriz (
+\begin{DoxyParamCaption}
+\item[{int}]{dim}
+\end{DoxyParamCaption}
+)}\hypertarget{ejer4b_8c_a62a06579118e57101527159657bd5f84}{}\label{ejer4b_8c_a62a06579118e57101527159657bd5f84}
+Funcion que se encarga de reservar memoria para una matriz 
+\begin{DoxyParams}{Parameters}
+{\em dim} & dimesnion de la matriz a la que se le requiere reservar mem \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $\ast$$\ast$ con la matriz creada o N\+U\+LL en caso de error 
+\end{DoxyReturn}
+\index{ejer4b.\+c@{ejer4b.\+c}!lectura\+De\+Datos@{lectura\+De\+Datos}}
+\index{lectura\+De\+Datos@{lectura\+De\+Datos}!ejer4b.\+c@{ejer4b.\+c}}
+\subsubsection[{\texorpdfstring{lectura\+De\+Datos(\+Info $\ast$i1, Info $\ast$i2)}{lecturaDeDatos(Info *i1, Info *i2)}}]{\setlength{\rightskip}{0pt plus 5cm}int lectura\+De\+Datos (
+\begin{DoxyParamCaption}
+\item[{{\bf Info} $\ast$}]{i1, }
+\item[{{\bf Info} $\ast$}]{i2}
+\end{DoxyParamCaption}
+)}\hypertarget{ejer4b_8c_ae61fb5166886270676bfb26bd00ca0ff}{}\label{ejer4b_8c_ae61fb5166886270676bfb26bd00ca0ff}
+Funcion que se encarga de leer los datos del usuario por la linea de comandos en introducirlos en las estructuras Info pasadas como argumento 
+\begin{DoxyParams}{Parameters}
+{\em i1} & Estructura Info del primer hilo \\
+\hline
+{\em i2} & Estructura Info del segundo hilo \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 si no ha habido error, 0 si ha habido un error 
+\end{DoxyReturn}
+\index{ejer4b.\+c@{ejer4b.\+c}!liberar\+Info@{liberar\+Info}}
+\index{liberar\+Info@{liberar\+Info}!ejer4b.\+c@{ejer4b.\+c}}
+\subsubsection[{\texorpdfstring{liberar\+Info(\+Info $\ast$i)}{liberarInfo(Info *i)}}]{\setlength{\rightskip}{0pt plus 5cm}void liberar\+Info (
+\begin{DoxyParamCaption}
+\item[{{\bf Info} $\ast$}]{i}
+\end{DoxyParamCaption}
+)}\hypertarget{ejer4b_8c_a89a72cd2083248293b9dbcdd5e7e3a81}{}\label{ejer4b_8c_a89a72cd2083248293b9dbcdd5e7e3a81}
+Funcion que se encarga de liberar un info \index{ejer4b.\+c@{ejer4b.\+c}!liberar\+Matriz@{liberar\+Matriz}}
+\index{liberar\+Matriz@{liberar\+Matriz}!ejer4b.\+c@{ejer4b.\+c}}
+\subsubsection[{\texorpdfstring{liberar\+Matriz(int $\ast$$\ast$matriz, int dim)}{liberarMatriz(int **matriz, int dim)}}]{\setlength{\rightskip}{0pt plus 5cm}void liberar\+Matriz (
+\begin{DoxyParamCaption}
+\item[{int $\ast$$\ast$}]{matriz, }
+\item[{int}]{dim}
+\end{DoxyParamCaption}
+)}\hypertarget{ejer4b_8c_acadbc8f2ab0cb79a2d665433c671de74}{}\label{ejer4b_8c_acadbc8f2ab0cb79a2d665433c671de74}
+Se encarga de liberar una matriz 
+\begin{DoxyParams}{Parameters}
+{\em matriz} & matriz a liberar \\
+\hline
+{\em dim} & la dimension en filas de la matriz \\
+\hline
+\end{DoxyParams}
+\index{ejer4b.\+c@{ejer4b.\+c}!main@{main}}
+\index{main@{main}!ejer4b.\+c@{ejer4b.\+c}}
+\subsubsection[{\texorpdfstring{main()}{main()}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{ejer4b_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{}\label{ejer4b_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}
+Funcion principal que ejecutará a través de hilos operaciones matriciales. Nota\+: Esta funcion puede ser sensible si no se introducen los datos con el formato indicado \index{ejer4b.\+c@{ejer4b.\+c}!operacion\+Print@{operacion\+Print}}
+\index{operacion\+Print@{operacion\+Print}!ejer4b.\+c@{ejer4b.\+c}}
+\subsubsection[{\texorpdfstring{operacion\+Print(void $\ast$i1)}{operacionPrint(void *i1)}}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ operacion\+Print (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{i1}
+\end{DoxyParamCaption}
+)}\hypertarget{ejer4b_8c_a8bfc1e74d1b5b946fd05e50b53ab1c64}{}\label{ejer4b_8c_a8bfc1e74d1b5b946fd05e50b53ab1c64}
+Funcion que ejecutara cada hilo 

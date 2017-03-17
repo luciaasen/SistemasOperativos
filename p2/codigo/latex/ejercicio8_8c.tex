@@ -1,0 +1,85 @@
+\hypertarget{ejercicio8_8c}{}\section{ejercicio8.\+c File Reference}
+\label{ejercicio8_8c}\index{ejercicio8.\+c@{ejercicio8.\+c}}
+
+
+fichero que contiene ej8 de la practica 2 de S\+O\+P\+ER para el manejo y envio de seniales entre padres e hijos  
+
+
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$signal.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$sys/types.\+h$>$}\\*
+{\ttfamily \#include $<$time.\+h$>$}\\*
+Include dependency graph for ejercicio8.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{ejercicio8_8c_a7f879b8312ae6ed21d1a89231ff564bd}{mytime} ()
+\item 
+void \hyperlink{ejercicio8_8c_a4f4eaeeaf28c653945156b635fa257b5}{sigterm\+Handler} (int sig)
+\item 
+void \hyperlink{ejercicio8_8c_a20866b5f1262f9f391f98981e0e54826}{sigusr1\+Handler} (int sig)
+\item 
+int \hyperlink{ejercicio8_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+fichero que contiene ej8 de la practica 2 de S\+O\+P\+ER para el manejo y envio de seniales entre padres e hijos 
+
+\begin{DoxyAuthor}{Author}
+Lucia Asencio y Rodrigo de Pool 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+16-\/3-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\index{ejercicio8.\+c@{ejercicio8.\+c}!main@{main}}
+\index{main@{main}!ejercicio8.\+c@{ejercicio8.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$$\ast$argv)}{main(int argc, char **argv)}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio8_8c_a3c04138a5bfe5d72780bb7e82a18e627}{}\label{ejercicio8_8c_a3c04138a5bfe5d72780bb7e82a18e627}
+Funcion main\+: crea N hijos secuencialmente. A partir del ultimo, se pasan entre ellos V veces la senial S\+I\+G\+U\+S\+R1, de padres a hijos (siendo el hijo del ultimo hijo el proceso raiz). Despues, repiten el mismo proceso para S\+I\+G\+T\+E\+RM, antes de hacer exit(). El padre empieza enviando la senial al hijo, y este a su hijo, etc hasta el ultimo hijo, que envia al padre. 
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+\index{ejercicio8.\+c@{ejercicio8.\+c}!mytime@{mytime}}
+\index{mytime@{mytime}!ejercicio8.\+c@{ejercicio8.\+c}}
+\subsubsection[{\texorpdfstring{mytime()}{mytime()}}]{\setlength{\rightskip}{0pt plus 5cm}int mytime (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio8_8c_a7f879b8312ae6ed21d1a89231ff564bd}{}\label{ejercicio8_8c_a7f879b8312ae6ed21d1a89231ff564bd}
+Funcion que devuelve una string con la hora actual \index{ejercicio8.\+c@{ejercicio8.\+c}!sigterm\+Handler@{sigterm\+Handler}}
+\index{sigterm\+Handler@{sigterm\+Handler}!ejercicio8.\+c@{ejercicio8.\+c}}
+\subsubsection[{\texorpdfstring{sigterm\+Handler(int sig)}{sigtermHandler(int sig)}}]{\setlength{\rightskip}{0pt plus 5cm}void sigterm\+Handler (
+\begin{DoxyParamCaption}
+\item[{int}]{sig}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio8_8c_a4f4eaeeaf28c653945156b635fa257b5}{}\label{ejercicio8_8c_a4f4eaeeaf28c653945156b635fa257b5}
+Manejador para la senial S\+I\+G\+T\+E\+RM 
+\begin{DoxyParams}{Parameters}
+{\em int} & sig senial a manejar \\
+\hline
+\end{DoxyParams}
+\index{ejercicio8.\+c@{ejercicio8.\+c}!sigusr1\+Handler@{sigusr1\+Handler}}
+\index{sigusr1\+Handler@{sigusr1\+Handler}!ejercicio8.\+c@{ejercicio8.\+c}}
+\subsubsection[{\texorpdfstring{sigusr1\+Handler(int sig)}{sigusr1Handler(int sig)}}]{\setlength{\rightskip}{0pt plus 5cm}void sigusr1\+Handler (
+\begin{DoxyParamCaption}
+\item[{int}]{sig}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio8_8c_a20866b5f1262f9f391f98981e0e54826}{}\label{ejercicio8_8c_a20866b5f1262f9f391f98981e0e54826}
+Manejador para S\+I\+G\+U\+S\+R1 
+\begin{DoxyParams}{Parameters}
+{\em sig} & senial a manejar \\
+\hline
+\end{DoxyParams}

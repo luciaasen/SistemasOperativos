@@ -1,0 +1,86 @@
+\hypertarget{ejercicio3b_8c}{}\section{ejercicio3b.\+c File Reference}
+\label{ejercicio3b_8c}\index{ejercicio3b.\+c@{ejercicio3b.\+c}}
+
+
+fichero que contiene ej3b de la practica 2 de S\+O\+P\+ER para el estudio forks vs threads  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$math.\+h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\+h$>$}\\*
+{\ttfamily \#include $<$sys/time.\+h$>$}\\*
+{\ttfamily \#include $<$time.\+h$>$}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+Include dependency graph for ejercicio3b.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{ejercicio3b_8c_a17e2ad086de00754139f9b4808dbdce4}{is\+Prime} (int num, int $\ast$lista, int tamanio)
+\item 
+int $\ast$ \hyperlink{ejercicio3b_8c_a86fd3efbec1ee2f82fe38b8dbf2d1ed2}{n\+Primos} (int n)
+\item 
+int \hyperlink{ejercicio3b_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+fichero que contiene ej3b de la practica 2 de S\+O\+P\+ER para el estudio forks vs threads 
+
+\begin{DoxyAuthor}{Author}
+Lucia Asencio y Rodrigo de Pool 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+16-\/3-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\index{ejercicio3b.\+c@{ejercicio3b.\+c}!is\+Prime@{is\+Prime}}
+\index{is\+Prime@{is\+Prime}!ejercicio3b.\+c@{ejercicio3b.\+c}}
+\subsubsection[{\texorpdfstring{is\+Prime(int num, int $\ast$lista, int tamanio)}{isPrime(int num, int *lista, int tamanio)}}]{\setlength{\rightskip}{0pt plus 5cm}int is\+Prime (
+\begin{DoxyParamCaption}
+\item[{int}]{num, }
+\item[{int $\ast$}]{lista, }
+\item[{int}]{tamanio}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio3b_8c_a17e2ad086de00754139f9b4808dbdce4}{}\label{ejercicio3b_8c_a17e2ad086de00754139f9b4808dbdce4}
+Funcion que calcula si un numero es o no primo, cribandolo. 
+\begin{DoxyParams}{Parameters}
+{\em num} & numero a comprobar. \\
+\hline
+{\em lista} & array de enteros con todos los primos anteriores a n \\
+\hline
+{\em tamanio} & numero de elementos de lista \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 si no es primo, 1 en caso contrario 
+\end{DoxyReturn}
+\index{ejercicio3b.\+c@{ejercicio3b.\+c}!main@{main}}
+\index{main@{main}!ejercicio3b.\+c@{ejercicio3b.\+c}}
+\subsubsection[{\texorpdfstring{main()}{main()}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio3b_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{}\label{ejercicio3b_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}
+Funcion main Genera de manera secuencial 100 hijos, cada uno de los cuales calcula los 10000 numeros primos. Cada hijo se lanzado cuando el anterior completa su ejecucion. Imprime el tiempo total de ejecucion \begin{DoxyReturn}{Returns}
+-\/1 en caso de error, 0 en caso de exito. 
+\end{DoxyReturn}
+\index{ejercicio3b.\+c@{ejercicio3b.\+c}!n\+Primos@{n\+Primos}}
+\index{n\+Primos@{n\+Primos}!ejercicio3b.\+c@{ejercicio3b.\+c}}
+\subsubsection[{\texorpdfstring{n\+Primos(int n)}{nPrimos(int n)}}]{\setlength{\rightskip}{0pt plus 5cm}int $\ast$ n\+Primos (
+\begin{DoxyParamCaption}
+\item[{int}]{n}
+\end{DoxyParamCaption}
+)}\hypertarget{ejercicio3b_8c_a86fd3efbec1ee2f82fe38b8dbf2d1ed2}{}\label{ejercicio3b_8c_a86fd3efbec1ee2f82fe38b8dbf2d1ed2}
+n\+Primos\+: reserva memoria para una lista de tamanio n, que devuelve con los n primeros numeros primos. 
+\begin{DoxyParams}{Parameters}
+{\em n} & entero $>$ 0, numero de primos a calcular \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+lista de primos o N\+U\+LL en caso de error. 
+\end{DoxyReturn}
