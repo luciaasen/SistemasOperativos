@@ -2,7 +2,7 @@
 #include <sys/shm.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <semaforos.h>
+#include "semaforos.h"
 
 /**
  * Crea un nuevo semaforo con el key dado y del tamanio indicado.
@@ -19,27 +19,30 @@
  */
 int Crear_Semaforo(key_t key, int size, int *semid){
     int i;
+    int ret = 1;
     union semun {
         int             val;
         struct semid_ds *semstat;
         unsigned short  *array;
     } arg;
-    arg = (unsigned short *) malloc(sizeof(unsigned short) * size);
+    arg.array = (unsigned short *) malloc(sizeof(unsigned short) * size);
 
     for (i = 0; i < size; i++)
         arg.array[i] = 0;
 
     *semid = semget(key, size, IPC_CREAT | IPC_EXCL | SHM_R | SHM_W);
     if (*semid == ERROR) {
+        ret = 0;
         *semid = semget(key, size, SHM_R | SHM_W);
         if (*semid == ERROR) {
-            return 0;
+            free(arg.array);
+            return ERROR;
         }
     }
     //Tanto si se crea nuevo como si ya existe, se fijan los valores a 0
     semctl(*semid, size, SETALL, arg);
-    free(values);
-    return 1;
+    free(arg.array);
+    return ret;
 }
 
 /**
@@ -67,7 +70,7 @@ int Inicializar_Semaforo(int semid, unsigned short *array){
  * @return       devuelve OK si todo correcto, y ERROR en caso de error
  */
 int Borrar_Semaforo(int semid){
-    if (smctl(semid, 0, IPC_RMID, 0) == -1) {
+    if (semctl(semid, 0, IPC_RMID, 0) == -1) {
         return ERROR;
     }
     return OK;
@@ -87,7 +90,7 @@ int operacionSemaforo(int id, int num_sem, int undo, int op){
 
     sem_oper.sem_num = num_sem;
     sem_oper.sem_op  = op;
-    sem_oper         = undo;
+    sem_oper.sem_flg = undo;
 
     if (semop(id, &sem_oper, 1) == -1)
         return ERROR;
