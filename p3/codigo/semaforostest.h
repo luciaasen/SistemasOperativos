@@ -1,13 +1,11 @@
 #ifndef SEMAFOROSTEST_H
-#define PASSED 1
-#define NOT_PASSED -1
+#define PASSED        1
+#define NOT_PASSED    -1
 
-//COMENTAR CUANDO LLEGUE A CASA CON ATOM
+//Comentarios realizados en el .c
 int Crear_Semaforo_Test();
 
 int Inicializar_Semaforo_Test();
-
-int Borrar_Semaforo_Test();
 
 int Down_Semaforo_Test();
 

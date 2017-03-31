@@ -1,3 +1,9 @@
+/**
+ * @file semaforos.c
+ * @author Lucia Asencio y Rodrigo de Pool
+ * @date 31-3-2017
+ * @brief fichero que contiene la implementacion de la libreria de semaforos
+ */
 #include <sys/sem.h>
 #include <sys/shm.h>
 #include <stdio.h>
@@ -32,7 +38,7 @@ int Crear_Semaforo(key_t key, int size, int *semid){
 
     *semid = semget(key, size, IPC_CREAT | IPC_EXCL | SHM_R | SHM_W);
     if (*semid == ERROR) {
-        ret = 0;
+        ret    = 0;
         *semid = semget(key, size, SHM_R | SHM_W);
         if (*semid == ERROR) {
             free(arg.array);
