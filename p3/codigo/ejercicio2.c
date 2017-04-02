@@ -1,3 +1,9 @@
+/**
+ * @file ejericio2.c
+ * @author Lucia Asencio y Rodrigo de Pool
+ * @date 31-3-2017
+ * @brief fichero que contiene la implementacion del ejercicio 2
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>

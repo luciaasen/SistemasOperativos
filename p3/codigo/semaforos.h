@@ -1,4 +1,5 @@
 #ifndef SEMAFOROS_H
+#include <sys/sem.h>
 #define OK       1
 #define ERROR    -1
 /***************************************************************
