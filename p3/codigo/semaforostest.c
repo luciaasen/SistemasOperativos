@@ -42,7 +42,7 @@ int Crear_Semaforo_Test(){
     //Circumstancias normales prueba2
     //Deberia devolver semaforo ya creado pero sin error
     i = Crear_Semaforo(clave, tam, &semid2);
-    if (i == 1) {
+    if (i == 1 || i == ERROR) {
         perror("Crear_Semaforo_Test prueba2 fallo.\n");
         Borrar_Semaforo(semid1);
         return NOT_PASSED;
@@ -229,6 +229,7 @@ int General_Multiple_Test(int num){
             return NOT_PASSED;
         }
     }
+    Borrar_Semaforo(semid);
     return PASSED;
 }
 

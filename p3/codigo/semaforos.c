@@ -20,35 +20,35 @@
  * @return      devuelve un 0 si el semaforo ya estaba creado 1 si se ha creado.
  * Si se creo el semaforo en semid se guarda su Identificador
  * Si ya estaba creado y no hubo error se devuelve el identificador, en este caso
- * tambien se colocan todos los semaforos a 0
+ * los valores del semaforo no son cambiados
  * Si no se logra crear el semafoto devuelve ERROR en semid
  */
 int Crear_Semaforo(key_t key, int size, int *semid){
     int i;
-    int ret = 1;
     union semun {
         int             val;
         struct semid_ds *semstat;
         unsigned short  *array;
     } arg;
+
+    *semid = semget(key, size, IPC_CREAT | IPC_EXCL | SHM_R | SHM_W);
+    if (*semid == ERROR) {
+        *semid = semget(key, size, SHM_R | SHM_W);
+        if (*semid == ERROR) {
+            return ERROR;
+        }
+        return 0;
+    }
+    //En caso de que se este creando el semaforo se incializa la estructura
     arg.array = (unsigned short *) malloc(sizeof(unsigned short) * size);
 
     for (i = 0; i < size; i++)
         arg.array[i] = 0;
 
-    *semid = semget(key, size, IPC_CREAT | IPC_EXCL | SHM_R | SHM_W);
-    if (*semid == ERROR) {
-        ret    = 0;
-        *semid = semget(key, size, SHM_R | SHM_W);
-        if (*semid == ERROR) {
-            free(arg.array);
-            return ERROR;
-        }
-    }
-    //Tanto si se crea nuevo como si ya existe, se fijan los valores a 0
+    //Se fijan valores a 0
     semctl(*semid, size, SETALL, arg);
     free(arg.array);
-    return ret;
+    return 1;
 }
 
 /**
