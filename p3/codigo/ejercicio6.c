@@ -96,16 +96,16 @@ int consumidor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio){
         (alpha->end) -= 1;
 
         printf(", lo deja a %d\n", alpha->end);
-        if(Up_Semaforo(*mutex, 0, 0) == -1){
-            shmdt(alpha);
-            return -1;            
-        }
         if(Up_Semaforo(*vacio, 0, 0) == -1){
             shmdt(alpha);
             return -1;            
         }
+        if(Up_Semaforo(*mutex, 0, 0) == -1){
+            shmdt(alpha);
+            return -1;            
+        }
         
-        usleep(1000);
+        usleep(10000);
     }
     return 0;
 }
@@ -126,16 +126,16 @@ int productor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio){
         (alpha->end) += 1;
         printf("El productor ha producido %c\n y deja el end a %d\n", alpha->alpha[alpha->end], alpha->end);
         fflush(stdout);
-
+       
+       if(Up_Semaforo(*lleno, 0, 0) == -1){
+            shmdt(alpha);
+            return -1;            
+        }
         if(Up_Semaforo(*mutex, 0, 0) == -1){
             shmdt(alpha);
             return -1;            
         }
-        if(Up_Semaforo(*lleno, 0, 0) == -1){
-            shmdt(alpha);
-            return -1;            
-        }
-        usleep(1000);
+        usleep(10000);
     }
     return 0;
 }
