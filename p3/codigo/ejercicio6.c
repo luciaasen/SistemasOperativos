@@ -11,7 +11,7 @@
 
 #define KEY 1
 #define KEY2 2
-#define FILEKEY "./"
+#define FILEKEY "/"
 
 typedef struct {
     char alpha[27];
@@ -92,9 +92,10 @@ int consumidor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio){
 
         /*Consume*/
         printf("El consumidor consume %c\n", alpha->alpha[alpha->end]);
+        fflush(stdout);
         alpha->end--;
 
-        if(Up_Semaforo(*mutex, 0, SEM_UNDO) == -1){
+        if(Up_Semaforo(*mutex, 0, 0) == -1){
             shmdt(alpha);
             return -1;            
         }
@@ -117,8 +118,9 @@ int productor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio){
         /*Produce*/
         alpha->end ++;
         printf("El productor ha producido %c\n", alpha->alpha[alpha->end]);
+        fflush(stdout);
 
-        if(Up_Semaforo(*mutex, 0, SEM_UNDO) == -1){
+        if(Up_Semaforo(*mutex, 0, 0) == -1){
             shmdt(alpha);
             return -1;            
         }
@@ -136,9 +138,12 @@ int crear_shmem(char *filekey, int key, int size, void **att){
         perror("Error en fok desde crear_shmem\n");
         return -1;
     }
-    if((id = shmget(k, size, IPC_CREAT | IPC_EXCL | SHM_R | SHM_W) == -1)){
+    id = shmget(352532, size, IPC_CREAT | IPC_EXCL | SHM_R | SHM_W); 
+    if( id == -1){
         if(errno == EEXIST){
-            if( id = shmget(k, size, SHM_R | SHM_W) == 1){
+	    printf("EEXIST\n");
+            id = shmget(352532, size, SHM_R | SHM_W);
+            if(id == -1){
                 perror("Error en shmget");
                 return -1;
             }            
@@ -147,7 +152,11 @@ int crear_shmem(char *filekey, int key, int size, void **att){
             return -1;
         }
     }
-    if((*att = (AlphaStack *)shmat(id, (void *)NULL, 0)) == ((void*)-1)){
+    printf("%d\n", id);
+    if(shmat(id, (void *)NULL, 0) == ((void*)-1)){
+       printf("Papaya\n");
+    }
+    if((*((AlphaStack**)att) = (AlphaStack *)shmat(id, (void *)NULL, 0)) == ((void*)-1)){
        /* if(*att == NULL){
             perror("shmat devolvio NULL\n");
             printf("id %d\n", id);
@@ -169,7 +178,6 @@ int crear_shmem(char *filekey, int key, int size, void **att){
         }
         
         perror("Error en el attach de crear_shmem\n");
-        shmdt(*att);
         shmctl(id, IPC_RMID, (struct shmid_ds *)NULL);
         return -1;
     }
@@ -189,7 +197,8 @@ int crear_sems(char *filekey, int *mutex, int *lleno, int *vacio){
     }
 
     /*Debemos inicializar los semaforos, ademas de crearlos*/
-    if((ret = Crear_Semaforo(k1, 1, mutex)) == -1){
+    ret = Crear_Semaforo(k1, 1, mutex); 
+    if((ret) == -1){
         perror("Error en la creacion de semaforo mutex\n");
         return -1;
     } else if(ret == 0){
@@ -199,8 +208,9 @@ int crear_sems(char *filekey, int *mutex, int *lleno, int *vacio){
         array[0] = 1;
         Inicializar_Semaforo(*mutex, array);
     }
-
-    if((ret = Crear_Semaforo(k2, 1, vacio)) == -1){
+   
+    ret = Crear_Semaforo(k2, 1, vacio);
+    if((ret) == -1){
         perror("Error en la creacion de semaforo vacio\n");
         Borrar_Semaforo(*mutex);
         return -1;
@@ -213,7 +223,8 @@ int crear_sems(char *filekey, int *mutex, int *lleno, int *vacio){
         Inicializar_Semaforo(*vacio, array);
     }
 
-    if((ret = Crear_Semaforo(k3, 1, lleno)) == -1){
+    ret = Crear_Semaforo(k3, 1, lleno);
+    if((ret) == -1){
         perror("Error en la creacion de semaforo lleno\n");
         Borrar_Semaforo(*mutex);
         Borrar_Semaforo(*vacio);
@@ -232,22 +243,22 @@ int in_critica(int *sem1, int *sem2, int *sem3){
        perror("Error en los argumentos de entrada a in_critica\n");
        return -1;
     }
-    if( Down_Semaforo(*sem1, 0, SEM_UNDO) == -1){
-        perror("Error en las operaciones de in_critica\n");
+    if( Down_Semaforo(*sem1, 0, 0) == -1){
+        printf("Error en las operaciones 1 de in_critica %d\n", getpid());
         Borrar_Semaforo(*sem1);
         Borrar_Semaforo(*sem2);
         Borrar_Semaforo(*sem3);
         return -1;
     }
-    if( Down_Semaforo(*sem2, 0, SEM_UNDO) == -1){
-        perror("Error en las operaciones de in_critica\n");
+    if( Down_Semaforo(*sem2, 0, 0) == -1){
+        printf("Error en las operaciones 2 de in_critica %d\n", getpid());
         Borrar_Semaforo(*sem1);
         Borrar_Semaforo(*sem2);
         Borrar_Semaforo(*sem3);
         return -1;
     }
-    if( Up_Semaforo(*sem3, 0, SEM_UNDO) == -1){
-        perror("Error en las operaciones de in_critica\n");
+    if( Up_Semaforo(*sem3, 0, 0) == -1){
+        printf("Error en las operaciones 3 de in_critica %d\n", getpid());
         Borrar_Semaforo(*sem1);
         Borrar_Semaforo(*sem2);
         Borrar_Semaforo(*sem3);
@@ -283,7 +294,7 @@ int main(){
 
     /*creacion + atach shmem*/
     pq = &q;
-    if( (id = crear_shmem(FILEKEY, KEY, sizeof(AlphaStack), (void **)(&q)) )   == -1){
+    if( (id = crear_shmem(FILEKEY, KEY, sizeof(AlphaStack), (void **)(&pq)) )   == -1){
         return -1;
     }
     strcpy(q.alpha, myalpha);
