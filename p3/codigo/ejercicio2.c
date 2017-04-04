@@ -95,7 +95,7 @@ int main(int argc, char const *argv[]) {
     }
     //Establecemos memoria para todos los hijos en info
     info = (Info *) shmat(id_zone, (void *) NULL, 0);
-    if (info == NULL) {
+    if (info == (void *)-1) {
         perror("Error en el attachment de memoria.\n");
         return 0;
     }
