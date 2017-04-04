@@ -22,7 +22,7 @@ main_test.o: main_test.c
 	gcc -c  $^
 
 ejercicio6.o: ejercicio6.c
-	gcc -c  $^
+	gcc -c -pedantic -Wall $^
 
 clean:
 	 rm $(EXEC) 

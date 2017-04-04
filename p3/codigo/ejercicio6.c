@@ -9,7 +9,7 @@
 #include <string.h>
 #include "semaforos.h"
 
-#define KEY 1
+#define KEY 1432676
 #define KEY2 2
 #define FILEKEY "/"
 
@@ -30,7 +30,7 @@ typedef struct {
  * @param size: int > 0, tamanio de la memoria a compartir
  * @return identifier for the shared mmemory, -1 in case of error
 */
-int crear_shmem(char *filekey, int key, int size, void **att);
+int crear_shmem(char *filekey, int key, int size, AlphaStack **att);
 
 /**
  * Solicita los 3 sems necesarios para el problema productor/consumidor
@@ -40,7 +40,7 @@ int crear_shmem(char *filekey, int key, int size, void **att);
  * @param mutex, lleno, vacio: punteros a los ints donde se guarda los sems id
  * @return 0 si semaforos creados, -1 en caso de error (libera los semaforos ya creados si error)
  */
-int crear_sems(char *filekey, int *mutex, int *lleno, int *vacio);
+int crear_sems(char *filekey, int **mutex, int **lleno, int **vacio);
 
 /**
  * Sirve para generalizar la enttrada a la seccion critica por parte de ambos procesos, ya que los dos hacen
@@ -82,19 +82,20 @@ int consumidor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio){
     if(alpha == NULL || mutex == NULL || lleno == NULL || vacio == NULL){
         return -1;
     }
-    
+   
+    printf("Soy las prmeras lineasdel consumidor, y voy a asegurarme de que:\n%s\n%d\npid: %d\n", alpha->alpha, alpha->end, getpid());
     /*bucle*/
     while(1){
         if(in_critica(lleno, mutex, vacio) == -1){
             shmdt(alpha);
             return -1;
         }
-
         /*Consume*/
-        printf("El consumidor consume %c\n", alpha->alpha[alpha->end]);
+        printf("El consumidor consume %c se encuentra el end a : %d", alpha->alpha[alpha->end], alpha->end);
         fflush(stdout);
-        alpha->end--;
+        (alpha->end) -= 1;
 
+        printf(", lo deja a %d\n", alpha->end);
         if(Up_Semaforo(*mutex, 0, 0) == -1){
             shmdt(alpha);
             return -1;            
@@ -116,8 +117,8 @@ int productor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio){
         }
 
         /*Produce*/
-        alpha->end ++;
-        printf("El productor ha producido %c\n", alpha->alpha[alpha->end]);
+        (alpha->end) += 1;
+        printf("El productor ha producido %c\n y deja el end a %d\n", alpha->alpha[alpha->end], alpha->end);
         fflush(stdout);
 
         if(Up_Semaforo(*mutex, 0, 0) == -1){
@@ -128,21 +129,20 @@ int productor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio){
     return 0;
 }
 
-int crear_shmem(char *filekey, int key, int size, void **att){
+int crear_shmem(char *filekey, int key, int size, AlphaStack **att){
     int k, id;
     if(filekey == NULL || size < 1 ){
         perror("Error en los parametros para crear_shmem\n");
         return -1;
     }   
-    if(k = ftok(filekey, 136) == -1){
+    if((k = ftok(filekey, key)) == -1){
         perror("Error en fok desde crear_shmem\n");
         return -1;
     }
-    id = shmget(352532, size, IPC_CREAT | IPC_EXCL | SHM_R | SHM_W); 
+    id = shmget(k, size, IPC_CREAT | IPC_EXCL | SHM_R | SHM_W); 
     if( id == -1){
         if(errno == EEXIST){
-	    printf("EEXIST\n");
-            id = shmget(352532, size, SHM_R | SHM_W);
+            id = shmget(k, size, SHM_R | SHM_W);
             if(id == -1){
                 perror("Error en shmget");
                 return -1;
@@ -152,11 +152,9 @@ int crear_shmem(char *filekey, int key, int size, void **att){
             return -1;
         }
     }
-    printf("%d\n", id);
-    if(shmat(id, (void *)NULL, 0) == ((void*)-1)){
-       printf("Papaya\n");
-    }
-    if((*((AlphaStack**)att) = (AlphaStack *)shmat(id, (void *)NULL, 0)) == ((void*)-1)){
+   
+    *att = (AlphaStack *)shmat(id, (void *)NULL, 0);  
+    if( *att == ((void*)-1)){
        /* if(*att == NULL){
             perror("shmat devolvio NULL\n");
             printf("id %d\n", id);
@@ -184,57 +182,59 @@ int crear_shmem(char *filekey, int key, int size, void **att){
     return id;
 }
 
-int crear_sems(char *filekey, int *mutex, int *lleno, int *vacio){
+int crear_sems(char *filekey, int **mutex, int **lleno, int **vacio){
     int ret, k1, k2, k3;
-    unsigned short array[1];
+    unsigned short array[1], array2[1], array3[1];
     if(filekey == NULL || lleno == NULL || vacio == NULL || filekey == NULL){
         perror("Error en los argumentos de entrada a crear_sems\n");
         return -1;
     }
-    if( (k1 = ftok(filekey, 2) == -1) || (k2 = ftok(filekey, 3) == -1) || (k3 = ftok(filekey, 4) == -1) ){
+
+    k1 = ftok(filekey, 256743);
+    k2 = ftok(filekey, 721572);
+    k3 = ftok(filekey, 17625);
+    if( ( k1 == -1) || ( k2 == -1) ||  k3 == -1) {
         perror("Error en el ftok desde crear_sems\n");
         return -1;
     }
 
     /*Debemos inicializar los semaforos, ademas de crearlos*/
-    ret = Crear_Semaforo(k1, 1, mutex); 
+    ret = Crear_Semaforo(k1, 1, *mutex); 
     if((ret) == -1){
-        perror("Error en la creacion de semaforo mutex\n");
+        perror("Error en la creacion de semaforo mutex \n");
         return -1;
-    } else if(ret == 0){
-        perror("El semaforo mutex ya existia\n");
-        return -1;
-    } else{
+    } else {
         array[0] = 1;
-        Inicializar_Semaforo(*mutex, array);
+        Inicializar_Semaforo(**mutex, array);
+        printf("Semaforo mutex %d creado e inicializado por %d\n", **mutex, getpid());
     }
+    printf("Semaforo mutex %d creado e inicializado por %d\n", **mutex, getpid());
    
-    ret = Crear_Semaforo(k2, 1, vacio);
+    ret = Crear_Semaforo(k2, 1, *vacio);
     if((ret) == -1){
-        perror("Error en la creacion de semaforo vacio\n");
-        Borrar_Semaforo(*mutex);
+        perror("Error en la creacion de semaforo vacio \n");
+        Borrar_Semaforo(**mutex);
         return -1;
-    } else if(ret == 0){
-        perror("El semaforo vacio ya existia\n");
-        Borrar_Semaforo(*mutex);
-        return -1;
-    } else{
-        array[0] = 26;
-        Inicializar_Semaforo(*vacio, array);
+    } else {
+        array2[0] = 26;
+        Inicializar_Semaforo(**vacio, array2);
+        printf("Semaforo vacio %d creado e inicializado por %d\n", **vacio, getpid());
     }
+    printf("Semaforo vacio %d creado por %d\n", **vacio, getpid());
 
-    ret = Crear_Semaforo(k3, 1, lleno);
+    ret = Crear_Semaforo(k3, 1, *lleno);
     if((ret) == -1){
         perror("Error en la creacion de semaforo lleno\n");
-        Borrar_Semaforo(*mutex);
-        Borrar_Semaforo(*vacio);
+        Borrar_Semaforo(**mutex);
+        Borrar_Semaforo(**vacio);
         return -1;
-    } else if(ret == 0){
-        perror("El semaforo lleno ya existia");
-        Borrar_Semaforo(*mutex);
-        Borrar_Semaforo(*vacio);
-        return -1;
+    } else {
+        array3[0] = 0;
+        printf("Semaforo lleno %d creado e inicializado por %d\n", **lleno, getpid());
+        Inicializar_Semaforo(**lleno, array3);
     }
+    printf("Semaforo lleno %d creado por %d\n", **lleno, getpid());
+    
     return 0;
 }
 
@@ -288,20 +288,23 @@ int in_critica(int *sem1, int *sem2, int *sem3){
 }*/
 
 int main(){
-    int id, mutex, lleno, vacio, pid, ret, status;
+    int id, mutex, *pmutex, lleno, *plleno, vacio, *pvacio, pid, ret, status;
     AlphaStack q, *pq;
     char myalpha[27] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',  'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '\0'};
 
     /*creacion + atach shmem*/
     pq = &q;
-    if( (id = crear_shmem(FILEKEY, KEY, sizeof(AlphaStack), (void **)(&pq)) )   == -1){
+    if( (id = crear_shmem(FILEKEY, KEY, sizeof(AlphaStack), (&pq)) )   == -1){
         return -1;
     }
     strcpy(q.alpha, myalpha);
     q.end = -1;
-   
+    printf("%s\n%d\nHola, solo deberia ejecutarme una vez y estoy al ppio del main %d\n", q.alpha, q.end, getpid()); 
     /*semaforos necesarios*/
-    if( (crear_sems(FILEKEY, &mutex, &lleno, &vacio)) == -1){
+    pmutex = &mutex;
+    pvacio = &vacio;
+    plleno = &lleno;
+    if( (crear_sems(FILEKEY, &pmutex, &plleno, &pvacio)) == -1){
         shmdt(&q);
         shmctl(id, IPC_RMID, (struct shmid_ds *)NULL);
         return -1;
@@ -318,6 +321,7 @@ int main(){
         return -1;
     }else if( pid == 0){
         ret = consumidor(&q, &mutex, &lleno, &vacio);
+        printf("%s\n%d\nHola, soy el proceso hijo y quiero asegurarme de q tengo bien el accesp a la mem compartida%d\n", q.alpha, q.end, getpid());        
         Borrar_Semaforo(mutex);
         Borrar_Semaforo(lleno);
         Borrar_Semaforo(vacio);
@@ -327,6 +331,7 @@ int main(){
         exit(EXIT_SUCCESS);
     }else{
         ret = productor(&q, &mutex, &lleno, &vacio);
+        
     }
 
     /*Esperamos por el consumidor*/
