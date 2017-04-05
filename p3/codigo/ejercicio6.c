@@ -84,12 +84,23 @@ int consumidor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio){
     }
    
     printf("Soy las prmeras lineasdel consumidor, y voy a asegurarme de que:\n%s\n%d\npid: %d\n", alpha->alpha, alpha->end, getpid());
+    printf("Al consumidor: mutex = %d, lleno = %d, vacio = %d\n", semctl(*mutex, 0, GETVAL), semctl(*lleno, 0, GETVAL), semctl(*vacio, 0, GETVAL));
     /*bucle*/
     while(1){
-        if(in_critica(lleno, mutex, vacio) == -1){
+        if(Down_Semaforo(*lleno, 0, 0) == -1){
+            shmdt(alpha);
+            return -1;            
+        }
+        printf("El consumidor hace down a lleno: lo deja a %d\n", semctl(*lleno, 0, GETVAL));
+        if(Down_Semaforo(*mutex, 0, 0) == -1){
+            shmdt(alpha);
+            return -1;            
+        }
+        printf("El consumidor hace down a mutex: lo deja a %d\n", semctl(*mutex, 0, GETVAL));
+        /*if(in_critica(lleno, mutex, vacio) == -1){
             shmdt(alpha);
             return -1;
-        }
+        }*/
         /*Consume*/
         printf("El consumidor consume %c se encuentra el end a : %d", alpha->alpha[alpha->end], alpha->end);
         fflush(stdout);
@@ -100,12 +111,14 @@ int consumidor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio){
             shmdt(alpha);
             return -1;            
         }
+        //printf("El consumidor hace up a vacio: lo deja a %d\n", semctl(*vacio, 0, GETVAL));
         if(Up_Semaforo(*mutex, 0, 0) == -1){
             shmdt(alpha);
             return -1;            
         }
+        //printf("El consumidor hace up a mutex: lo deja a %d\n", semctl(*mutex, 0, GETVAL));
         
-        usleep(10000);
+        usleep(100000);
     }
     return 0;
 }
@@ -114,28 +127,41 @@ int productor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio){
     if(alpha == NULL || mutex == NULL || lleno == NULL || vacio == NULL){
         return -1;
     }
+    printf("Al productor: mutex = %d, lleno = %d, vacio = %d\n", semctl(*mutex, 0, GETVAL), semctl(*lleno, 0, GETVAL), semctl(*vacio, 0, GETVAL));
 
     /*bucle*/
     while(1){
-        if(in_critica(vacio, mutex, lleno) == -1){
+        if(Down_Semaforo(*vacio, 0, 0) == -1){
+            shmdt(alpha);
+            return -1;            
+        }
+        printf("El productor hace down a vacio: %d\n", semctl(*vacio, 0, GETVAL));
+        if(Down_Semaforo(*mutex, 0, 0) == -1){
+            shmdt(alpha);
+            return -1;            
+        }
+        printf("El productor hace down a mutex: lo deja a %d\n", semctl(*mutex, 0, GETVAL));
+        /*if(in_critica(vacio, mutex, lleno) == -1){
             shmdt(alpha);
             return -1;
-        }
+        }*/
 
         /*Produce*/
         (alpha->end) += 1;
         printf("El productor ha producido %c\n y deja el end a %d\n", alpha->alpha[alpha->end], alpha->end);
         fflush(stdout);
        
-       if(Up_Semaforo(*lleno, 0, 0) == -1){
+        if(Up_Semaforo(*lleno, 0, 0) == -1){
             shmdt(alpha);
             return -1;            
         }
+        //printf("El productor hace up a lleno: lo deja a %d\n", semctl(*lleno, 0, GETVAL));
         if(Up_Semaforo(*mutex, 0, 0) == -1){
             shmdt(alpha);
             return -1;            
         }
-        usleep(10000);
+        //printf("El productor hace up a mutex: lo deja a %d\n", semctl(*mutex, 0, GETVAL));
+        usleep(100000);
     }
     return 0;
 }
@@ -227,7 +253,7 @@ int crear_sems(char *filekey, int *mutex, int *lleno, int *vacio){
         Borrar_Semaforo(*mutex);
         return -1;
     } else {
-        array2[0] = 26;
+        array2[0] = 6;
         Inicializar_Semaforo(*vacio, array2);
         printf("Semaforo vacio %d creado e inicializado por %d\n", *vacio, getpid());
     }
@@ -256,16 +282,16 @@ int in_critica(int *sem1, int *sem2, int *sem3){
     }
     if( Down_Semaforo(*sem1, 0, 0) == -1){
         printf("Error en las operaciones 1 de in_critica %d\n", getpid());
-        Borrar_Semaforo(*sem1);
+        /*Borrar_Semaforo(*sem1);
         Borrar_Semaforo(*sem2);
-        Borrar_Semaforo(*sem3);
+        Borrar_Semaforo(*sem3);*/
         return -1;
     }
     if( Down_Semaforo(*sem2, 0, 0) == -1){
         printf("Error en las operaciones 2 de in_critica %d\n", getpid());
-        Borrar_Semaforo(*sem1);
+        /*Borrar_Semaforo(*sem1);
         Borrar_Semaforo(*sem2);
-        Borrar_Semaforo(*sem3);
+        Borrar_Semaforo(*sem3);*/
         return -1;
     }
     /*if( Up_Semaforo(*sem3, 0, 0) == -1){
