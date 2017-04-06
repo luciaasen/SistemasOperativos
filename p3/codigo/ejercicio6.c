@@ -22,6 +22,15 @@ typedef struct {
 /*Cabeceras de funciones*/
 /************************/
 
+/**
+ * Main que, utilizando dos procesos hijos, simula los procesos productor y consumidor
+ * Pueden omitirse todos los argumentos (los argumentos por defecto son 1000,5000, 80000), omitirse el ultimo (por defecto, se usa 100000), o no omitirse ninguno.
+ * @arg argv[1] , n1, int >=0 que indica el usleep(n1) que ejecutara el padre entre produccion y produccion
+ * @arg argv[2] , n2, int >=0 que indica el usleep(n2) que ejecutara el padre entre consumicion y consumicion
+ * @arg argv[3] , n3, int > 0 que indica el usleep(n3) que ejecutara el hijo temporizador antes de cortar la produccion/consumicion de los otros dos.
+ * @return 0 si todo fue bien, -1 si error
+ */
+ int main(int argc, char **argv);
 
 /**
  * Solicita zona de memoria compartida, primero con IPC_CREAT | IPC_EXCL y, si ya existe,
@@ -268,20 +277,25 @@ int main(int argc, char**argv){
     int ret, prodSleep, consSleep, tempo;
     AlphaStack q, *pq;
     char myalpha[27] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',  'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '\0'};
-
     /*Captamos argumentos entrada*/
-    if(argc != 4){
-        perror("Error. El programa espera 3 naturales:\n \tn1: sleep productor\n\tn2: sleep consumidor\n\tn3: temporizador\n");
+    if(argc == 1){
+        prodSleep = 1000;
+        consSleep = 5000;
+        tempo = 40000;
+    }else if(argc == 3){
+        tempo = 100000;
+    }else if (argc == 4){
+        prodSleep = atoi(argv[1]);
+        consSleep = atoi(argv[2]);
+        tempo = atoi(argv[3]);
+        if(prodSleep < 0 || consSleep < 0 || tempo < 1){
+            perror("Error: Necesito sleeps de entrada >= 0, temp > 0 \n");
+            return -1;
+        }   
+    }else{
+        perror("Error. El programa espera 0, 2 o 3 naturales:\n \tn1: sleep productor\n\tn2: sleep consumidor\n\tn3: temporizador\n");
         return -1;
     }
-    prodSleep = atoi(argv[1]);
-    consSleep = atoi(argv[2]);
-    tempo = atoi(argv[3]);
-    if(prodSleep < 0 || consSleep < 0 || tempo < 1){
-        perror("Error: Necesito sleeps de entrada >= 0, temp > 0 \n");
-        return -1;
-    }
-    printf("Holis,\n");
     /*creacion + atach + inicialicacion shmem*/
     pq = &q;
     if( (id = crear_shmem(FILEKEY, KEY, sizeof(AlphaStack), (&pq)) )   == -1){
@@ -296,7 +310,7 @@ int main(int argc, char**argv){
         shmctl(id, IPC_RMID, (struct shmid_ds *)NULL);
         return -1;
     }
-    printf("Semaforos: %d %d %d\n", mutex, lleno, vacio);    
+    printf("Semaforos: %d %d %d\nShmem: %d\n", mutex, lleno, vacio, id);    
     /*Ahora creamos otros 2 procesos: padre produce, hijo1 consume, hijo2 temporiza*/
     if((pid[0] = fork()) == -1){
         perror("Error en el fork\n");
