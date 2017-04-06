@@ -1,0 +1,137 @@
+\hypertarget{semaforostest_8c}{}\section{semaforostest.\+c File Reference}
+\label{semaforostest_8c}\index{semaforostest.\+c@{semaforostest.\+c}}
+
+
+fichero que contiene la implementacion de la libreria de test de semaforos  
+
+
+{\ttfamily \#include \char`\"{}semaforostest.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}semaforos.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$sys/sem.\+h$>$}\\*
+Include dependency graph for semaforostest.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{semaforostest_8c_a690f9bf5cd8e35a7348736d7e8a1e415}{Crear\+\_\+\+Semaforo\+\_\+\+Test} ()
+\item 
+int \hyperlink{semaforostest_8c_ae680879a5e9847bece11700c6590a42e}{Inicializar\+\_\+\+Semaforo\+\_\+\+Test} ()
+\item 
+int \hyperlink{semaforostest_8c_a8511bf1daa132afdc36705625b843b81}{General\+\_\+\+Single\+\_\+\+Test} (int num)
+\item 
+int \hyperlink{semaforostest_8c_ad2c6e360caef5fb8941a4eb5711a8340}{Down\+\_\+\+Semaforo\+\_\+\+Test} ()
+\item 
+int \hyperlink{semaforostest_8c_afe874f196f8c15771fc7be26a964bcf3}{Up\+\_\+\+Semaforo\+\_\+\+Test} ()
+\item 
+int \hyperlink{semaforostest_8c_a94feba5565ac841ea34c866bca0b2eb0}{General\+\_\+\+Multiple\+\_\+\+Test} (int num)
+\item 
+int \hyperlink{semaforostest_8c_afbb8de52eaeb143e3b5dba13bac9ec2b}{Down\+Multiple\+\_\+\+Semaforo\+\_\+\+Test} ()
+\item 
+int \hyperlink{semaforostest_8c_a5ee7101ac572581ab057b40d1c8752ae}{Up\+Multiple\+\_\+\+Semaforo\+\_\+\+Test} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+fichero que contiene la implementacion de la libreria de test de semaforos 
+
+\begin{DoxyAuthor}{Author}
+Lucia Asencio y Rodrigo de Pool 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+31-\/3-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\index{semaforostest.\+c@{semaforostest.\+c}!Crear\+\_\+\+Semaforo\+\_\+\+Test@{Crear\+\_\+\+Semaforo\+\_\+\+Test}}
+\index{Crear\+\_\+\+Semaforo\+\_\+\+Test@{Crear\+\_\+\+Semaforo\+\_\+\+Test}!semaforostest.\+c@{semaforostest.\+c}}
+\subsubsection[{\texorpdfstring{Crear\+\_\+\+Semaforo\+\_\+\+Test()}{Crear_Semaforo_Test()}}]{\setlength{\rightskip}{0pt plus 5cm}int Crear\+\_\+\+Semaforo\+\_\+\+Test (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{semaforostest_8c_a690f9bf5cd8e35a7348736d7e8a1e415}{}\label{semaforostest_8c_a690f9bf5cd8e35a7348736d7e8a1e415}
+Funcion que prueba Crear\+\_\+\+Semaforo\+\_\+\+Test\+: 1) Se asegura que se crear un semaforo en condiciones normales 2) Se asegura que se puede solicitar la informacion de un semaforo ya creado 3) Se asegura que NO se puede crear otro semaforo con la misma clave y un tamanio distinto ( si fueran el mismo estariamos en el caso 2) 4) Se asegura que el valor de cada semaforo creado es 0 \begin{DoxyReturn}{Returns}
+P\+A\+S\+S\+ED si el test termina con exito, N\+O\+T\+\_\+\+P\+A\+S\+S\+ED en caso contrario 
+\end{DoxyReturn}
+\index{semaforostest.\+c@{semaforostest.\+c}!Down\+\_\+\+Semaforo\+\_\+\+Test@{Down\+\_\+\+Semaforo\+\_\+\+Test}}
+\index{Down\+\_\+\+Semaforo\+\_\+\+Test@{Down\+\_\+\+Semaforo\+\_\+\+Test}!semaforostest.\+c@{semaforostest.\+c}}
+\subsubsection[{\texorpdfstring{Down\+\_\+\+Semaforo\+\_\+\+Test()}{Down_Semaforo_Test()}}]{\setlength{\rightskip}{0pt plus 5cm}int Down\+\_\+\+Semaforo\+\_\+\+Test (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{semaforostest_8c_ad2c6e360caef5fb8941a4eb5711a8340}{}\label{semaforostest_8c_ad2c6e360caef5fb8941a4eb5711a8340}
+Funcion que prueba el correcto funcionamiento de Down\+\_\+\+Semaforo\+: Crea un semaforo de 4 elementos y se inicializan. Luego se hace down a cada uno de los semaforos probando que, en efecto, su valor disminuye \begin{DoxyReturn}{Returns}
+P\+A\+S\+S\+ED si el test termina con exito, N\+O\+T\+\_\+\+P\+A\+S\+S\+ED en caso contrario 
+\end{DoxyReturn}
+\index{semaforostest.\+c@{semaforostest.\+c}!Down\+Multiple\+\_\+\+Semaforo\+\_\+\+Test@{Down\+Multiple\+\_\+\+Semaforo\+\_\+\+Test}}
+\index{Down\+Multiple\+\_\+\+Semaforo\+\_\+\+Test@{Down\+Multiple\+\_\+\+Semaforo\+\_\+\+Test}!semaforostest.\+c@{semaforostest.\+c}}
+\subsubsection[{\texorpdfstring{Down\+Multiple\+\_\+\+Semaforo\+\_\+\+Test()}{DownMultiple_Semaforo_Test()}}]{\setlength{\rightskip}{0pt plus 5cm}int Down\+Multiple\+\_\+\+Semaforo\+\_\+\+Test (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{semaforostest_8c_afbb8de52eaeb143e3b5dba13bac9ec2b}{}\label{semaforostest_8c_afbb8de52eaeb143e3b5dba13bac9ec2b}
+Funcion que prueba el correcto funcioamiento de Down\+Multiple\+\_\+\+Semaforo\+: Se crea un semaforo de 4 elementos y se inicializan. Se le aplica la funcion a 3 elementos indicando sus valores a traves de un array. Luego se prueba que los valores fueron cambiados satisfactoriamente y que el elemento no cambiado se mantuvo en su mismo estado \begin{DoxyReturn}{Returns}
+P\+A\+S\+S\+ED si el el test termina con exito, N\+O\+T\+\_\+\+P\+A\+S\+S\+ED en caso contrario 
+\end{DoxyReturn}
+\index{semaforostest.\+c@{semaforostest.\+c}!General\+\_\+\+Multiple\+\_\+\+Test@{General\+\_\+\+Multiple\+\_\+\+Test}}
+\index{General\+\_\+\+Multiple\+\_\+\+Test@{General\+\_\+\+Multiple\+\_\+\+Test}!semaforostest.\+c@{semaforostest.\+c}}
+\subsubsection[{\texorpdfstring{General\+\_\+\+Multiple\+\_\+\+Test(int num)}{General_Multiple_Test(int num)}}]{\setlength{\rightskip}{0pt plus 5cm}int General\+\_\+\+Multiple\+\_\+\+Test (
+\begin{DoxyParamCaption}
+\item[{int}]{num}
+\end{DoxyParamCaption}
+)}\hypertarget{semaforostest_8c_a94feba5565ac841ea34c866bca0b2eb0}{}\label{semaforostest_8c_a94feba5565ac841ea34c866bca0b2eb0}
+Funcion privada que generaliza las prueba Down\+Multiple\+\_\+\+Semaforo\+\_\+\+Test y Up\+Multiple\+\_\+\+Semaforo\+\_\+\+Test. 
+\begin{DoxyParams}{Parameters}
+{\em num} & si es -\/1 se realiza Down\+Multiple\+\_\+\+Semaforo\+\_\+\+Test, cualquier otro numero realiza Up\+Multiple\+\_\+\+Semaforo\+\_\+\+Test \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+P\+A\+S\+S\+ED o N\+O\+T\+\_\+\+P\+A\+S\+S\+ED dependiendo de si se paso o no la prueba 
+\end{DoxyReturn}
+\index{semaforostest.\+c@{semaforostest.\+c}!General\+\_\+\+Single\+\_\+\+Test@{General\+\_\+\+Single\+\_\+\+Test}}
+\index{General\+\_\+\+Single\+\_\+\+Test@{General\+\_\+\+Single\+\_\+\+Test}!semaforostest.\+c@{semaforostest.\+c}}
+\subsubsection[{\texorpdfstring{General\+\_\+\+Single\+\_\+\+Test(int num)}{General_Single_Test(int num)}}]{\setlength{\rightskip}{0pt plus 5cm}int General\+\_\+\+Single\+\_\+\+Test (
+\begin{DoxyParamCaption}
+\item[{int}]{num}
+\end{DoxyParamCaption}
+)}\hypertarget{semaforostest_8c_a8511bf1daa132afdc36705625b843b81}{}\label{semaforostest_8c_a8511bf1daa132afdc36705625b843b81}
+Funcion privada que generaliza las prueba Down\+\_\+\+Semaforo\+\_\+\+Test y Up\+\_\+\+Semaforo\+\_\+\+Test. 
+\begin{DoxyParams}{Parameters}
+{\em num} & si es -\/1 se realiza Down\+\_\+\+Semaforo\+\_\+\+Test, cualquier otro numero realiza Up\+\_\+\+Semaforo\+\_\+\+Test \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+P\+A\+S\+S\+ED o N\+O\+T\+\_\+\+P\+A\+S\+S\+ED dependiendo de si se paso o no la prueba 
+\end{DoxyReturn}
+\index{semaforostest.\+c@{semaforostest.\+c}!Inicializar\+\_\+\+Semaforo\+\_\+\+Test@{Inicializar\+\_\+\+Semaforo\+\_\+\+Test}}
+\index{Inicializar\+\_\+\+Semaforo\+\_\+\+Test@{Inicializar\+\_\+\+Semaforo\+\_\+\+Test}!semaforostest.\+c@{semaforostest.\+c}}
+\subsubsection[{\texorpdfstring{Inicializar\+\_\+\+Semaforo\+\_\+\+Test()}{Inicializar_Semaforo_Test()}}]{\setlength{\rightskip}{0pt plus 5cm}int Inicializar\+\_\+\+Semaforo\+\_\+\+Test (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{semaforostest_8c_ae680879a5e9847bece11700c6590a42e}{}\label{semaforostest_8c_ae680879a5e9847bece11700c6590a42e}
+Funcion que se asegura del correcto funcionamiento de Inicializar\+\_\+\+Semaforo\+: 1) Nos aseguramos de que podemos inicializar los valores correctamente 2) Nos aseguramos que devuelve error en caso de dar argumentos erroneos \begin{DoxyReturn}{Returns}
+P\+A\+S\+S\+ED si el test terminal con exito, en cualquier otro caso N\+O\+T\+\_\+\+P\+A\+S\+S\+ED 
+\end{DoxyReturn}
+\index{semaforostest.\+c@{semaforostest.\+c}!Up\+\_\+\+Semaforo\+\_\+\+Test@{Up\+\_\+\+Semaforo\+\_\+\+Test}}
+\index{Up\+\_\+\+Semaforo\+\_\+\+Test@{Up\+\_\+\+Semaforo\+\_\+\+Test}!semaforostest.\+c@{semaforostest.\+c}}
+\subsubsection[{\texorpdfstring{Up\+\_\+\+Semaforo\+\_\+\+Test()}{Up_Semaforo_Test()}}]{\setlength{\rightskip}{0pt plus 5cm}int Up\+\_\+\+Semaforo\+\_\+\+Test (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{semaforostest_8c_afe874f196f8c15771fc7be26a964bcf3}{}\label{semaforostest_8c_afe874f196f8c15771fc7be26a964bcf3}
+Funcion que prueba el correcto funcionamiento de Up\+\_\+\+Semaforo\+: Crea un semaforo de 4 elementos y se inicializan. Luego se hace up a cada uno de los semaforos probando que, en efecto, su valor aumenta \begin{DoxyReturn}{Returns}
+P\+A\+S\+S\+ED si el test termina con exito, N\+O\+T\+\_\+\+P\+A\+S\+S\+ED en caso contrario 
+\end{DoxyReturn}
+\index{semaforostest.\+c@{semaforostest.\+c}!Up\+Multiple\+\_\+\+Semaforo\+\_\+\+Test@{Up\+Multiple\+\_\+\+Semaforo\+\_\+\+Test}}
+\index{Up\+Multiple\+\_\+\+Semaforo\+\_\+\+Test@{Up\+Multiple\+\_\+\+Semaforo\+\_\+\+Test}!semaforostest.\+c@{semaforostest.\+c}}
+\subsubsection[{\texorpdfstring{Up\+Multiple\+\_\+\+Semaforo\+\_\+\+Test()}{UpMultiple_Semaforo_Test()}}]{\setlength{\rightskip}{0pt plus 5cm}int Up\+Multiple\+\_\+\+Semaforo\+\_\+\+Test (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{semaforostest_8c_a5ee7101ac572581ab057b40d1c8752ae}{}\label{semaforostest_8c_a5ee7101ac572581ab057b40d1c8752ae}
+Funcion que prueba el correcto funcioamiento de Up\+Multiple\+\_\+\+Semaforo\+: Se crea un semaforo de 4 elementos y se inicializan. Se le aplica la funcion a 3 elementos indicando sus valores a traves de un array. Luego se prueba que los valores fueron cambiados satisfactoriamente y que el elemento no cambiado se mantuvo en su mismo estado \begin{DoxyReturn}{Returns}
+P\+A\+S\+S\+ED si el el test termina con exito, N\+O\+T\+\_\+\+P\+A\+S\+S\+ED en caso contrario 
+\end{DoxyReturn}

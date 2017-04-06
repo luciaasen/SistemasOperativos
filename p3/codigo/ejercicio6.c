@@ -1,3 +1,10 @@
+/**
+* @file ejercicio6.c
+* @author Lucia Asencio y Rodrigo de Pool
+* @date 16-3-2017
+* @brief fichero que contiene ej6 de la practica 3 de SOPER para el problema productor consumidor
+*/
+
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/types.h>
