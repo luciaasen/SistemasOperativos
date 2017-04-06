@@ -282,6 +282,7 @@ int main(int argc, char**argv){
         perror("Error: Necesito sleeps de entrada >= 0, temp > 0 \n");
         return -1;
     }
+    printf("Holis,\n");
     /*creacion + atach + inicialicacion shmem*/
     pq = &q;
     if( (id = crear_shmem(FILEKEY, KEY, sizeof(AlphaStack), (&pq)) )   == -1){
@@ -295,7 +296,8 @@ int main(int argc, char**argv){
         shmdt(pq);
         shmctl(id, IPC_RMID, (struct shmid_ds *)NULL);
         return -1;
-    }    
+    }
+    printf("Semaforos: %d %d %d\n", mutex, lleno, vacio);    
     /*Ahora creamos otros 2 procesos: padre produce, hijo1 consume, hijo2 temporiza*/
     if((pid[0] = fork()) == -1){
         perror("Error en el fork\n");
