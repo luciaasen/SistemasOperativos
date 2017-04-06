@@ -82,6 +82,7 @@ int consumidor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio, int consSl
             return -1;            
         }
         if(alpha->temp == 0){
+            printf("El consumidor sale tras ser despertado por el proceso temporizador\n");
             shmdt(alpha);
             return 0;            
         }
@@ -107,6 +108,8 @@ int consumidor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio, int consSl
         
         usleep(consSleep);
     }
+    printf("Consumidor sale\n");
+
     shmdt(alpha);
     return 0;
 }
@@ -125,6 +128,7 @@ int productor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio, int prodSle
             return -1;            
         }
         if(alpha->temp == 0){
+            printf("El productor sale tras ser despertado por el proceso temporizador\n");
             shmdt(alpha);
             return 0;            
         }
@@ -149,6 +153,7 @@ int productor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio, int prodSle
         }
         usleep(prodSleep);
     }
+    printf("Productor sale\n");
     shmdt(alpha);
     return 0;
 }
