@@ -75,7 +75,6 @@ int consumidor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio, int consSl
        
     /*bucle*/
     while(alpha->temp == 1){
-        
         /*Down lleno, down mutex*/
         if(Down_Semaforo(*lleno, 0, 0) == -1){
             shmdt(alpha);
@@ -92,7 +91,7 @@ int consumidor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio, int consSl
         }
 
         /*Consume*/
-        printf("El consumidor consume %c se encuentra el end a %d y lo decrementa\n", alpha->alpha[alpha->end], alpha->end);
+        printf("El consumidor consume %c, se encuentra el end a %d y lo decrementa\n", alpha->alpha[alpha->end], alpha->end);
         fflush(stdout);
         (alpha->end) -= 1;
 
@@ -101,6 +100,7 @@ int consumidor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio, int consSl
             shmdt(alpha);
             return -1;            
         }
+        printf("Vacio queda a %d\n", semctl(*vacio, 0, GETVAL));
         if(Up_Semaforo(*mutex, 0, 0) == -1){
             shmdt(alpha);
             return -1;            
@@ -109,7 +109,6 @@ int consumidor(AlphaStack *alpha, int *mutex, int *lleno, int *vacio, int consSl
         usleep(consSleep);
     }
     printf("Consumidor sale\n");
-
     shmdt(alpha);
     return 0;
 }
@@ -320,10 +319,10 @@ int main(int argc, char**argv){
                 shmdt(pq);
                 return -1;            
             }
-            if(Up_Semaforo(vacio, 0, 0) == -1){
+            /*if(Up_Semaforo(vacio, 0, 0) == -1){
                 shmdt(pq);
                 return -1;            
-            }
+            }*/
             exit(EXIT_SUCCESS);
         }else{
             ret = productor(pq, &mutex, &lleno, &vacio, prodSleep);
