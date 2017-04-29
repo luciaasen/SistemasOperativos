@@ -209,7 +209,7 @@ int hayGanador(infoCaballos *info){
     /*final forzado*/
     if (info->endFlag == TRUE) return TRUE;
 
-    if (info->valoresTotales[idC - 1] > info->longCarrera)
+    if (info->valoresTotales[idC - 1] >= info->longCarrera)
         return TRUE;
     return FALSE;
 }
@@ -218,7 +218,7 @@ int posicionCaballo(infoCaballos *info, int id){
     int i;
     int pos = info->numCaballos;
 
-    if (id > info->numCaballos + 1) return -1;
+    if (id > info->numCaballos) return -1;
 
     for (i = 0; i < info->numCaballos; i++) {
         if (i != id - 1) {
@@ -230,33 +230,52 @@ int posicionCaballo(infoCaballos *info, int id){
     return pos;
 }
 
-int idPrimerLugar(infoCaballos *info){
-    int i;
+
+/*auxiliar para el caso de empates en el primer lugar*/
+int idPrimerLugarFlag(infoCaballos *info, int flag){
+    int i, num;
+    num = flag;
     for (i = 0; i < info->numCaballos; i++) {
-        if (posicionCaballo(info, i) == 1)
-            return i + 1;
+        if (posicionCaballo(info, i + 1) == 1) {
+            num--;
+            if (num < 0)
+                return i + 1;
+        }
     }
     return -1;
 }
 
+int idPrimerLugar(infoCaballos *info){
+    return idPrimerLugarFlag(info, 0);
+}
+
+
+/*auxiliar para casos de empate en el segundo lugar*/
+int idSegundoLugarFlag(infoCaballos *info, int flag){
+    int i, num;
+    num = flag;
+    for (i = 0; i < info->numCaballos; i++) {
+        if (posicionCaballo(info, i + 1) == 2) {
+            num--;
+            if (num < 0)
+                return i + 1;
+        }
+    }
+    return idPrimerLugarFlag(info, flag + 1);
+}
 
 int idSegundoLugar(infoCaballos *info){
-    int i;
-    for (i = 0; i < info->numCaballos; i++) {
-        if (posicionCaballo(info, i) == 2)
-            return i + 1;
-    }
-    return -1;
+    return idSegundoLugarFlag(info, 0);
 }
 
 
 int idTercerLugar(infoCaballos *info){
     int i;
     for (i = 0; i < info->numCaballos; i++) {
-        if (posicionCaballo(info, i) == 3)
+        if (posicionCaballo(info, i + 1) == 3)
             return i + 1;
     }
-    return -1;
+    return idSegundoLugarFlag(info, 1);
 }
 
 
@@ -264,7 +283,7 @@ int idUltimoLugar(infoCaballos *info){
     int i, max, id, aux;
     max = 0;
     for (i = 0; i < info->numCaballos; i++) {
-        aux = posicionCaballo(info, i);
+        aux = posicionCaballo(info, i + 1);
         if (aux >= max) {
             max = aux;
             id  = i + 1;
@@ -274,7 +293,7 @@ int idUltimoLugar(infoCaballos *info){
 }
 
 void imprimeResultados(infoCaballos *info){
-    printf("Carrera finalizada.\n");
+    printf("\nCarrera finalizada.\n");
     printf("\nRESULTADOS DE LA CARRERA:\n");
     printf("Primer lugar: Caballo %d\n", idPrimerLugar(info));
     printf("Segundo lugar: Caballo %d\n", idSegundoLugar(info));
@@ -300,18 +319,50 @@ void finalizaLibera(infoCaballos *info){
     return;
 }
 
-//
-//
+//INICIO DE PROCESO EJECUTADO POR LOS CABALLOS
+
+//Funcion auxiliares
+int tirada(int estado);
+void enviaMensajeCaballo(int buzon, int avance, int idCaballo);
+
 /**
- * Proceso que ejecuta cada caballo de forma independiente.
- * @param pipe Para que el monitor se comunique con el.
- * //FALTA COSAS PARA PODER COMUNICAR EL CABALLO CON EL MONITOR.
- * //MANEJADOR PARA CERRAR CUANDO ACABE LA CARRERA
+ * proceso que ejecuta las acciones de los caballos de carrera
+ * @param id    id de este caballo
+ * @param pipe  pipe para recibir informacion del monitor
+ * @param buzon buzon en el cual se dejan los mensajes al monitor
  */
 void procesoCaballo(int id, int *pipe, int buzon){
-    //cierra pipe que no se necesita
-    //bucle do while con:
-    //recibe info por el pipe, espera ocupada
-    //genera su numero en base a su estados
-    //envia mensaje por buzon
+    int estado, avance;
+
+    srand(time(NULL) * getpid());
+    close(pipe[1]);
+    do {
+        read(pipe[0], &estado, sizeof(int));
+        avance = tirada(estado);
+        enviaMensajeCaballo(buzon, avance, id);
+    } while (1);
 }
+
+int tirada(int estado){
+    int avance;
+
+    if (estado == FIRST) {
+        avance = 1 + (rand() % 7);
+    }else if (estado == LAST) {
+        avance = 1 + (rand() % 6);
+        avance = avance + (1 + rand() % 6);
+    }else{
+        avance = 1 + (rand() % 6);
+    }
+    return avance;
+}
+
+void enviaMensajeCaballo(int buzon, int avance, int idCaballo){
+    mensajeCaballo msj;
+    msj.id        = MSJ_CAB;
+    msj.tirada    = avance;
+    msj.idCaballo = idCaballo;
+    msgsnd(buzon, (struct msgbuf *) &msj, sizeof(mensajeCaballo), IPC_NOWAIT);
+}
+
+//FIN DE PROCESOS EJECUTADO POR LOS CABALLOS

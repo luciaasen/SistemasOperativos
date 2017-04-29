@@ -54,8 +54,7 @@ void wrapperCarrera(infoCaballos *infoC){
         sigprocmask(SIG_SETMASK, &set, NULL); /*mascara para protejer durante ronda*/
         siguienteRonda(infoC);
         actualizaRonda(infoC);
-        if (hayGanador(infoC) == FALSE)
-            imprimeRonda(infoC);
+        imprimeRonda(infoC);
         sigprocmask(SIG_UNBLOCK, &set, NULL);
     }
     imprimeResultados(infoC);
