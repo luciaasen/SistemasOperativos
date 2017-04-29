@@ -31,6 +31,7 @@ int recibirEnviar(int id){
 void toLowerCase(char *string, char *copy){
     int i;
 
+    /*+1 para que tambien se copie el fin de cadena*/
     for (i = 0; i < strlen(string) + 1; i++) {
         copy[i] = tolower(string[i]);
     }
