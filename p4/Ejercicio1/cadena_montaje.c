@@ -5,7 +5,7 @@
  * y lanzar los procesos
  */
 void main(int argc, char ** argv){
-    int  num, id;
+    int  num, id, key;
     FILE *read, *write;
 
     if (argc < 3) {
@@ -22,12 +22,18 @@ void main(int argc, char ** argv){
     write = fopen(argv[2], "r");
     if (write == NULL) {
         perror("Error al abrir el fichero de escritura\n");
+        fclose(read);
         return;
     }
 
-    id = msgget(KEY, IPC_CREAT | 0600);
+    srand(time(NULL) * getpid());
+    key = rand();
+
+    id = msgget(key, IPC_CREAT | 0600);
     if (id == -1) {
         perror("Error en la creacion de la cola de mensajes\n");
+        fclose(read);
+        fclose(write);
         return;
     }
 

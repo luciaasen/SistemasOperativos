@@ -1,12 +1,14 @@
+#ifndef CADENA_MONTAJE_H
+#define CADENA_MONTAJE_H
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#define KEY    1513415
-
+#include <string.h>
+#include <time.h>
 
 typedef struct _mensaje {
     long type;
@@ -47,3 +49,4 @@ void procesoC(int id, int num, FILE *write);
  */
 int char4K();
 
+#endif

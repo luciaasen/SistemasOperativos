@@ -1,0 +1,29 @@
+printf("Recibido mensaje tipo %d \n", msg.id);
+printf("Dato_Numerico = %d \n", msg.valor);
+printf("Mensaje = %s \n", msg.aviso);
+/* * Envio de un mensaje */ 
+msg.id = 2; 
+msg.valor = 13; 
+strcpy (msg.aviso, "Adios");
+msgsnd (msqid, (struct msgbuf *) &msg, sizeof(mensaje)-sizeof(long), IPC_NOWAIT);msgctl (msqid, IPC_RMID, (struct msqid_ds *)NULL);
+exit(EXIT_SUCCESS);
+}
+Ejercicio 1. (ENTREGABLE) (2.0 ptos) Se pretende diseñar e implementar una
+cadena de montaje usando colas de mensajes de UNIX. La cadena de montaje está
+compuesta por tres procesos (A, B y C), cada uno especializado en una función. La
+comunicación entre cada par de procesos (es decir el proceso i y el proceso i+1) se
+realiza a través de una cola de mensajes de UNIX. En esta cadena de montaje, cada
+proceso realiza una función bien diferenciada:
+•
+•
+•
+El primer proceso A lee de un fichero f1 y escribe en la primera cola de
+mensajes trozos del fichero de longitud máxima 4KB.
+El proceso intermedio B lee de la cola de mensajes cada trozo del fichero y
+realiza una simple función de conversión, consistente en reemplazar las
+letras minúsculas por letras mayúsculas. Una vez realizada esta
+transformación, escribe el contenido en la cola de mensajes.
+El último proceso lee de la cola el trozo de memoria y lo vuelca al fichero f2.
+El programa principal acepta dos argumentos de entrada, correspondientes al
+nombre del fichero origen (f1) y destino (f2).
+Debe ejecutarse de la siguiente manera: $ cadena_montaje <f1> <f2>
