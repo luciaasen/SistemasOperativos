@@ -46,16 +46,10 @@ void esperaImprime(){
 
 
 void wrapperCarrera(infoCaballos *infoC){
-    sigset_t set;
-    sigfillset(&set);
-
     while (hayGanador(infoC) == FALSE) {
-        /*IGUAL HACE FALTA ALGUNA ESPECIE DE DELAY PARA QUE SE VEAN LOS RESUMENES*/
-        sigprocmask(SIG_SETMASK, &set, NULL); /*mascara para protejer durante ronda*/
         siguienteRonda(infoC);
         actualizaRonda(infoC);
         imprimeRonda(infoC);
-        sigprocmask(SIG_UNBLOCK, &set, NULL);
     }
     imprimeResultados(infoC);
 }
