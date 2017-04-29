@@ -37,10 +37,10 @@ typedef struct _mensajeCaballo {
     int  idCaballo; /*valor del caballo que envia el mensaje 1,2,3...*/
 }mensajeCaballo;
 
-//Funcion que ejecutan todos los procesos de caballos
+/*Funcion que ejecutan todos los procesos de caballos*/
 void procesoCaballo(int id, int *pipe, int buzon);
 
-//Cabeceras de funciones auxiliares y privadas
+/*Cabeceras de funciones auxiliares y privadas*/
 void cierraComunicaciones(infoCaballos *info);
 int inicializacionInfoArrays(infoCaballos * info, int numC, int longCarrera);
 int generaComunicaciones(infoCaballos *info);
@@ -48,13 +48,13 @@ int generaProcesos(infoCaballos *info);
 void setAllNULL(infoCaballos *info);
 
 
-// ZONA DE FUNCION DE INICIALIZACION Y SUS AUXILIARES
+/* ZONA DE FUNCION DE INICIALIZACION Y SUS AUXILIARES*/
 
 infoCaballos *inicializaCaballos(int numC, int longCarrera){
     infoCaballos *info;
 
     info = (infoCaballos *) malloc(sizeof(infoCaballos));
-    setAllNULL(info); //Para evitar errores en caso de fallo de memoria
+    setAllNULL(info); /*Para evitar errores en caso de fallo de memoria*/
     if (info == NULL) {
         printf("Error de memoria.\n");
         return NULL;
@@ -102,7 +102,7 @@ int inicializacionInfoArrays(infoCaballos * info, int numC, int longCarrera){
     info->pipes          = (int *) malloc(sizeof(int) * 2 * numC);
     if (info->idProcCaballos == NULL || info->valoresTotales == NULL
         || info->estadoActual == NULL || info->pipes == NULL) return FALSE;
-    //Inicializamos valores totales a 0 y estados a NONE
+    /*Inicializamos valores totales a 0 y estados a NONE*/
     for (i = 0; i < numC; i++) {
         info->valoresTotales[i] = 0;
         info->estadoActual[i]   = NONE;
@@ -113,11 +113,11 @@ int inicializacionInfoArrays(infoCaballos * info, int numC, int longCarrera){
 
 int generaComunicaciones(infoCaballos *info){
     int i, clave;
-    //Tuberias
+    /*Tuberias*/
     for (i = 0; i < info->numCaballos; i++) {
         if (pipe(info->pipes + 2 * i) == -1) return FALSE;
     }
-    //Buzon
+    /*Buzon*/
     srand(time(NULL) * getpid());
     clave       = rand();
     info->buzon = msgget(clave, 0600 | IPC_CREAT);
@@ -150,7 +150,7 @@ int generaProcesos(infoCaballos *info){
 }
 
 
-// FIN DE ZONA DE FUNCION DE INICIALIZACION
+/* FIN DE ZONA DE FUNCION DE INICIALIZACION*/
 
 void cierraComunicaciones(infoCaballos *info){
     int i;
@@ -173,7 +173,6 @@ void actualizaRonda(infoCaballos *info){
     mensajeCaballo mensaje;
 
     for (i = 0; i < info->numCaballos; i++) {
-        //IGUALLL NO LOSE HAY QUE PONER - SIZEOF(LONG)
         msgrcv(info->buzon, (struct msgbuf *) &mensaje,
                sizeof(mensajeCaballo), MSJ_CAB, 0);
         idC                           = mensaje.idCaballo;
@@ -319,11 +318,14 @@ void finalizaLibera(infoCaballos *info){
     return;
 }
 
-//INICIO DE PROCESO EJECUTADO POR LOS CABALLOS
+/*INICIO DE PROCESO EJECUTADO POR LOS CABALLOS*/
 
-//Funcion auxiliares
+/*Funcion auxiliares*/
 int tirada(int estado);
 void enviaMensajeCaballo(int buzon, int avance, int idCaballo);
+void manejadorCaballo(int sing){
+    return;
+}
 
 /**
  * proceso que ejecuta las acciones de los caballos de carrera
@@ -333,6 +335,8 @@ void enviaMensajeCaballo(int buzon, int avance, int idCaballo);
  */
 void procesoCaballo(int id, int *pipe, int buzon){
     int estado, avance;
+
+    signal(SIGINT, manejadorCaballo); /*Ignora la senial cuando le llega sigInt al proceso padre*/
 
     srand(time(NULL) * getpid());
     close(pipe[1]);
@@ -365,4 +369,4 @@ void enviaMensajeCaballo(int buzon, int avance, int idCaballo){
     msgsnd(buzon, (struct msgbuf *) &msj, sizeof(mensajeCaballo), IPC_NOWAIT);
 }
 
-//FIN DE PROCESOS EJECUTADO POR LOS CABALLOS
+/*FIN DE PROCESOS EJECUTADO POR LOS CABALLOS*/
