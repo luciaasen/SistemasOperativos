@@ -19,7 +19,7 @@ void main(int argc, char ** argv){
         return;
     }
 
-    write = fopen(argv[2], "w");
+    write = fopen(argv[2], "r");
     if (write == NULL) {
         perror("Error al abrir el fichero de escritura\n");
         fclose(read);
@@ -29,7 +29,7 @@ void main(int argc, char ** argv){
     srand(time(NULL) * getpid());
     key = rand();
 
-    id = msgget(key, IPC_CREAT | 0600);
+    id = msgget(key, IPC_CREAT | SHM_R | SHM_W);
     if (id == -1) {
         perror("Error en la creacion de la cola de mensajes\n");
         fclose(read);
@@ -37,15 +37,16 @@ void main(int argc, char ** argv){
         return;
     }
 
+    num = char4K();
 
     if (fork() == 0) {
-        procesoA(id, read);
+        procesoA(id, num, read);
         return;
     }else if (fork() == 0) {
-        procesoB(id);
+        procesoB(id, num);
         return;
     }
-    procesoC(id, write);
+    procesoC(id, num, write);
     /*Esperamos al procesoA y al procesoB*/
     wait(NULL);
     wait(NULL);
@@ -53,4 +54,9 @@ void main(int argc, char ** argv){
     return;
 }
 
-
+int char4K(){
+    int num = 1;
+    while (sizeof(char) * num < 4000)
+        num++;
+    return num;
+}

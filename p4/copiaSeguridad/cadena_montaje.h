@@ -10,14 +10,13 @@
 #include <string.h>
 #include <time.h>
 #include <ctype.h>
+#include <sys/shm.h>
 
-#define TAM    10
-
-typedef struct _mensaje {
-    long id;
+typedef struct _msgbuf {
+    long type;
+    char *info;
     int  end;
-    char info[TAM];
-}mensaje;
+}msgbuf;
 
 
 /**
@@ -28,7 +27,7 @@ typedef struct _mensaje {
  * @param num  tamanio de caracteres dentro de la estructura
  * @param read fichero en el que se lee
  */
-void procesoA(int id, FILE *read);
+void procesoA(int id, int num, FILE *read);
 /**
  * Funcionamiento explicado en el enunciado. Cuando envie el ultimo mensaje a
  * C lo dira marcando con un 1 el atributo end del mensaje. Recibira mensaje
@@ -36,7 +35,7 @@ void procesoA(int id, FILE *read);
  * @param id  id del buzon
  * @param num numero de caracteres a leer dentro de la estructura
  */
-void procesoB(int id);
+void procesoB(int id, int num);
 /**
  * Funcionamiento explicado en el enunciado. Cuando envie reciba el ultimom
  * mensaje lo escribira y se cerrara. Recibira mensaje de tipo 42
@@ -44,7 +43,13 @@ void procesoB(int id);
  * @param num   numero de caracteres dentro de la estructura de mensaje
  * @param write fichero en el que se escribe
  */
-void procesoC(int id, FILE *write);
+void procesoC(int id, int num, FILE *write);
 
+/**
+ * Funcion que determina cuantos caracteres son 4kb dependiendo de la
+ * maquina en que se utiliza
+ * @return Entero con el numero de caracteres que representan 4kb
+ */
+int char4K();
 
 #endif

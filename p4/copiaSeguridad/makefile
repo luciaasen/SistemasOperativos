@@ -1,21 +1,19 @@
-FLAGS = -c -g
 all: cadena_montaje
-	rm *.o
 
 cadena_montaje : cadena_montaje.o procesoA.o procesoB.o procesoC.o
 	gcc -o cadena_montaje $^
 
 cadena_montaje.o : cadena_montaje.c cadena_montaje.h
-	gcc $(FLAGS) cadena_montaje.c
+	gcc -c cadena_montaje.c
 
 procesoA.o : procesoA.c cadena_montaje.h
-	gcc $(FLAGS) procesoA.c
+	gcc -c procesoA.c
 	
 procesoB.o : procesoB.c cadena_montaje.h
-	gcc $(FLAGS) procesoB.c
+	gcc -c procesoB.c
 
 procesoC.o : procesoC.c cadena_montaje.h
-	gcc $(FLAGS) procesoC.c
+	gcc -c procesoC.c
 
 clean:
 	rm *.o

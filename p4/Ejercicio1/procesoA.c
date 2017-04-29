@@ -1,24 +1,31 @@
 #include "cadena_montaje.h"
 
-void procesoA(int id, int num, FILE *read){
-    mensaje msg;
-    int     flag = 0, aux;
-    char    *str = (char *) malloc(sizeof(char) * num);
-    if (str == NULL) {
-        perror("Error de memoria, cerrar programa y vuelve a intentarlo.\n");
-        return;
-    }
+int enviarMensaje(int id, FILE *read);
 
-    msg.type = 27;
+void procesoA(int id, FILE *read){
+    int flag = 0;
+
     do {
-        aux     = fread(str, 1, sizeof(char) * num, read);
-        msg.end = 0;
-        if (aux < sizeof(char) * num) { /*end reached*/
-            flag    = 1;
-            msg.end = 1;
-        }
-        msg.info = str;
-        msgsnd(id, (struct msgbuf *) &msg, sizeof(mensaje), IPC_NOWAIT);
+        if (enviarMensaje(id, read) == 1) flag = 1;
     } while (flag == 0);
-    free(str);
+}
+
+
+int enviarMensaje(int id, FILE *read){
+    int     aux, flag;
+    mensaje msg;
+
+    flag = 0;
+
+    msg.id  = 27;
+    aux     = fread(msg.info, 1, sizeof(char) * TAM, read);
+    msg.end = 0;
+    if (aux < sizeof(char) * TAM) {
+        flag    = 1;
+        msg.end = 1;
+        /*fread no pone fin de cadena cuando se encuentra en EOF*/
+        msg.info[aux / sizeof(char)] = '\0';
+    }
+    msgsnd(id, &msg, sizeof(mensaje), IPC_NOWAIT);
+    return flag;
 }
