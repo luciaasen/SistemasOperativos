@@ -14,12 +14,19 @@ typedef struct _infoCaballos   infoCaballos;
  */
 infoCaballos *inicializaCaballos(int num, int longCarrera);
 
-//Notifica que se pueden generar los valores de la siguiente ronda a todos
-//los caballos usando pipes, SUJETO A CAMBIOS
+/**
+ * Notifica con una senyal a todos los caballos de que pueden esperar la
+ * informacion de la siguiente ronda. Luego envia a traves de los pipes
+ * la informacion de los estados
+ * @param info puntero con la informacion de los caballos
+ */
 void siguienteRonda(infoCaballos *info);
 
-//Recibe todas las tiradas de los caballos a traves de MENSAJES
-//y actualiza los valores necesarios (valores totales, estados)
+/**
+ * Recibe a traves de mensajes las tiradas de los caballos y  actualiza
+ * los valores totales y los estados de todos los caballos
+ * @param info puntero con la descripcion de los caballos
+ */
 void actualizaRonda(infoCaballos *info);
 
 //Imprime la informacion de la ronda, sujeto a cambios
@@ -33,8 +40,16 @@ void imprimeRonda(infoCaballos *info);
 int hayGanador(infoCaballos *info);
 
 /**
- * Devuelve el id del caballo ganador.
- * Es independiente de si ha terminado o no la carrera.
+ * Dado informacion sobre los caballos y el id de un caballo devuelve su posicion
+ * en la carrera
+ * @return      posicion del caballo o -1 en caso de error
+ */
+int posicionCaballo(infoCaballos *info, int id);
+
+/**
+ * Devuelve el id del caballo ganador (1 ,2, 3...).
+ * Es independiente de si ha terminado o no la carrera
+ * -1 en caso de error.
  */
 int idPrimerLugar(infoCaballos *info);
 
@@ -53,13 +68,23 @@ int idSegundoLugar(infoCaballos *info);
 int idTercerLugar(infoCaballos *info);
 
 /**
+ * Devuelve el id del caballo en ultimo lugar.
+ * Es independiente de si ha terminado o no la carrera.
+ */
+int idUltimoLugar(infoCaballos *info);
+
+
+
+/**
  * Imprime resultados de la carrera
  * @param info puntero con informacion de la carrera
  */
 void imprimeResultados(infoCaballos *info);
 
 /**
- *
+ * Funcion que se encarga de forzar el fin de la carrera.
+ * Esta funcion se ejecutara cuando se mande un senal SIGINT
+ * @param info informacion de los caballos
  */
 void forzarFin(infoCaballos *info);
 

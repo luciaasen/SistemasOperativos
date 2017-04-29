@@ -14,8 +14,8 @@ int inicializacionArgs(int *numCaballos, int *longCarrera, int *numApostadores,
     *numApostadores = atoi(argv[3]);
     *numVentanillas = atoi(argv[4]);
 
-    if (*numCaballos < 0 || *numCaballos > MAX_ARGS) {
-        printf("Solo se aceptan numero de caballos enteros en [1,10].\n");
+    if (*numCaballos < 3 || *numCaballos > MAX_ARGS) {
+        printf("Solo se aceptan numero de caballos enteros en [3,10].\n");
         return ERROR;
     }else if (*longCarrera < 0) {
         printf("La longitud de la carrera tiene que ser un entero mayor que cero.\n");
@@ -50,7 +50,8 @@ void wrapperCarrera(infoCaballos *infoC){
     sigfillset(&set);
 
     while (hayGanador(infoC) == FALSE) {
-        sigprocmask(SIG_SETMASK, &set, NULL); //mascara para protejer durante ronda
+        /*IGUAL HACE FALTA ALGUNA ESPECIE DE DELAY PARA QUE SE VEAN LOS RESUMENES*/
+        sigprocmask(SIG_SETMASK, &set, NULL); /*mascara para protejer durante ronda*/
         siguienteRonda(infoC);
         actualizaRonda(infoC);
         if (hayGanador(infoC) == FALSE)
