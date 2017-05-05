@@ -26,6 +26,6 @@ int enviarMensaje(int id, FILE *read){
         /*fread no pone fin de cadena cuando se encuentra en EOF*/
         msg.info[aux / sizeof(char)] = '\0';
     }
-    msgsnd(id, &msg, sizeof(mensaje), IPC_NOWAIT);
+    msgsnd(id, &msg, sizeof(mensaje)- sizeof(long), IPC_NOWAIT);
     return flag;
 }
