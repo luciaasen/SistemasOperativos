@@ -60,15 +60,18 @@
      */
     void info_free(infoApuestas *info, int numC){
 
-
-
-
-
-
-
-
-
-
+    /**
+     * Espero que en algun momento antes del viernes, esto gestione apuestas
+     * Inicialize la estructura con la informacion de todas las apuesats,
+     * y se la pase, junto con una cola de la que leer mensajes y un semaforo con el que proteger a la estructura,
+     * a un monton de threads ventanillas que gestionen las diferentes apuestas que lean de la cola de mensajes
+     * @param cola de mensajes
+     * @param numC caballos en la carrera
+     * @param numA apostadores en la carrera
+     * @param numV ventanillas en la carrera
+     * @return -1 si error, 0 si ok
+     */
+    int gestorApuestas(int cola, int numC, int numA, int numV){
 
 
 
@@ -112,7 +115,7 @@
                 attr_free(attr, numC);
                 /*¿Como liberar correctamente los hilos? (Parte ya se esta ejecutando) Discute rodri*/                
             }
-//            pthread_join(ventanillas[i], NULL);
+            //pthread_join(ventanillas[i], NULL);
         }
         
         /*No se me ocurre como cerrar bien todo esto (si espero a que me llege una senial, y no tengo variables globales
