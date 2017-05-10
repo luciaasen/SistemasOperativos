@@ -171,10 +171,9 @@ void siguienteRonda(infoCaballos *info){
 void actualizaRonda(infoCaballos *info){
     int            i, idC, primero, ultimo;
     mensajeCaballo mensaje;
-
     for (i = 0; i < info->numCaballos; i++) {
         msgrcv(info->buzon, (struct msgbuf *) &mensaje,
-               sizeof(mensajeCaballo), MSJ_CAB, 0);
+               sizeof(mensajeCaballo) - sizeof(long), MSJ_CAB, 0);
         idC                           = mensaje.idCaballo;
         info->valoresTotales[idC - 1] = info->valoresTotales[idC - 1] + mensaje.tirada;
     }
@@ -366,7 +365,7 @@ void enviaMensajeCaballo(int buzon, int avance, int idCaballo){
     msj.id        = MSJ_CAB;
     msj.tirada    = avance;
     msj.idCaballo = idCaballo;
-    msgsnd(buzon, (struct msgbuf *) &msj, sizeof(mensajeCaballo), IPC_NOWAIT);
+    msgsnd(buzon, (struct msgbuf *) &msj, sizeof(mensajeCaballo)-sizeof(long), IPC_NOWAIT);
 }
 
 /*FIN DE PROCESOS EJECUTADO POR LOS CABALLOS*/
