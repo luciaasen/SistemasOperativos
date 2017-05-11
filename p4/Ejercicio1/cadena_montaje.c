@@ -50,6 +50,8 @@ void main(int argc, char ** argv){
     wait(NULL);
     wait(NULL);
     msgctl(id, IPC_RMID, NULL);
+    fclose(read);
+    fclose(write);
     return;
 }
 
