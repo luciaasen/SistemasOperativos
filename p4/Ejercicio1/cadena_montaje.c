@@ -40,16 +40,24 @@ void main(int argc, char ** argv){
 
     if (fork() == 0) {
         procesoA(id, read);
+        /*Al crear un nuevo proceso se duplican los punteros FILE*/
+        fclose(read);
+        fclose(write);
         return;
     }else if (fork() == 0) {
         procesoB(id);
+        fclose(read);
+        fclose(write);
         return;
     }
+
     procesoC(id, write);
     /*Esperamos al procesoA y al procesoB*/
     wait(NULL);
     wait(NULL);
     msgctl(id, IPC_RMID, NULL);
+    fclose(read);
+    fclose(write);
     return;
 }
 

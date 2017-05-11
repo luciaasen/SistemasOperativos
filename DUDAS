@@ -1,0 +1,12 @@
+Ejercicio 1:
+
+* Esta bien que el mensaje tenga tamanio fijo?? o deberia hacerlo crecer
+dinamicamente para que ocupe 4kb
+
+
+Ejercicio 2:
+
+* Cuando cierrro a los procesos caballo con una senial, como hago que se imprima
+algo y cierre??, si no se ejecuta en el main.
+
+
