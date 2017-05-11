@@ -21,6 +21,7 @@ Ret *apuestas(int numC, int numV, int numA){
     colaMain = msgget(key, 0660);
     if(colaMain == -1){
         perror("Error en la creacion de colaMain\n");
+        free(ret);
         return NULL;
     }
     ret->cola = colaMain;
@@ -32,8 +33,8 @@ Ret *apuestas(int numC, int numV, int numA){
     colaApuesta = msgget(clave, 0660);
     if(colaApuesta == -1){
         perror("Error en la creacion de colaApuesta\n");
-        ret.cola = -1;
-        return ret;
+        free(ret);
+        return NULL;
     }
     
     /*Lanza hijos*/
@@ -41,6 +42,7 @@ Ret *apuestas(int numC, int numV, int numA){
     if(Apostador == -1){
 
         perror("Error en el fork para apostador\n");
+        free(ret);
         return NULL;
 
     }else if(pidApostador == 0){
@@ -59,11 +61,12 @@ Ret *apuestas(int numC, int numV, int numA){
 
         }else if (pidGestor == 0){
 
-            if(gestorApuestas(colaApuesta, MTYPE, numC, numA, numV) == NULL){
+            if(gestorApuestas(colaApuesta, colaMain, MTYPE, numC, numA, numV) == NULL){
                 exit(-1); 
             }
         }else{
             ret->pid2 = pidGestor
+            return ret;
         }
     }
 }

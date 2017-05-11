@@ -20,6 +20,6 @@
      * @param numV ventanillas en la carrera
      * @return -1 si error, 0 si ok
      */
-    int gestorApuestas(int cola, int numC, int numA, int numV);
+    int gestorApuestas(int colaApuesta, int colaMain, int numC, int numA, int numV);
 
     

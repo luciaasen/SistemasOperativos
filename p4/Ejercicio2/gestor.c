@@ -1,3 +1,4 @@
+    #include "gestor.h"
 
     struct _infoApuestas{
         /*dinero[i][j] contiene el dinero que se da al apostador j si gana el caballo i*/
@@ -62,7 +63,7 @@
 
 
 
-    infoApuestas *gestorApuestas(int cola, int tipo, int numC, int numA, int numV){
+    infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, int numA, int numV){
         infoApuestas *info;
         Attr* attr;
         int semid, key, i, j;
@@ -88,7 +89,7 @@
             return NULL;
         }
         
-        attr= attr_ini(semid, info, cola);
+        attr= attr_ini(semid, info, colaApuesta);
         if(attr == NULL){
             free(ventanillas);
             Borrar_Semaforo(semid);
@@ -108,11 +109,15 @@
         }
 
         /*Espero hasta que recibo mensaje del main, cierro libero y devuelvo mensaje con info*/ 
-        msgrcv(cola, &recibido, sizeof(struct msgbuf) - sizeof(long), tipo, 0);
+        msgrcv(colaMain, &recibido, sizeof(struct msgbuf) - sizeof(long), tipo, 0);
+        for(i = 0; i < numV; i++){
+            pthread_cancel(ventanillas[i]);
+        }
+        free(ventnaillas);
         /*Envio mensaje al main*/
         mensaje.info = info;
         mensaje.id = tipo;
-        msgsnd(cola, (struct msgbuf *)&mensaje, sizeof(MensajeRes)-sizeof(long), IPC_NOWAIT);
+        msgsnd(colaMain, (struct msgbuf *)&mensaje, sizeof(MensajeRes)-sizeof(long), IPC_NOWAIT);
         return attr->info;
     }
 
