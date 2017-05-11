@@ -307,7 +307,8 @@ void forzarFin(infoCaballos *info){
 void finalizaLibera(infoCaballos *info){
     int i;
     for (i = 0; i < info->numCaballos; i++) {
-        kill(info->idProcCaballos[i], SIGINT);
+        /*Finalizamos con sigusr1 porque los caballos ignoran la senyal sigint*/
+        kill(info->idProcCaballos[i], SIGUSR1);
     }
     cierraComunicaciones(info);
     free(info->valoresTotales);
