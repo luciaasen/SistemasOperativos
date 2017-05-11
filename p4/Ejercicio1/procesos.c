@@ -24,7 +24,7 @@ void procesoA(int id, FILE *read){
  */
 int enviarMensaje(int id, FILE *read){
     int     aux, flag;
-    mensaje msg;
+    mensaje msg = { 0 };
 
     flag = 0;
 
@@ -63,8 +63,9 @@ void procesoB(int id){
  * @return    flag de si se ha enviado o no el ultimo mensaje, 1 si es ultimo
  */
 int recibirEnviar(int id){
-    int     aux = 0;
-    mensaje msg27, msg42;
+    int     aux   = 0;
+    mensaje msg27 = { 0 };
+    mensaje msg42 = { 0 };
 
     msgrcv(id, (struct msgbuf *) &msg27, sizeof(mensaje) - sizeof(long), MSJ_TYPE1, 0);
     msg42.end = 0;
