@@ -16,7 +16,7 @@ int recibirEnviar(int id){
     int     aux = 0;
     mensaje msg27, msg42;
 
-    msgrcv(id, &msg27, sizeof(mensaje), 27, 0);
+    msgrcv(id, &msg27, sizeof(mensaje)- sizeof(long), 27, 0);
     msg42.end = 0;
     msg42.id  = 42;
     if (msg27.end == 1) {
@@ -24,7 +24,7 @@ int recibirEnviar(int id){
         msg42.end = 1;
     }
     toLowerCase(msg27.info, msg42.info);
-    msgsnd(id, &msg42, sizeof(mensaje), IPC_NOWAIT);
+    msgsnd(id, &msg42, sizeof(mensaje)- sizeof(long), IPC_NOWAIT);
     return aux;
 }
 

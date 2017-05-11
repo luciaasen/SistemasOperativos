@@ -33,7 +33,6 @@ int main(int argc, char **argv){
     esperaImprime();
     /*NOTIFICA AL GESTOR QUE SE ACABO EL TIEMPO*/
     /*RECIBE INFORMACION DEL GESTOR?*/
-
     printf("Inicia la carrera.\n");
     //IMPRIMIR ESTADOS DE APUESTAS JUSTO DESPUES DE INICIAR LA CARRERA
     signal(SIGINT, manejador);
