@@ -6,24 +6,57 @@ typedef struct _Apuesta{
     int cuantia;
 }
 
+typedef struct _Mensaje{
+    long id;
+    Apuesta a;
+} Mensaje;
+
 
 /**
- * Maneja la sneiañ sigint para hacer un exit(0)
+ * Maneja la senial sigint para hacer un exit(0)
  * @param signo senial
  */
 void sig_handler(int signo){
     exit(0);
 }
 
-
-
-
-
-
-
 /*Esto en teoria va a enviar apuestas*/
-int envia_apuesta(int cola, int tipo, Apuesta a){
+void envia_apuesta(int cola, int tipo, Apuesta a){
+    Mensaje mns;
+    mns.Apuesta = a;
+    mns.id = tipo;
+    msgsnd(cola, (struct msgbuf *)&a, sizeof(Mensaje) - sizeof(long), IPC_NOWAIT);
+}
+
+int generador(int nApostadores, int nCaballos, int colaApuesta, int tipo){
+    int cola, i, apostador;
+    Apuesta a;
+
+    if(nApostadores < 1 || nCaballos < 1 || cola < 1){
+        exit(-1);
+    }
     
+    if(signal(SIGINT, sig_handler) == SIG_ERR){
+        perror("Error en el manejador");
+        exit(0);
+    }
+
+    /*Parara cuando le llegue una senial*/
+    i = 0;
+    while(1){
+        apostador = i%nApostadores;
+        a = apuesta_ini(apostador, nCaballos);
+        if(a == NULL){
+            printf("Error en creacion apuesta %d\n", i);
+            exit(-1);
+        }
+        if(envia_apuesta(cola, MTYPE, a) == -1){
+            printf("Error en el envio de la apuesta %d\n", i);
+            exit(-1);
+        }
+        i++;
+        sleep(0.1);
+    }
 }
 
 Apuesta apuesta_ini(int idApostador, int nCaballos){     
@@ -55,53 +88,5 @@ int getCaballo(Apuesta * a){
 
 int getCuantia(Apuesta * a){
     return a->cuantia;
-}
-
-/*Discute con rodri si no es mejor que me pasen ya la cola de mensajes como parametro
-(para que el gestor sepa de donde leer) Lo aniades como parametro, pero sigues calculando el msqid*/
-int generador(int nApostadores, int nCaballos, int cola){
-    int cola, i, apostador;
-    int clave = ftok(F, N);
-    Apuesta a;
-
-    if(nApostadores < 1 || nCaballos < 1){
-        exit(-1);
-    }
-    if(clave == -1){
-        perror("Error en generacion clave ftok\n");
-        exit(-1);
-    }
-
-    cola = msgget(clave, MTYPE);
-    if(cola == -1){
-        perror("Error en la creacion de cola\n");
-        exit(-1);
-    }
-
-    if(signal(SIGINT, sig_handler) == SIG_ERR){
-        perror("Error en el manejador");
-        exit(0);
-    }
-
-    /*Parara cuando le llegue una senial*/
-    i = 0;
-    while(1){
-        apostador = i%nApostadores;
-        a = apuesta_ini(apostador, nCaballos);
-        if(a == NULL){
-            printf("Error en creacion apuesta %d\n", i);
-            exit(-1);
-        }
-        if(envia_apuesta(cola, MTYPE, a) == -1){
-            printf("Error en el envio de la apuesta %d\n", i);
-            exit(-1);
-        }
-        i++;
-        sleep(0.1);
-    }
-    
-
-
-    
 }
 

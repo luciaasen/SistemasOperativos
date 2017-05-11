@@ -1,5 +1,6 @@
     #include "apostador.h"
     #include "semaforos.h"
+    #include "gestor.h"
     #include <stdio.h>
     #include <stdlib.h>
     #include <pthread.h>
@@ -14,7 +15,7 @@
         double[] apostado;
         /*Total dinero apostado, podriamos sumarlo en cada apuesta pero me parece comodo guardarlo*/
         double total;
-    } infoApuestas;
+    }
 
     /*Esructura que se pasa como argumento al thread*/
     typedef struct _Attr{
@@ -60,18 +61,6 @@
      */
     void info_free(infoApuestas *info, int numC){
 
-    /**
-     * Espero que en algun momento antes del viernes, esto gestione apuestas
-     * Inicialize la estructura con la informacion de todas las apuesats,
-     * y se la pase, junto con una cola de la que leer mensajes y un semaforo con el que proteger a la estructura,
-     * a un monton de threads ventanillas que gestionen las diferentes apuestas que lean de la cola de mensajes
-     * @param cola de mensajes
-     * @param numC caballos en la carrera
-     * @param numA apostadores en la carrera
-     * @param numV ventanillas en la carrera
-     * @return -1 si error, 0 si ok
-     */
-    int gestorApuestas(int cola, int numC, int numA, int numV){
 
 
 
@@ -79,8 +68,7 @@
 
 
 
-
-    int gestorApuestas(int cola, int numC, int numA, int numV){
+    infoApuestas *gestorApuestas(int cola, int tipo, int numC, int numA, int numV){
         infoApuestas *info;
         Attr* attr;
         int semid, i;
@@ -88,13 +76,13 @@
 
         ventanillas = (pthread_t*)malloc(numV * sizeof(pthread_t));
         if(ventanillas == NULL){
-            return -1;
+            return NULL;
         }
         
         info = info_ini(numC, numA);
         if(info == NULL){
             free(ventanillas);
-            return -1;
+            return NULL;
         }
 
         /*Crea semaforo con las funciones de rodri*/
@@ -120,6 +108,7 @@
         
         /*No se me ocurre como cerrar bien todo esto (si espero a que me llege una senial, y no tengo variables globales
          no dejaria los recursos liberados)*/       
+        return attr->info;
     }
 
 
