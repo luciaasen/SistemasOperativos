@@ -5,7 +5,8 @@
     #include <stdlib.h>
     #include <pthread.h>
     #include <unistd.h>
-
+    #include <sys/msg.h>
+    
     typedef struct _infoApuestas infoApuestas;
     typedef struct _MensajeRes MensajeRes;
 
@@ -22,4 +23,7 @@
      */
     int gestorApuestas(int colaApuesta, int colaMain, int numC, int numA, int numV);
 
-    
+    /**
+     * Imprime cotizaciones
+     */
+    int imprimeApuestas(MensajeRes *r); 

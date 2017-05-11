@@ -20,7 +20,7 @@
 
     struct _MensajeRes{
         long id;
-        infoApuestas info;
+        infoApuestas *info;
     }
 
     /**
@@ -58,7 +58,7 @@
      * @param info estructura a liberar
      * @param numC numero de caballos en la carrera
      */
-    void info_free(infoApuestas *info, int numC){
+    void info_free(infoApuestas *info, int numC);
 
 
 
@@ -69,8 +69,8 @@
         int semid, key, i, j;
         pthread_t *ventanillas;
         MensajeRes mensaje;
-        struct msgbuf recibido;
-
+        mens recibido;
+        
         ventanillas = (pthread_t*)malloc(numV * sizeof(pthread_t));
         if(ventanillas == NULL){
             return NULL;
@@ -109,13 +109,13 @@
         }
 
         /*Espero hasta que recibo mensaje del main, cierro libero y devuelvo mensaje con info*/ 
-        msgrcv(colaMain, &recibido, sizeof(struct msgbuf) - sizeof(long), tipo, 0);
+        msgrcv(colaMain, &recibido, sizeof(mens) - sizeof(long), tipo, 0);
         for(i = 0; i < numV; i++){
             pthread_cancel(ventanillas[i]);
         }
         free(ventnaillas);
         /*Envio mensaje al main*/
-        mensaje.info = info;
+        mensaje.info = attr->info;
         mensaje.id = tipo;
         msgsnd(colaMain, (struct msgbuf *)&mensaje, sizeof(MensajeRes)-sizeof(long), IPC_NOWAIT);
         return attr->info;
@@ -123,33 +123,31 @@
 
 
     int ventanilla(void *atributo){
-        Apuesta a;
+        Apuesta *a;
         Attr *attr; 
-        int apostador, caballo, cuantia;
+        int apostador, caballo,;
+        double cuantia;
+        Mensaje mensaje;
         if(atributo == NULL){
             return -1;
         }
         attr = (Attr *) atributo;
-
+        
         while(1){
-            /*Recibe el mensaje de la apuesta*/
-            
-            /*********************************/
-            
+            msgrcv(attr->cola, (struct msgbuf *)&mensaje, sizeof(Mensaje) - sizeof(long), 0);
+            a = getApuesta(mensaje);            
 
             apostador = getApostador(a);
             caballo = getCaballo(a);
             cuantia = getCuantia(a);
 
-            Down_Semaforo(attr->infoMutex, 0, /*UNDO*/);
+            Down_Semaforo(attr->infoMutex, 0, 0);
             attr->info->dinero[caballo][apostador] += cuantia * attr->info->cotizacion[caballo];
             attr->info->total += cuantia;
             attr->info->apostado[caballo] += cuantia;
             attr->info->cotizacion[caballo] = attr->info->total/attr->info->apostado;
-            Up_Semaforo(attr->info;utex, 0, /*UNDO*/);
+            Up_Semaforo(attr->infoMutex, 0, 0);
         }
-        /*¿Como son interrumpidas las ventanillas?*/
-
     }
 
 

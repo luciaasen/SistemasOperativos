@@ -10,13 +10,15 @@
 
 typedef struct _Apuesta Apuesta;
 
+typedef struct _Mensaje Mensaje;
+
 /**
  * Crea apuesta aleatoria
  * @param idApostador numero del apostador
  * @param nCaballos caballos en la carrera
  * @return NULL si error, si no la apuesta creada.
  */
-Apuesta apuesta_ini(int idApostador, int nCaballos);     
+Apuesta *apuesta_ini(int idApostador, int nCaballos);     
 
 /**
  * Funcion que se encarga de generar cada 0.1 segundos apuestas aleatorias
@@ -30,7 +32,7 @@ int generador(int nApostadores, int nCaballos);
  * @param a Apuesta
  * @return id del caballo
  */
-int getCaballo(Apuesta *a);
+int getCaballo(Apuesta a*);
  
 /**
  * @param a Apuesta
@@ -43,3 +45,10 @@ int getApostador(Apuesta *a);
  * @return cuantia de la apuesta
  */
 int getCuantia(Apuesta *a);
+
+/**
+ * Obtiene la apuesta dentro del mensaje
+ * @param mensaje del que obtener la apuesta
+ * @return apuesta del mensaje
+ */
+ Apuesta *getApuesta(Mensaje m);

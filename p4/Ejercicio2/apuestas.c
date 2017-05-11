@@ -3,8 +3,13 @@
 struct _Ret{
     int cola;
     int tipo;
-    int pid1;
-    int pid2;
+    int pidGestor;
+    int pidApostador;
+}
+
+struct _mens{
+    long type;
+    char[1] c;
 }
 
 Ret *apuestas(int numC, int numV, int numA){
@@ -47,12 +52,12 @@ Ret *apuestas(int numC, int numV, int numA){
 
     }else if(pidApostador == 0){
 
-        if(generador(numA, numC, colaApuesta, MTYPE) == -1){
+        if(generador(numA, numC, colaApuesta, ret->tipo) == -1){
             exit(-1)
         }
     }else{
         
-        ret->pid1 = pidApostador;
+        ret->pidApostador = pidApostador;
         pidGestor = fork();
         if(pidGestor == -1){
            
@@ -61,12 +66,34 @@ Ret *apuestas(int numC, int numV, int numA){
 
         }else if (pidGestor == 0){
 
-            if(gestorApuestas(colaApuesta, colaMain, MTYPE, numC, numA, numV) == NULL){
+            if(gestorApuestas(colaApuesta, colaMain, ret->tipo, numC, numA, numV) == NULL){
                 exit(-1); 
             }
         }else{
-            ret->pid2 = pidGestor
+            ret->pidGestor = pidGestor;
             return ret;
         }
+    }
+}
+
+MensajeRes *paraApuestas(Ret *r){
+    mens m;
+    MensajeRes *resultados;
+    
+    if(r == NULL){
+        return -1;
+    }
+    else{
+
+        resultados = (Mensaje *)malloc(sizeof(Mensaje));
+        if(resultados == NULL){
+            return -1;
+        }
+        mens.type = r->tipo;
+        msgsnd(r->cola, (msgbuf*)&m, sizeof(mens) - sizeof(long), IPC_NOWAIT);
+        kill(r->pidApostador, SIGINT);
+        waitpid(r->pidGestor, NULL, 0);
+        msgrcv(r->cola, (msgbuf *)resultados, sizeof(MensajeRes) - sizeof(long), r->tipo, 0);
+        return resultados;
     }
 }
