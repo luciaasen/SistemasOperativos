@@ -1,12 +1,5 @@
-    #include "apostador.h"
-    #include "semaforos.h"
-    #include "gestor.h"
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <pthread.h>
-    #include <unistd.h>
 
-    typedef struct _infoApuestas{
+    struct _infoApuestas{
         /*dinero[i][j] contiene el dinero que se da al apostador j si gana el caballo i*/
         double[][] dinero;
         /*cotizacion por caballo*/
@@ -23,6 +16,11 @@
         int infoMutex;
         infoApuestas *info;
     } Attr;
+
+    struct _MensajeRes{
+        long id;
+        infoApuestas info;
+    }
 
     /**
      * Reserva memoria para una estructura y la inicializa.
@@ -64,15 +62,13 @@
 
 
 
-
-
-
-
     infoApuestas *gestorApuestas(int cola, int tipo, int numC, int numA, int numV){
         infoApuestas *info;
         Attr* attr;
-        int semid, i;
+        int semid, key, i, j;
         pthread_t *ventanillas;
+        MensajeRes mensaje;
+        struct msgbuf recibido;
 
         ventanillas = (pthread_t*)malloc(numV * sizeof(pthread_t));
         if(ventanillas == NULL){
@@ -84,30 +80,39 @@
             free(ventanillas);
             return NULL;
         }
-
-        /*Crea semaforo con las funciones de rodri*/
-        /******************************************/
+            
+        srand(time(NULL) * getpid());
+        key = rand();
+        if(Crear_Semaforo(key, 1, &semid) == ERROR){
+            free(ventanillas);
+            return NULL;
+        }
         
-        attr = attr_ini(semid, info, cola);
+        attr= attr_ini(semid, info, cola);
         if(attr == NULL){
             free(ventanillas);
+            Borrar_Semaforo(semid);
             info_free(info, numC);
             return NULL;
         }
-
         
         for(i = 0; i < numV; i++){
             if(pthread_create(ventanillas + i, NULL, ventanillas, (void*) attr) != 0){
                 printf("Error en la creacion del hilo %d\n", i);
-                /*Este free ya libera la estructura info*/
-                attr_free(attr, numC);
-                /*¿Como liberar correctamente los hilos? (Parte ya se esta ejecutando) Discute rodri*/                
+                attr_free(attr, numC);            
+                for(j = 0; j < i; j++){
+                    pthread_cancel(ventanillas[j]);
+                }
+                free(ventanillas);
             }
-            //pthread_join(ventanillas[i], NULL);
         }
-        
-        /*No se me ocurre como cerrar bien todo esto (si espero a que me llege una senial, y no tengo variables globales
-         no dejaria los recursos liberados)*/       
+
+        /*Espero hasta que recibo mensaje del main, cierro libero y devuelvo mensaje con info*/ 
+        msgrcv(cola, &recibido, sizeof(struct msgbuf) - sizeof(long), tipo, 0);
+        /*Envio mensaje al main*/
+        mensaje.info = info;
+        mensaje.id = tipo;
+        msgsnd(cola, (struct msgbuf *)&mensaje, sizeof(MensajeRes)-sizeof(long), IPC_NOWAIT);
         return attr->info;
     }
 
