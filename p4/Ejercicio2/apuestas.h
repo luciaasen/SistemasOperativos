@@ -3,6 +3,9 @@
 #include "gestor.h"
 #include "apostador.h"
 
+#define STOP_TIPO 43
+#define RESULTADO_TIPO 59
+
 /*Estructura con valores de colas y pids para que el monitor pueda mandar a callar
    a las apuestas*/
 typedef struct _Ret   Ret;

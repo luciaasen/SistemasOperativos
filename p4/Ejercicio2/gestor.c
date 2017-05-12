@@ -209,7 +209,7 @@ int imprimeResApuestas(infoApuestas *r, int prim, int sec, int terc){
 Attr *attr_ini(infoApuestas *info, int cola){
     Attr *attr;
 
-    if (cola < 0 || tipo < 0 || info == NULL) {
+    if (cola < 0 || info == NULL) {
         return NULL;
     }
     attr = (Attr *) malloc(sizeof(Attr));
