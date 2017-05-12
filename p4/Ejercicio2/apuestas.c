@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
+#include <errno.h>
 
 #include "apuestas.h"
 
@@ -39,11 +40,26 @@ Ret *apuestas(int numC, int numV, int numA){
     }
     /*Crea cola main*/
     srand(time(NULL) * getpid());
-    //key = rand();    
-    key = ftok(PHI, LAMBDA);
-    colaMain = msgget(key, 0660);
+    key = rand();    
+    //key = ftok(PHI, LAMBDA);
+    colaMain = msgget(key, 0777);
     if(colaMain == -1){
         perror("Error en la creacion de colaMain\n");
+        if(errno == EACCES){
+            perror("EACCESS\n");
+        }
+        if(errno == EIDRM){
+            perror("EIDRM\n");
+        }
+        if(errno == EINVAL){
+            perror("EINVAL\n");
+        }
+        if(errno == ENOMEM){
+            perror("ENOMEM\n");
+        }
+        if(errno == EINVAL){
+            perror("EINVAL\n");
+        }
         free(ret);
         return NULL;
     }
