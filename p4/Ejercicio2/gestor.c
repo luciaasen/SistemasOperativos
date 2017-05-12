@@ -140,7 +140,7 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
     info.id = RESULTADO_TIPO;
     msgsnd(colaMain, (struct msgbuf *)&info, sizeof(infoApuestas) - sizeof(long), IPC_NOWAIT);
     free(attr);     /*Solo libero el puntero, el infoApuestas de dentro que envia el mensaje no, vd?*/
-    //msgctl (colaApuesta, IPC_RMID, (struct msqid_ds *)NULL);
+    msgctl (colaApuesta, IPC_RMID, (struct msqid_ds *)NULL);
     exit(0);
     return attr->info;
 }
