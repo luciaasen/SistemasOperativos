@@ -69,7 +69,7 @@ void info_free(infoApuestas *info);
 
 
 infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, int numA, int numV){
-    infoApuestas *info;
+    infoApuestas info;
     Attr         * attr;
     int          i, j;
     pthread_t    *ventanillas;
@@ -82,17 +82,24 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
         return NULL;
     }
 
-    info = info_ini(tipo, numC, numA);
-    if (info == NULL) {
-        free(ventanillas);
-        return NULL;
+    /*Inicializacion del info*/
+    info.numC  = numC;
+    info.numA  = numA;
+    info.id    = tipo;
+    info.total = numC;
+    for (i = 0; i < numC; i++) {
+        for (j = 0; j < numA; j++) {
+            info.dinero[i][j] = 0;
+        }
+        info.cotizacion[i] = numC;
+        info.apostado[i]   = 1;
     }
+    /*Fin de inicializacion*/
 
 
-    attr = attr_ini(info, colaApuesta);
+    attr = attr_ini(&info, colaApuesta);
     if (attr == NULL) {
         free(ventanillas);
-        info_free(info);
         return NULL;
     }
 
@@ -111,7 +118,6 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
                 pthread_cancel(ventanillas[j]);
             }
             free(ventanillas);
-            info_free(info);
             return NULL;
         }
     }
@@ -132,8 +138,8 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
 
     /*Envio mensaje al main con la info de las apuestas*/
     /***************************************************/
-    info->id = RESULTADO_TIPO;
-    msgsnd(colaMain, (struct msgbuf *) info, sizeof(infoApuestas) - sizeof(long), IPC_NOWAIT);
+    info.id = RESULTADO_TIPO;
+    msgsnd(colaMain, (struct msgbuf *)&info, sizeof(infoApuestas) - sizeof(long), IPC_NOWAIT);
     free(attr);     /*Solo libero el puntero, el infoApuestas de dentro que envia el mensaje no, vd?*/
     exit(0);
     return attr->info;
@@ -233,39 +239,6 @@ void attr_free(Attr* attr){
 }
 
 
-
-infoApuestas *info_ini(long id, int numC, int numA){
-    infoApuestas *info = NULL;
-    int          i, j;
-
-    if (numC < 1 || numA < 1) {
-        return NULL;
-    }
-    /*Reservamos catorcemil cosas*/
-    printf("En info ini numC %d  numA %d\n", numC, numA);
-
-
-    info = (infoApuestas *) malloc(sizeof(infoApuestas));
-    if (info == NULL) {
-        return NULL;
-    }
-    info->numC = numC;
-    info->numA = numA;
-    info->id   = id;
-
-    info->total = 0;
-    for (i = 0; i < numC; i++) {
-        for (j = 0; j < numA; j++) {
-            info->dinero[i][j] = 0;
-        }
-        info->cotizacion[i] = numC;
-        info->apostado[i]   = 1;
-    }
-    info->total = numC;
-    printf("En info ini numC %d  numA %d\n", numC, numA);
-
-    return info;
-}
 
 void info_free(infoApuestas *info){
     if (info != NULL) {
