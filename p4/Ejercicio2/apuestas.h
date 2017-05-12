@@ -1,19 +1,21 @@
+#ifndef APUESTAS_H
+#define APUESTAS_H
 #include "gestor.h"
 #include "apostador.h"
 
-/*Estructura con valores de colas y pids para que el monitor pueda mandar a callar 
-a las apuestas*/
-typedef struct _Ret Ret;
+/*Estructura con valores de colas y pids para que el monitor pueda mandar a callar
+   a las apuestas*/
+typedef struct _Ret   Ret;
 
 /*Mensaje para decirle al gestor que se calle*/
-typedef struct _mens{
+typedef struct _mens {
     long type;
     char c[1];
 }mens;
 
 /**
  * Crea 2 colas de mensajes: una por la que el gestor se comunicara con el main,
- * y otra por la que el gestor se comunicara con los apostadores. 
+ * y otra por la que el gestor se comunicara con los apostadores.
  * Lanza dos procesos, uno que crea apuestas y otro que las gestiona.
  * @param numC num caballos
  * @param numV num ventanillas
@@ -31,3 +33,4 @@ MensajeRes * paraApuestas(Ret *r);
 
 
 
+#endif
