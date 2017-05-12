@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include "caballos.h"
-
+#include "gestor.h"
 
 #define OK           1
 #define ERROR        0
@@ -37,6 +37,6 @@ void esperaImprime();
  * Funcion que hace de wrapper para el funcionamiento durante la carrera
  * @param infoC puntero a infoCaballos
  */
-void wrapperCarrera(infoCaballos *infoC);
+void wrapperCarrera(infoCaballos *infoC, MensajeRes *resApuestas);
 
 #endif
