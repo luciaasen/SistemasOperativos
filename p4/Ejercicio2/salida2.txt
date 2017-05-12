@@ -1,0 +1,71 @@
+Quedan 3 segundos para que inicie la carrera.
+Quedan 2 segundos para que inicie la carrera.
+Quedan 1 segundos para que inicie la carrera.
+Inicia la carrera.
+
+RESUMEN DE LA CARRERA :
+Caballo 1: Ha recorrido 2 de 15, posicion 3.
+Caballo 2: Ha recorrido 3 de 15, posicion 2.
+Caballo 3: Ha recorrido 5 de 15, posicion 1.
+Caballo 4: Ha recorrido 2 de 15, posicion 3.
+Caballo 5: Ha recorrido 1 de 15, posicion 5.
+
+COTIZACIONES:
+	Caballo 1 -> cotizacion 4.927643
+	Caballo 2 -> cotizacion 5.170451
+	Caballo 3 -> cotizacion 4.977916
+	Caballo 4 -> cotizacion 4.170732
+	Caballo 5 -> cotizacion 5.741799
+
+
+RESUMEN DE LA CARRERA :
+Caballo 1: Ha recorrido 7 de 15, posicion 1.
+Caballo 2: Ha recorrido 6 de 15, posicion 3.
+Caballo 3: Ha recorrido 6 de 15, posicion 3.
+Caballo 4: Ha recorrido 4 de 15, posicion 5.
+Caballo 5: Ha recorrido 7 de 15, posicion 1.
+
+COTIZACIONES:
+	Caballo 1 -> cotizacion 4.927643
+	Caballo 2 -> cotizacion 5.170451
+	Caballo 3 -> cotizacion 4.977916
+	Caballo 4 -> cotizacion 4.170732
+	Caballo 5 -> cotizacion 5.741799
+
+
+RESUMEN DE LA CARRERA :
+Caballo 1: Ha recorrido 9 de 15, posicion 3.
+Caballo 2: Ha recorrido 10 de 15, posicion 2.
+Caballo 3: Ha recorrido 7 de 15, posicion 5.
+Caballo 4: Ha recorrido 15 de 15, posicion 1.
+Caballo 5: Ha recorrido 9 de 15, posicion 3.
+
+COTIZACIONES:
+	Caballo 1 -> cotizacion 4.927643
+	Caballo 2 -> cotizacion 5.170451
+	Caballo 3 -> cotizacion 4.977916
+	Caballo 4 -> cotizacion 4.170732
+	Caballo 5 -> cotizacion 5.741799
+
+
+Carrera finalizada.
+
+RESULTADOS DE LA CARRERA:
+Primer lugar: Caballo 4
+Segundo lugar: Caballo 2
+Tercer lugar: Caballo 1
+
+GANANCIA APOSTADORES:
+	Apostador 1 -> ganancia 11571.467743
+	Apostador 2 -> ganancia 6540.419704
+	Apostador 3 -> ganancia 6326.427427
+	Apostador 4 -> ganancia 5264.974907
+	Apostador 5 -> ganancia 7702.690459
+	Apostador 6 -> ganancia 5280.937954
+	Apostador 7 -> ganancia 6264.693986
+
+Proceso Caballo cerrado con exito
+Proceso Caballo cerrado con exito
+Proceso Caballo cerrado con exito
+Proceso Caballo cerrado con exito
+Proceso Caballo cerrado con exito
