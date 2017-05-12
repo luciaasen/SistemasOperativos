@@ -66,7 +66,7 @@ int apuestaEnvia(long tipo, int idApostador, int nCaballos, int cola){
 
     sprintf(a.nombre, "Apostador-%d", idApostador);
     a.numC    = rand() % nCaballos;
-    a.cuantia = rand();
+    a.cuantia = rand() % 100;
     a.id      = tipo;
     msgsnd(cola, (struct msgbuf *) &a, sizeof(Apuesta) - sizeof(long), IPC_NOWAIT);
 

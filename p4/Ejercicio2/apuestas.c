@@ -105,7 +105,8 @@ Ret *apuestas(int numC, int numV, int numA){
 infoApuestas *paraApuestas(Ret *r){
     /*TODO: FALTA FREE AL RET??*/
     mens         m;
-    infoApuestas *resultados;
+    infoApuestas *resultados, ret;
+    int          i, j;
 
     if (r == NULL) {
         return NULL;
@@ -119,14 +120,30 @@ infoApuestas *paraApuestas(Ret *r){
 
         m.type = STOP_TIPO;
         m.c[0] = 'c';
-        printf("La funcion para apuestas envia a cola %d tipo %d\n", r->cola, r->tipo);
+        //printf("La funcion para apuestas envia a cola %d tipo %d\n", r->cola, r->tipo);
 
         msgsnd(r->cola, (struct msgbuf *) &m, sizeof(mens) - sizeof(long), IPC_NOWAIT);
         kill(r->pidApostador, SIGINT);
         waitpid(r->pidGestor, NULL, 0);
-        printf("%d ha muerto, paraApuestas intenta recibir resultados de cola %d tipo %d\n", r->pidGestor, r->cola, r->tipo);
-        msgrcv(r->cola, (struct msgbuf *) resultados, sizeof(infoApuestas) - sizeof(long), RESULTADO_TIPO, 0);
-        printf("Hola after receive de paraApeustas\n");
+
+        //printf("La funcion para apuestas intenta recibir resultados de cola %d tipo %d\n", r->cola, r->tipo);
+        msgrcv(r->cola, (struct msgbuf *) &ret, sizeof(infoApuestas) - sizeof(long), RESULTADO_TIPO, 0);
+        /*Copia del mensaje al puntero devuelto*/
+        resultados->id    = ret.id;
+        resultados->total = ret.total;
+        resultados->numC  = ret.numC;
+        resultados->numA  = ret.numA;
+        for (i = 0; i < 10; i++) {
+            resultados->cotizacion[i] = ret.cotizacion[i];
+            resultados->apostado[i]   = ret.apostado[i];
+
+            for (j = 0; j < 10; j++) {
+                resultados->dinero[i][j] = ret.dinero[i][j];
+            }
+        }
+
+        /*fin de la copia*/
+        //printf("Hola after receive de paraApeustas\n");
         return resultados;
     }
 }

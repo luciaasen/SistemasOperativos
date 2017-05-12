@@ -55,5 +55,5 @@ void wrapperCarrera(infoCaballos *infoC, infoApuestas *resApuestas){
     }
     imprimeResultados(infoC);
     /*IMPRIME LOS RESULTADOS DE LA CARRERA*/
-    /*imprimeResApuestas(resApuestas,idPrimerLugar(infoC),idSegundoLugar(infoC),idTercerLugar(infoC));*/
+    imprimeResApuestas(resApuestas, idPrimerLugar(infoC), idSegundoLugar(infoC), idTercerLugar(infoC));
 }
