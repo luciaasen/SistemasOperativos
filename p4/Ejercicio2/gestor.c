@@ -202,7 +202,7 @@
     int imprimeResApuestas(MensajeRes *r, int prim, int sec, int terc){
         int i;
         double ganancia;
-        if(r == NULL || prim < 1 || sec < 1 || terc < 1){
+        if(r == NULL || prim < 0 || sec < 0 || terc < 0){
             return -1;
         }
         
@@ -210,7 +210,7 @@
         /************************************/
         printf("Ganancia apostadores:\n");
         for(i = 0; i < r->info->numA; i++){
-            ganancia = r->info->dinero[prim][i] + r->info->dinero[sec][i] + r->info->dinero[terc][i];
+            ganancia = r->info->dinero[prim-1][i] + r->info->dinero[sec-1][i] + r->info->dinero[terc-1][i];
             if(ganancia > 0){
                 printf("\tApostador %d -> ganancia %lf\n", i, ganancia);
             }
