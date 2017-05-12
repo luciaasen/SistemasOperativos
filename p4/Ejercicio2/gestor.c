@@ -1,4 +1,5 @@
     #include "apostador.h"
+    #include "apuestas.h"
     #include "semaforos.h"
     #include <stdio.h>
     #include <stdlib.h>
@@ -52,7 +53,7 @@
      * @param info puntero al infoApuestas indicado
      * @return NULL si error, puntero a Attr si OK
      */
-    Attr *attr_ini(int semid, infoApuestas *info, int cola);
+    Attr *attr_ini(int semid, infoApuestas *info, int cola, int tipo);
 
     
     /**
@@ -70,7 +71,7 @@
      * ventanillas acerca de las apuestas
      * @return -1 si error, 0 else
      */
-    int ventanilla(void *atributo);
+    void* ventanilla(void *atributo);
     
     /**
      * Libera los recursos d una estructura infoApuestas
@@ -151,7 +152,7 @@
     }
 
 
-    vod * ventanilla(void *atributo){
+    void * ventanilla(void *atributo){
         Apuesta *a;
         Attr *attr; 
         int apostador, caballo;
@@ -176,7 +177,7 @@
             attr->info->dinero[caballo][apostador] += cuantia * attr->info->cotizacion[caballo];
             attr->info->total += cuantia;
             attr->info->apostado[caballo] += cuantia;
-            attr->info->cotizacion[caballo] = attr->info->total/attr->info->apostado;
+            attr->info->cotizacion[caballo] = attr->info->total/attr->info->apostado[caballo];
             Up_Semaforo(attr->infoMutex, 0, 0);
         }
         return NULL;
@@ -209,7 +210,7 @@
         /************************************/
         printf("Ganancia apostadores:\n");
         for(i = 0; i < r->info->numA; i++){
-            ganancia = dinero[prim][i] + dinero[sec][i] + dinero[terc][i];
+            ganancia = r->info->dinero[prim][i] + r->info->dinero[sec][i] + r->info->dinero[terc][i];
             if(ganancia > 0){
                 printf("\tApostador %d -> ganancia %lf\n", i, ganancia);
             }

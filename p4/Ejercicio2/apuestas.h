@@ -1,10 +1,15 @@
+#include "gestor.h"
+#include "apostador.h"
 
 /*Estructura con valores de colas y pids para que el monitor pueda mandar a callar 
 a las apuestas*/
 typedef struct _Ret Ret;
 
 /*Mensaje para decirle al gestor que se calle*/
-typedef struct _mens mens;
+typedef struct _mens{
+    long type;
+    char c[1];
+}mens;
 
 /**
  * Crea 2 colas de mensajes: una por la que el gestor se comunicara con el main,

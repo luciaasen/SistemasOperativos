@@ -1,5 +1,3 @@
-#include "apostador.h"
-#include "gestor.h"
 #include <sys/msg.h>
 #include <sys/wait.h>
 #include <sys/types.h>
@@ -18,10 +16,7 @@ struct _Ret{
     int pidApostador;
 };
 
-struct _mens{
-    long type;
-    char c[1];
-};
+
 
 struct msgbuf {
     long mtype;

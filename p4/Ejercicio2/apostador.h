@@ -6,7 +6,10 @@
 
 typedef struct _Apuesta Apuesta;
 
-typedef struct _Mensaje Mensaje;
+typedef struct _Mensaje{
+    long id;
+    Apuesta *a;
+} Mensaje;
 
 /**
  * Crea apuesta aleatoria
@@ -40,7 +43,7 @@ int getApostador(Apuesta *a);
  * @param a Apuesta
  * @return cuantia de la apuesta
  */
-int getCuantia(Apuesta *a);
+double getCuantia(Apuesta *a);
 
 /**
  * Obtiene la apuesta dentro del mensaje

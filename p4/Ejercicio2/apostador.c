@@ -14,11 +14,6 @@ struct _Apuesta{
 }
 
 
-struct _Mensaje{
-    long id;
-    Apuesta *a;
-};
-
 struct msgbuf {
     long mtype;
     char mtext[1]; 
