@@ -1,3 +1,14 @@
+#include "apostador.h"
+#include "gestor.h"
+#include <sys/msg.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <stdio.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
+
 #include "apuestas.h"
 
 struct _Ret{

@@ -1,3 +1,11 @@
+    #include "apostador.h"
+    #include "semaforos.h"
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <pthread.h>
+    #include <unistd.h>
+    #include <sys/msg.h>
+    
     #include "gestor.h"
 
     struct _infoApuestas{
@@ -11,7 +19,7 @@
         double total;
         int numC;
         int numA;
-    }
+    };
 
     /*Esructura que se pasa como argumento al thread*/
     typedef struct _Attr{

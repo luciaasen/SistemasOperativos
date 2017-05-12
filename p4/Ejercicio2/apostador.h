@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
-#include <sys/types.h>
+
 
 #define N 1997
 #define F "/bin/cat"

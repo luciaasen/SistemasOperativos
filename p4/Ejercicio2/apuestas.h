@@ -1,11 +1,3 @@
-#include "apostador.h"
-#include "gestor.h"
-#include <sys/msg.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <stdio.h>
-#include <signal.h>
-
 
 /*Estructura con valores de colas y pids para que el monitor pueda mandar a callar 
 a las apuestas*/

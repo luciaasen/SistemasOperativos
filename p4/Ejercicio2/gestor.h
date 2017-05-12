@@ -1,10 +1,4 @@
-    #include "apostador.h"
-    #include "semaforos.h"
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <pthread.h>
-    #include <unistd.h>
-    #include <sys/msg.h>
+
     
     typedef struct _infoApuestas infoApuestas;
     
