@@ -1,4 +1,4 @@
-OBJ = monitor_lib.o monitor.o caballos.o
+OBJ = monitor_lib.o monitor.o caballos.o apuestas.o
 
 all: monitor
 	rm *.o
@@ -15,5 +15,17 @@ monitor.o: monitor.c
 caballos.o : caballos.c caballos.h
 	gcc -c caballos.c
 	
+gestor.o : gestor.c gestor.h
+	gcc -c gestor.c
+	
+apostador.o : apostador.c apostador.h
+	gcc -c apostador.c
+
+apuestas.o : apuestas.c apuestas.h
+	gcc -c apuestas.c	
+	
+semaforos.o : semaforos.c semaforos.h
+	gcc -c semaforos.c
+    
 clean:
 	rm monitor

@@ -5,18 +5,25 @@ struct _Ret{
     int tipo;
     int pidGestor;
     int pidApostador;
-}
+};
 
 struct _mens{
     long type;
-    char[1] c;
-}
+    char c[1];
+};
+
+struct msgbuf {
+    long mtype;
+    char mtext[1]; 
+};
 
 Ret *apuestas(int numC, int numV, int numA){
     int colaMain, colaApuesta, key;
     int pidGestor, pidApostador;
     Ret *ret = (Ret *)malloc(sizeof(Ret));
     
+    /**Creo colaApuesta y colaMain, reservo memoria*/
+    /***********************************************/
     if(ret == NULL){
         return NULL;
     }
@@ -34,17 +41,18 @@ Ret *apuestas(int numC, int numV, int numA){
 
     /*Crea cola para las apuestas*/
     srand(time(NULL) * getpid());
-    key = rand();i
-    colaApuesta = msgget(clave, 0660);
+    key = rand();
+    colaApuesta = msgget(key, 0660);
     if(colaApuesta == -1){
         perror("Error en la creacion de colaApuesta\n");
         free(ret);
         return NULL;
     }
     
-    /*Lanza hijos*/
+    /*Lanza hijos: un gestor y un apostador, guardo sus pids para poder cargarmelos*/
+    /*******************************************************************************/
     pidApostador = fork();
-    if(Apostador == -1){
+    if(pidApostador == -1){
 
         perror("Error en el fork para apostador\n");
         free(ret);
@@ -53,7 +61,7 @@ Ret *apuestas(int numC, int numV, int numA){
     }else if(pidApostador == 0){
 
         if(generador(numA, numC, colaApuesta, ret->tipo) == -1){
-            exit(-1)
+            exit(-1);
         }
     }else{
         
@@ -81,19 +89,20 @@ MensajeRes *paraApuestas(Ret *r){
     MensajeRes *resultados;
     
     if(r == NULL){
-        return -1;
+        return NULL;
     }
     else{
-
-        resultados = (Mensaje *)malloc(sizeof(Mensaje));
+        /*Manda mensaje al gestor, mata al apostador, recibe info del gestor*/
+        /********************************************************************/
+        resultados = (MensajeRes *)malloc(sizeof(MensajeRes));
         if(resultados == NULL){
-            return -1;
+            return NULL;
         }
-        mens.type = r->tipo;
-        msgsnd(r->cola, (msgbuf*)&m, sizeof(mens) - sizeof(long), IPC_NOWAIT);
+        m.type = r->tipo;
+        msgsnd(r->cola, (struct msgbuf*)&m, sizeof(mens) - sizeof(long), IPC_NOWAIT);
         kill(r->pidApostador, SIGINT);
         waitpid(r->pidGestor, NULL, 0);
-        msgrcv(r->cola, (msgbuf *)resultados, sizeof(MensajeRes) - sizeof(long), r->tipo, 0);
+        msgrcv(r->cola, (struct msgbuf *)resultados, sizeof(MensajeRes) - sizeof(long), r->tipo, 0);
         return resultados;
     }
 }

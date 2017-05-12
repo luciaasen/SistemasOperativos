@@ -1,9 +1,17 @@
 #include "apostador.h"
 #include "gestor.h"
 #include <sys/msg.h>
+#include <sys/wait.h>
+#include <sys/types.h>
 #include <stdio.h>
+#include <signal.h>
 
-typedef struct _Ret ret;
+
+/*Estructura con valores de colas y pids para que el monitor pueda mandar a callar 
+a las apuestas*/
+typedef struct _Ret Ret;
+
+/*Mensaje para decirle al gestor que se calle*/
 typedef struct _mens mens;
 
 /**
@@ -22,7 +30,7 @@ Ret *apuestas(int numC, int numV, int numA);
  * @param r Estructura obtenida de la funcion apuestas
  * @return 0 si bien, 1 si error
  */
-int paraApuestas(Ret *r);
+MensajeRes * paraApuestas(Ret *r);
 
 
 

@@ -1,15 +1,25 @@
 #include "apostador.h"
 
-typedef struct _Apuesta{
+
+
+
+struct _Apuesta{
     char nombre[20];
     int numC;
     double cuantia;
 }
 
-typedef struct _Mensaje{
+
+struct _Mensaje{
     long id;
     Apuesta *a;
-}
+};
+
+struct msgbuf {
+    long mtype;
+    char mtext[1]; 
+};
+
 
 
 /**
@@ -32,6 +42,8 @@ int generador(int nApostadores, int nCaballos, int colaApuesta, int tipo){
     int cola, i, apostador;
     Apuesta *a;
 
+    /*CdE + cambio manejador*/
+    /************************/
     if(nApostadores < 1 || nCaballos < 1 || cola < 1){
         exit(-1);
     }
@@ -41,7 +53,8 @@ int generador(int nApostadores, int nCaballos, int colaApuesta, int tipo){
         exit(0);
     }
 
-    /*Parara cuando le llegue una senial*/
+    /*Genera y envia apuestas aleatoriasm parara cuando le llegue una senial*/
+    /************************************************************************/
     i = 0;
     while(1){
         apostador = i%nApostadores;
@@ -50,7 +63,7 @@ int generador(int nApostadores, int nCaballos, int colaApuesta, int tipo){
             printf("Error en creacion apuesta %d\n", i);
             exit(-1);
         }
-        if(envia_apuesta(cola, MTYPE, a) == -1){
+        if(envia_apuesta(colaApuesta, tipo, a) == -1){
             printf("Error en el envio de la apuesta %d\n", i);
             exit(-1);
         }

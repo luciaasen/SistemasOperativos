@@ -26,13 +26,13 @@ Apuesta *apuesta_ini(int idApostador, int nCaballos);
  * @param nApostadores numero de apostadores
  * @param nCaballos numero de caballos
  */
-int generador(int nApostadores, int nCaballos);
+int generador(int nApostadores, int nCaballos, int colaApuesta, int tipo);
 
 /**
  * @param a Apuesta
  * @return id del caballo
  */
-int getCaballo(Apuesta a*);
+int getCaballo(Apuesta *a);
  
 /**
  * @param a Apuesta
@@ -52,3 +52,5 @@ int getCuantia(Apuesta *a);
  * @return apuesta del mensaje
  */
  Apuesta *getApuesta(Mensaje m);
+ 
+ 
