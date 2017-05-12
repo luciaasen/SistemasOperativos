@@ -83,8 +83,10 @@ Ret *apuestas(int numC, int numV, int numA){
         return NULL;
     }else if (pidApostador == 0) {
         if (generador(numA, numC, colaApuesta, ret->tipo) == -1) {
+            free(ret);
             exit(-1);
         }
+        free(ret);
     }else{
         ret->pidApostador = pidApostador;
         pidGestor         = fork();
@@ -93,8 +95,11 @@ Ret *apuestas(int numC, int numV, int numA){
             return NULL;
         }else if (pidGestor == 0) {
             if (gestorApuestas(colaApuesta, colaMain, ret->tipo, numC, numA, numV) == NULL) {
+                free(ret);
                 exit(-1);
             }
+            free(ret);
+            
         }else{
             ret->pidGestor = pidGestor;
             return ret;
@@ -143,7 +148,10 @@ infoApuestas *paraApuestas(Ret *r){
         }
 
         /*fin de la copia*/
-        //printf("Hola after receive de paraApeustas\n");
+        /*Libero la cola que comparten main y gestor, colaMain*/
+        //msgctl (r->cola, IPC_RMID, (struct msqid_ds *)NULL);
+
+        free(r);
         return resultados;
     }
 }

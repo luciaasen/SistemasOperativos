@@ -48,5 +48,6 @@ int main(int argc, char **argv){
 
 
     finalizaLibera(infoC);
+    free(resApuestas);
     return 1;
 }

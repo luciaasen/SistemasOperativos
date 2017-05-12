@@ -124,13 +124,11 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
 
     /*Espero hasta que recibo mensaje del main, cierro libero*/
     /*********************************************************/
-    printf("La funcion gestor apuestas intenta recibir de cola %d tipo %d, pid %d\n", colaMain, tipo, getpid());
-
+    
     if (msgrcv(colaMain, (struct msgbuf *) &recibido, sizeof(mens) - sizeof(long), STOP_TIPO, 0) == -1) {
         perror("Error en la recepcion de mensaje de parada\n");
         return NULL;
     }
-    printf("recibeeeeeeeeeeee\n");
     for (i = 0; i < numV; i++) {
         pthread_cancel(ventanillas[i]);
     }
@@ -141,6 +139,7 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
     info.id = RESULTADO_TIPO;
     msgsnd(colaMain, (struct msgbuf *)&info, sizeof(infoApuestas) - sizeof(long), IPC_NOWAIT);
     free(attr);     /*Solo libero el puntero, el infoApuestas de dentro que envia el mensaje no, vd?*/
+    //msgctl (colaApuesta, IPC_RMID, (struct msqid_ds *)NULL);
     exit(0);
     return attr->info;
 }
@@ -184,13 +183,14 @@ int imprimeApuestas(infoApuestas *r){
     /*Imprime todas las cotizaciones*/
     /********************************/
     cotizaciones = r->cotizacion;
-    printf("Cotizaciones:\n");
-    if (r != NULL) {
+    printf("\nCOTIZACIONES:\n");
+    /*if (r != NULL) {
         printf("numcaballos %d \n", r->numC);
-    }
+    }*/
     for (i = 0; i < r->numC; i++) {
         printf("\tCaballo %d -> cotizacion %lf\n", i + 1, cotizaciones[i]);
     }
+    printf("\n");
     return 0;
 }
 
@@ -203,13 +203,14 @@ int imprimeResApuestas(infoApuestas *r, int prim, int sec, int terc){
 
     /*Imprime ganancia de cada apostador*/
     /************************************/
-    printf("Ganancia apostadores:\n");
+    printf("\nGANANCIA APOSTADORES:\n");
     for (i = 0; i < r->numA; i++) {
         ganancia = r->dinero[prim - 1][i] + r->dinero[sec - 1][i] + r->dinero[terc - 1][i];
         if (ganancia > 0) {
             printf("\tApostador %d -> ganancia %lf\n", i + 1, ganancia);
         }
     }
+    printf("\n");
     return 0;
 }
 
