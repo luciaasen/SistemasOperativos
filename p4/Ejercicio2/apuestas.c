@@ -84,16 +84,16 @@ Ret *apuestas(int numC, int numV, int numA){
     }
 }
 
-MensajeRes *paraApuestas(Ret *r){
-    mens       m;
-    MensajeRes *resultados;
+infoApuestas *paraApuestas(Ret *r){
+    mens         m;
+    infoApuestas *resultados;
 
     if (r == NULL) {
         return NULL;
     }else {
         /*Manda mensaje al gestor, mata al apostador, recibe info del gestor*/
         /********************************************************************/
-        resultados = (MensajeRes *) malloc(sizeof(MensajeRes));
+        resultados = (infoApuestas *) malloc(sizeof(infoApuestas));
         if (resultados == NULL) {
             return NULL;
         }
@@ -104,7 +104,7 @@ MensajeRes *paraApuestas(Ret *r){
         kill(r->pidApostador, SIGINT);
         waitpid(r->pidGestor, NULL, 0);
         printf("La funcion para apuestas intenta recibir de cola %d tipo %d\n", r->cola, r->tipo);
-        msgrcv(r->cola, (struct msgbuf *) resultados, sizeof(MensajeRes) - sizeof(long), r->tipo, 0);
+        msgrcv(r->cola, (struct msgbuf *) resultados, sizeof(infoApuestas) - sizeof(long), r->tipo, 0);
         printf("Hola after receive de paraApeustas\n");
         return resultados;
     }

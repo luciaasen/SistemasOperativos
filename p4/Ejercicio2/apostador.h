@@ -12,12 +12,15 @@ typedef struct _Apuesta {
 } Apuesta;
 
 /**
- * Crea apuesta aleatoria
- * @param idApostador numero del apostador
- * @param nCaballos caballos en la carrera
- * @return NULL si error, si no la apuesta creada.
+ * Genera una apuesta aleatoria con los parametros dados y
+ * manda el mensaje a una de las ventanillas
+ * @param  tipo        [description]
+ * @param  idApostador [description]
+ * @param  nCaballos   [description]
+ * @param  cola        [description]
+ * @return             [description]
  */
-Apuesta *apuesta_ini(long id, int idApostador, int nCaballos);
+int apuestaEnvia(long tipo, int idApostador, int nCaballos, int cola);
 
 /**
  * Funcion que se encarga de generar cada 0.1 segundos apuestas aleatorias
