@@ -130,6 +130,7 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
         return NULL;
     }
     for (i = 0; i < numV; i++) {
+        pthread_detach(ventanillas[i]);
         pthread_cancel(ventanillas[i]);
     }
     free(ventanillas);
