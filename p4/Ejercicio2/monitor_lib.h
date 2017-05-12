@@ -37,6 +37,6 @@ void esperaImprime();
  * Funcion que hace de wrapper para el funcionamiento durante la carrera
  * @param infoC puntero a infoCaballos
  */
-void wrapperCarrera(infoCaballos *infoC, MensajeRes *resApuestas);
+void wrapperCarrera(infoCaballos *infoC, infoApuestas *resApuestas);
 
 #endif

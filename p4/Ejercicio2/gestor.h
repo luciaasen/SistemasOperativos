@@ -1,12 +1,20 @@
 #ifndef GESTOR_H
 #define GESTOR_H
 
-typedef struct _infoApuestas   infoApuestas;
-
-typedef struct _MensajeRes {
-    long         id;
-    infoApuestas *info;
-}MensajeRes;     /*So that I can get sizeof*/
+typedef struct _infoApuestas{
+    /*Tipo del mensaje que recogera el main*/
+    long id;
+    /*dinero[i][j] contiene el dinero que se da al apostador j si gana el caballo i*/
+    double dinero[10][10];
+    /*cotizacion por caballo*/
+    double cotizacion[10];
+    /*Dinero apostado por cada caballo*/
+    double apostado[10];
+    /*Total dinero apostado, no necesaria pero si comoda*/
+    double total;
+    int numC;
+    int numA;
+}infoApuestas;
 
 /**
  * Espero que en algun momento antes del viernes, esto gestione apuestas
@@ -29,7 +37,7 @@ infoApuestas * gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC,
  * @param r Mensaje enviado por el gestor al monitor al finalizar las apuestas
  * @return 0 si fue bien, -1 si error
  */
-int imprimeApuestas(MensajeRes *r);
+int imprimeApuestas(infoApuestas *r);
 
 /**
  * Imprime ganancias de los apostadores dados los caballos primero, segundo y tercero
@@ -39,5 +47,5 @@ int imprimeApuestas(MensajeRes *r);
  * @param terc caballo tercero - ASUMO QUE EMPIEZAN EN CERO
  * @return 0 si fue bien, -1 si error
  */
-int imprimeResApuestas(MensajeRes *r, int prim, int sec, int terc);
+int imprimeResApuestas(infoApuestas *r, int prim, int sec, int terc);
 #endif

@@ -29,7 +29,7 @@ Ret *apuestas(int numC, int numV, int numA);
  * @param r Estructura obtenida de la funcion apuestas
  * @return 0 si bien, 1 si error
  */
-MensajeRes * paraApuestas(Ret *r);
+infoApuestas * paraApuestas(Ret *r);
 
 
 

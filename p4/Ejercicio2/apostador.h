@@ -2,14 +2,15 @@
 #define APOSTADOR_H
 #define N        1997
 #define F        "/bin/cat"
-#define MTYPE    1
+#define MTYPE    199
 
-typedef struct _Apuesta   Apuesta;
-
-typedef struct _Mensaje {
+typedef struct _Apuesta{
+    char nombre[20];
+    int numC;
+    double cuantia;
     long    id;
-    Apuesta *a;
-} Mensaje;
+
+} Apuesta;
 
 /**
  * Crea apuesta aleatoria
@@ -17,7 +18,7 @@ typedef struct _Mensaje {
  * @param nCaballos caballos en la carrera
  * @return NULL si error, si no la apuesta creada.
  */
-Apuesta *apuesta_ini(int idApostador, int nCaballos);
+Apuesta *apuesta_ini(long id, int idApostador, int nCaballos);
 
 /**
  * Funcion que se encarga de generar cada 0.1 segundos apuestas aleatorias
@@ -25,7 +26,7 @@ Apuesta *apuesta_ini(int idApostador, int nCaballos);
  * @param nApostadores numero de apostadores
  * @param nCaballos numero de caballos
  */
-int generador(int nApostadores, int nCaballos, int colaApuesta, int tipo);
+int generador(int nApostadores, int nCaballos, int colaApuesta, long tipo);
 
 /**
  * @param a Apuesta
@@ -45,12 +46,6 @@ int getApostador(Apuesta *a);
  */
 double getCuantia(Apuesta *a);
 
-/**
- * Obtiene la apuesta dentro del mensaje
- * @param mensaje del que obtener la apuesta
- * @return apuesta del mensaje
- */
-Apuesta *getApuesta(Mensaje m);
 
 
 #endif

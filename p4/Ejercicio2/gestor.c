@@ -9,18 +9,7 @@
     
     #include "gestor.h"
 
-    struct _infoApuestas{
-        /*dinero[i][j] contiene el dinero que se da al apostador j si gana el caballo i*/
-        double** dinero;
-        /*cotizacion por caballo*/
-        double* cotizacion;
-        /*Dinero apostado por cada caballo*/
-        double* apostado;
-        /*Total dinero apostado, no necesaria pero si comoda*/
-        double total;
-        int numC;
-        int numA;
-    };
+    
     
 
     /*Esructura que se pasa como argumento al thread*/
@@ -46,7 +35,7 @@
      * @param numA numero de apostadores de la carrera
      * @return puntero a la estuctura o NULL en caso de error
      */
-    infoApuestas *info_ini(int numC, int numA);
+    infoApuestas *info_ini(long id, int numC, int numA);
 
     /**
      * Reserva memoria para una estructura Attr, y la inicializa con los campos indicados
@@ -86,7 +75,6 @@
         Attr* attr;
         int semid, key, i, j;
         pthread_t *ventanillas;
-        MensajeRes mensaje;
         mens recibido;
         
         /*Crea semaforos, reserva ventanillas,crea infoApuestas y Argumento para los threads*/
@@ -96,7 +84,7 @@
             return NULL;
         }
         
-        info = info_ini(numC, numA);
+        info = info_ini(tipo, numC, numA);
         if(info == NULL){
             free(ventanillas);
             return NULL;
@@ -135,11 +123,14 @@
         }
 
         /*Espero hasta que recibo mensaje del main, cierro libero*/ 
-        /*************************************************************************************/
-        printf("La funcion gestor apuestas intenta recibir de cola %d tipo %d\n", colaMain, tipo);
+        /*********************************************************/
+        printf("La funcion gestor apuestas intenta recibir de cola %d tipo %d, pid %d\n", colaMain, tipo, getpid());
           
-        msgrcv(colaMain, (struct msgbuf *)&recibido, sizeof(mens) - sizeof(long), tipo, 0);
-        printf("recibe");
+        if(msgrcv(colaMain, (struct msgbuf *)&recibido, sizeof(mens) - sizeof(long), tipo, 0) == -1){
+            perror("Error en la recepcion de mensaje de parada\n");
+            return NULL;
+        }
+        printf("recibeeeeeeeeeeee\n");
         for(i = 0; i < numV; i++){
             pthread_cancel(ventanillas[i]);
         }
@@ -148,20 +139,18 @@
           
         /*Envio mensaje al main con la info de las apuestas*/
         /***************************************************/
-        mensaje.info = attr->info;
-        mensaje.id = tipo;
-        msgsnd(colaMain, (struct msgbuf *)&mensaje, sizeof(MensajeRes)-sizeof(long), IPC_NOWAIT);
+        msgsnd(colaMain, (struct msgbuf *)info, sizeof(infoApuestas)-sizeof(long), IPC_NOWAIT);
         free(attr); /*Solo libero el puntero, el infoApuestas de dentro que envia el mensaje no, vd?*/
+        exit(0);
         return attr->info;
     }
 
 
     void * ventanilla(void *atributo){
-        Apuesta *a;
+        Apuesta a;
         Attr *attr; 
         int apostador, caballo;
         double cuantia;
-        Mensaje mensaje;
         if(atributo == NULL){
             return NULL;
         }
@@ -170,12 +159,10 @@
         /*Recibe mensaje bloqueante - toca la estructura protegiendola - repeat*/
         /***********************************************************************/
         while(1){
-            msgrcv(attr->cola, (struct msgbuf *)&mensaje, sizeof(Mensaje) - sizeof(long), attr->tipo, 0);
-            a = getApuesta(mensaje);            
-
-            apostador = getApostador(a);
-            caballo = getCaballo(a);
-            cuantia = getCuantia(a);
+            msgrcv(attr->cola, (struct msgbuf *)&a, sizeof(Apuesta) - sizeof(long), attr->tipo, 0);
+            apostador = getApostador(&a);
+            caballo = getCaballo(&a);
+            cuantia = getCuantia(&a);
 
             Down_Semaforo(attr->infoMutex, 0, 0);
             attr->info->dinero[caballo][apostador] += cuantia * attr->info->cotizacion[caballo];
@@ -187,7 +174,7 @@
         return NULL;
     }
 
-    int imprimeApuestas(MensajeRes *r){
+    int imprimeApuestas(infoApuestas *r){
         int i;
         double *cotizaciones;
         if(r == NULL){
@@ -195,18 +182,18 @@
         }        
         /*Imprime todas las cotizaciones*/
         /********************************/
-        cotizaciones = r->info->cotizacion;
+        cotizaciones = r->cotizacion;
         printf("Cotizaciones:\n");
-        if(r->info != NULL){
-            printf(" numcaballos %d\n", r->info->numC);        
+        if(r != NULL){
+            printf("numcaballos %d\n", r->numC);        
         }
-        for(i = 0; i < r->info->numC; i++){
+        for(i = 0; i < r->numC; i++){
             printf("\tCaballo %d -> cotizacion %lf\n", i+1, cotizaciones[i]);
         }
         return 0;
     }
     
-    int imprimeResApuestas(MensajeRes *r, int prim, int sec, int terc){
+    int imprimeResApuestas(infoApuestas *r, int prim, int sec, int terc){
         int i;
         double ganancia;
         if(r == NULL || prim < 0 || sec < 0 || terc < 0){
@@ -216,8 +203,8 @@
         /*Imprime ganancia de cada apostador*/
         /************************************/
         printf("Ganancia apostadores:\n");
-        for(i = 0; i < r->info->numA; i++){
-            ganancia = r->info->dinero[prim-1][i] + r->info->dinero[sec-1][i] + r->info->dinero[terc-1][i];
+        for(i = 0; i < r->numA; i++){
+            ganancia = r->dinero[prim-1][i] + r->dinero[sec-1][i] + r->dinero[terc-1][i];
             if(ganancia > 0){
                 printf("\tApostador %d -> ganancia %lf\n", i, ganancia);
             }
@@ -252,16 +239,64 @@
         }
     }
 
-    /*Esta funcion ocupa muchisimo por culpa de hacer mil millones de mallocs. No hace nada complicado*/
-    infoApuestas *info_ini(int numC, int numA){
-        infoApuestas *info;
+
+
+    infoApuestas *info_ini(long id, int numC, int numA){
+        infoApuestas *info = NULL;
         int i, j;
 
         if(numC < 1 || numA < 1){
             return NULL;
         }
         /*Reservamos catorcemil cosas*/
+   printf("En info ini numC %d  numA %d\n", numC, numA);
+        
 
+        info = (infoApuestas *)malloc(sizeof(infoApuestas));
+        if(info == NULL){
+            return NULL;
+        }
+        info->numC = numC;
+        info->numA = numA;
+        info->id = id;
+        
+        info->total = 0;
+        for(i = 0; i < numC; i++){
+            for(j = 0; j < numA; j++){
+                info->dinero[i][j] = 0;
+            }
+            info->cotizacion[i] = numC;
+            info->apostado[i] = 1;
+        }
+        info->total = numC;
+        printf("En info ini numC %d  numA %d\n", numC, numA);
+        
+        return info;
+    }
+    
+     void info_free(infoApuestas *info){
+        if(info != NULL){
+            free(info);
+        }
+    }    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*Esta funcion ocupa muchisimo por culpa de hacer mil millones de mallocs. No hace nada complicado*/
+   /* infoApuestas *info_ini(int numC, int numA){
+        infoApuestas *info;
+        int i, j;
+
+        if(numC < 1 || numA < 1){
+            return NULL;
+        }
+        
         info = (infoApuestas *)malloc(sizeof(infoApuestas));
         if(info == NULL){
             return NULL;
@@ -307,7 +342,6 @@
             return NULL;
         }
         
-        /*Inicializamos catorcmil cosas*/
         info->total = 0;
         for(i = 0; i < numC; i++){
             for(j = 0; j < numA; j++){
@@ -341,4 +375,4 @@
             }
             free(info);
         }
-    }
+    }*/

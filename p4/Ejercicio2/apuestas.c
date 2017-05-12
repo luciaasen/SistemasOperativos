@@ -9,6 +9,9 @@
 
 #include "apuestas.h"
 
+#define PHI "/bin/ls"
+#define LAMBDA 11
+
 struct _Ret{
     int cola;
     int tipo;
@@ -24,7 +27,8 @@ struct msgbuf {
 };
 
 Ret *apuestas(int numC, int numV, int numA){
-    int colaMain, colaApuesta, key;
+    int colaMain, colaApuesta;
+    long key;
     int pidGestor, pidApostador;
     Ret *ret = (Ret *)malloc(sizeof(Ret));
     
@@ -35,7 +39,8 @@ Ret *apuestas(int numC, int numV, int numA){
     }
     /*Crea cola main*/
     srand(time(NULL) * getpid());
-    key = rand();    
+    //key = rand();    
+    key = ftok(PHI, LAMBDA);
     colaMain = msgget(key, 0660);
     if(colaMain == -1){
         perror("Error en la creacion de colaMain\n");
@@ -90,9 +95,9 @@ Ret *apuestas(int numC, int numV, int numA){
     }
 }
 
-MensajeRes *paraApuestas(Ret *r){
+infoApuestas *paraApuestas(Ret *r){
     mens m;
-    MensajeRes *resultados;
+    infoApuestas *resultados;
     
     if(r == NULL){
         return NULL;
@@ -100,18 +105,22 @@ MensajeRes *paraApuestas(Ret *r){
     else{
         /*Manda mensaje al gestor, mata al apostador, recibe info del gestor*/
         /********************************************************************/
-        resultados = (MensajeRes *)malloc(sizeof(MensajeRes));
+        resultados = (infoApuestas *)malloc(sizeof(infoApuestas));
         if(resultados == NULL){
             return NULL;
         }
+        
         m.type = r->tipo;
         printf("La funcion para apuestas envia a cola %d tipo %d\n", r->cola, r->tipo);
         
         msgsnd(r->cola, (struct msgbuf*)&m, sizeof(mens) - sizeof(long), IPC_NOWAIT);
         kill(r->pidApostador, SIGINT);
-        waitpid(r->pidGestor, NULL, 0);
+        printf("pid al q espera paraApuesta %d, pid al que mata %d\n", r->pidGestor, r->pidApostador);
+        waitpid(r->pidGestor, NULL, WUNTRACED);
+        printf("Apuestas piensa que el gestor ha muerto\n");
         printf("La funcion para apuestas intenta recibir de cola %d tipo %d\n", r->cola, r->tipo);
-        msgrcv(r->cola, (struct msgbuf *)resultados, sizeof(MensajeRes) - sizeof(long), r->tipo, 0);
+        msgrcv(r->cola, (struct msgbuf *)resultados, sizeof(infoApuestas) - sizeof(long), r->tipo, 0);
+        printf("recibe el mismo\n");
         printf("Hola after receive de paraApeustas\n");
         return resultados;
     }

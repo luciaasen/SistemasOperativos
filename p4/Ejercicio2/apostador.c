@@ -9,11 +9,7 @@
 #include "apostador.h"
 
 
-struct _Apuesta{
-    char nombre[20];
-    int numC;
-    double cuantia;
-};
+
 
 
 struct msgbuf {
@@ -32,14 +28,14 @@ void sig_handler(int signo){
 }
 
 /*Esto en teoria va a enviar apuestas*/
-void envia_apuesta(int cola, int tipo, Apuesta *a){
-    Mensaje mns;
-    mns.a = a;
-    mns.id = tipo;
-    msgsnd(cola, (struct msgbuf *)&mns, sizeof(Mensaje) - sizeof(long), IPC_NOWAIT);
+void envia_apuesta(int cola, Apuesta *a){
+    if(a == NULL){
+        return;
+    }
+    msgsnd(cola, (struct msgbuf *)a, sizeof(Apuesta) - sizeof(long), IPC_NOWAIT);
 }
 
-int generador(int nApostadores, int nCaballos, int colaApuesta, int tipo){
+int generador(int nApostadores, int nCaballos, int colaApuesta, long tipo){
     int i, apostador;
     Apuesta *a;
 
@@ -59,18 +55,18 @@ int generador(int nApostadores, int nCaballos, int colaApuesta, int tipo){
     i = 0;
     while(1){
         apostador = i%nApostadores;
-        a = apuesta_ini(apostador, nCaballos);
+        a = apuesta_ini(tipo, apostador, nCaballos);
         if(a == NULL){
             printf("Error en creacion apuesta %d\n", i);
             exit(-1);
         }
-        envia_apuesta(colaApuesta, tipo, a);
+        envia_apuesta(colaApuesta, a);
         i++;
         usleep(10000);
     }
 }
 
-Apuesta *apuesta_ini(int idApostador, int nCaballos){     
+Apuesta *apuesta_ini(long id, int idApostador, int nCaballos){     
     Apuesta *a;
     if(nCaballos < 1){
         return NULL;
@@ -82,7 +78,8 @@ Apuesta *apuesta_ini(int idApostador, int nCaballos){
     }
     sprintf(a->nombre, "Apostador-%d", idApostador);
     a->numC = rand()%nCaballos;
-    a->cuantia = rand();    
+    a->cuantia = rand();
+    a->id = id;    
     return a;
 }
 
@@ -105,6 +102,3 @@ double getCuantia(Apuesta *a){
     return a->cuantia;
 }
 
-Apuesta *getApuesta(Mensaje m){
-    return m.a;
-}

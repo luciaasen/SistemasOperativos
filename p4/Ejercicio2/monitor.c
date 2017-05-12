@@ -21,7 +21,7 @@ void manejador(int sig){
 int main(int argc, char **argv){
     int        numCaballos, longCarrera, numApostadores, numVentanillas;
     Ret        *ret;
-    MensajeRes *resApuestas;
+    infoApuestas *resApuestas;
 
     if (inicializacionArgs(&numCaballos, &longCarrera, &numApostadores,
                            &numVentanillas, argv, argc) == ERROR) {
