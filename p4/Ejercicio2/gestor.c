@@ -9,14 +9,13 @@
     
     #include "gestor.h"
 
-    
+    #define SEM_TIPO 37
     
 
     /*Esructura que se pasa como argumento al thread*/
     typedef struct _Attr{
         int cola;
-        int tipo;
-        int infoMutex;
+        long tipo;
         infoApuestas *info;
     } Attr;
 
@@ -43,7 +42,7 @@
      * @param info puntero al infoApuestas indicado
      * @return NULL si error, puntero a Attr si OK
      */
-    Attr *attr_ini(int semid, infoApuestas *info, int cola, int tipo);
+    Attr *attr_ini( infoApuestas *info, int cola, int tipo);
 
     
     /**
@@ -73,9 +72,9 @@
     infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, int numA, int numV){
         infoApuestas *info;
         Attr* attr;
-        int semid, key, i, j;
+        int i, j;
         pthread_t *ventanillas;
-        mens recibido;
+        mens recibido, semaforo;
         
         /*Crea semaforos, reserva ventanillas,crea infoApuestas y Argumento para los threads*/
         /***********************************************************************************/
@@ -90,21 +89,18 @@
             return NULL;
         }
             
-        srand(time(NULL) * getpid());
-        key = rand();
-        if(Crear_Semaforo(key, 1, &semid) == ERROR){
-            info_free(info);
+                
+        attr= attr_ini(info, colaApuesta, tipo);
+        if(attr == NULL){
             free(ventanillas);
+            info_free(info);
             return NULL;
         }
         
-        attr= attr_ini(semid, info, colaApuesta, tipo);
-        if(attr == NULL){
-            free(ventanillas);
-            Borrar_Semaforo(semid);
-            info_free(info);
-            return NULL;
-        }
+        /*crear + enviar mensaje semtpo */
+        semaforo.type = SEM_TIPO;
+        semaforo.c[0] = 'a';
+        msgsnd(colaApuesta, &semaforo, sizeof(mens) - sizeof(long), IPC_NOWAIT);
         
         /*Lanza hilos*/
         /*************/
@@ -116,7 +112,6 @@
                     pthread_cancel(ventanillas[j]);
                 }
                 free(ventanillas);
-                Borrar_Semaforo(semid);
                 info_free(info);
                 return NULL;
             }
@@ -135,7 +130,6 @@
             pthread_cancel(ventanillas[i]);
         }
         free(ventanillas);
-        Borrar_Semaforo(semid);              
           
         /*Envio mensaje al main con la info de las apuestas*/
         /***************************************************/
@@ -151,6 +145,7 @@
         Attr *attr; 
         int apostador, caballo;
         double cuantia;
+        mens semaforo;
         if(atributo == NULL){
             return NULL;
         }
@@ -164,12 +159,12 @@
             caballo = getCaballo(&a);
             cuantia = getCuantia(&a);
 
-            Down_Semaforo(attr->infoMutex, 0, 0);
+            msgrcv(attr->cola, &semaforo, sizeof(semaforo) - sizeof(long), SEM_TIPO, 0);
             attr->info->dinero[caballo][apostador] += cuantia * attr->info->cotizacion[caballo];
             attr->info->total += cuantia;
             attr->info->apostado[caballo] += cuantia;
             attr->info->cotizacion[caballo] = attr->info->total/attr->info->apostado[caballo];
-            Up_Semaforo(attr->infoMutex, 0, 0);
+            msgsnd(attr->cola, &semaforo, sizeof(mens) - sizeof(long), IPC_NOWAIT);
         }
         return NULL;
     }
@@ -212,17 +207,16 @@
         return 0;        
     }
 
-    Attr *attr_ini(int semid, infoApuestas *info, int cola, int tipo){
+    Attr *attr_ini(infoApuestas *info, int cola, int tipo){
         Attr *attr;
 
-        if(semid < 0 || cola < 0 || tipo < 0 || info == NULL){
+        if(cola < 0 || tipo < 0 || info == NULL){
             return NULL;
         }
         attr = (Attr*)malloc(sizeof(Attr));
         if(attr == NULL){
             return NULL;
         }
-        attr->infoMutex = semid;
         attr->info = info;
         attr->cola = cola;
         attr->tipo = tipo;
