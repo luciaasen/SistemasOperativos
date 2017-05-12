@@ -132,6 +132,8 @@ int generaComunicaciones(infoCaballos *info){
 
 int generaProcesos(infoCaballos *info){
     int i, aux, j;
+    int *pipes;
+    int buzon;
     for (i = 0; i < info->numCaballos; i++) {
         aux = fork();
         if (aux == -1) {
@@ -139,7 +141,27 @@ int generaProcesos(infoCaballos *info){
                 kill(info->idProcCaballos[j], SIGINT);
             return FALSE;
         }else if (aux == 0) {
-            procesoCaballo(i + 1, info->pipes + 2 * i, info->buzon);
+            pipes = (int *) malloc(sizeof(int) * 2);
+            if (pipes == NULL) {
+                perror("Error en la memoria de uno de los caballos.\nLa carrera continua sin este.");
+                free(info->valoresTotales);
+                free(info->estadoActual);
+                free(info->idProcCaballos);
+                free(info->pipes);
+                free(info);
+                exit(EXIT_SUCCESS);
+            }
+            pipes[0] = info->pipes[2 * i];
+            pipes[1] = info->pipes[2 * i + 1];
+            buzon    = info->buzon;
+            /*Liberacion de la memoria duplicada*/
+            free(info->valoresTotales);
+            free(info->estadoActual);
+            free(info->idProcCaballos);
+            free(info->pipes);
+            free(info);
+            /*fin de la liberacion*/
+            procesoCaballo(i + 1, pipes, buzon);
             return -10; /*Aqui nunca se llega, aunque por sia acaso*/
         }else{
             info->idProcCaballos[i] = aux;
@@ -306,7 +328,6 @@ void forzarFin(infoCaballos *info){
 void finalizaLibera(infoCaballos *info){
     int i;
     for (i = 0; i < info->numCaballos; i++) {
-        /*Finalizamos con sigusr1 porque los caballos ignoran la senyal sigint*/
         kill(info->idProcCaballos[i], SIGUSR1);
     }
     cierraComunicaciones(info);
@@ -321,10 +342,20 @@ void finalizaLibera(infoCaballos *info){
 /*INICIO DE PROCESO EJECUTADO POR LOS CABALLOS*/
 
 /*Funcion auxiliares*/
+
+/*Variable global necesaria para permitir el cerrado desde el manejador*/
+int *pipeCaballo;
 int tirada(int estado);
 void enviaMensajeCaballo(int buzon, int avance, int idCaballo);
 void manejadorCaballo(int sing){
     return;
+}
+
+void manejadorCierre(int sing){
+    int *pipe = pipeCaballo;
+    free(pipe);
+    printf("Proceso Caballo cerrado con exito\n");
+    exit(EXIT_SUCCESS);
 }
 
 /**
@@ -335,8 +366,9 @@ void manejadorCaballo(int sing){
  */
 void procesoCaballo(int id, int *pipe, int buzon){
     int estado, avance;
-
+    pipeCaballo = pipe;
     signal(SIGINT, manejadorCaballo); /*Ignora la senial cuando le llega sigInt al proceso padre*/
+    signal(SIGUSR1, manejadorCierre); /*Manejador de cierre*/
 
     srand(time(NULL) * getpid());
     close(pipe[1]);
@@ -366,7 +398,7 @@ void enviaMensajeCaballo(int buzon, int avance, int idCaballo){
     msj.id        = MSJ_CAB;
     msj.tirada    = avance;
     msj.idCaballo = idCaballo;
-    msgsnd(buzon, (struct msgbuf *) &msj, sizeof(mensajeCaballo)-sizeof(long), IPC_NOWAIT);
+    msgsnd(buzon, (struct msgbuf *) &msj, sizeof(mensajeCaballo) - sizeof(long), IPC_NOWAIT);
 }
 
 /*FIN DE PROCESOS EJECUTADO POR LOS CABALLOS*/
