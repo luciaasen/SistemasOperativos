@@ -19,8 +19,8 @@ void manejador(int sig){
  * - Numero de ventanillas
  */
 int main(int argc, char **argv){
-    int        numCaballos, longCarrera, numApostadores, numVentanillas;
-    Ret        *ret;
+    int          numCaballos, longCarrera, numApostadores, numVentanillas;
+    Ret          *ret;
     infoApuestas *resApuestas;
 
     if (inicializacionArgs(&numCaballos, &longCarrera, &numApostadores,
@@ -33,7 +33,7 @@ int main(int argc, char **argv){
         return 0;
     }
     /*INICIALIZACION DE APOSTADORES Y GESTOR DE APUESTAS*/
-    ret = apuestas(numCaballos, numVentanillas, numApostadores);
+    ret = apuestas(numCaballos, numVentanillas, numApostadores, infoC);
     if (ret == NULL) {
         finalizaLibera(infoC);
         return 0;
@@ -41,7 +41,7 @@ int main(int argc, char **argv){
     esperaImprime();
     /*NOTIFICA A LAS APUESTAS DE QUE SE ACABO EL TIEMPO, RECIBE RESULTADOS*/
     resApuestas = paraApuestas(ret);
-   
+
     printf("Inicia la carrera.\n");
     signal(SIGINT, manejador);
     wrapperCarrera(infoC, resApuestas);

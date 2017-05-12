@@ -64,20 +64,13 @@ infoCaballos *inicializaCaballos(int numC, int longCarrera){
         return NULL;
     }else if (generaComunicaciones(info) == FALSE) {
         printf("Error de comunicaciones.\n");
-        free(info->valoresTotales);
-        free(info->estadoActual);
-        free(info->idProcCaballos);
         cierraComunicaciones(info);
-        free(info->pipes);
-        free(info);
+        freeEstructuraCaballos(info);
         return NULL;
     }else if (generaProcesos(info) == FALSE) {
         printf("Error al generar procesos.\n");
-        free(info->valoresTotales);
-        free(info->estadoActual);
         cierraComunicaciones(info);
-        free(info->pipes);
-        free(info);
+        freeEstructuraCaballos(info);
         return NULL;
     }
     return info;
@@ -144,22 +137,14 @@ int generaProcesos(infoCaballos *info){
             pipes = (int *) malloc(sizeof(int) * 2);
             if (pipes == NULL) {
                 perror("Error en la memoria de uno de los caballos.\nLa carrera continua sin este.");
-                free(info->valoresTotales);
-                free(info->estadoActual);
-                free(info->idProcCaballos);
-                free(info->pipes);
-                free(info);
+                freeEstructuraCaballos(info);
                 exit(EXIT_SUCCESS);
             }
             pipes[0] = info->pipes[2 * i];
             pipes[1] = info->pipes[2 * i + 1];
             buzon    = info->buzon;
             /*Liberacion de la memoria duplicada*/
-            free(info->valoresTotales);
-            free(info->estadoActual);
-            free(info->idProcCaballos);
-            free(info->pipes);
-            free(info);
+            freeEstructuraCaballos(info);
             /*fin de la liberacion*/
             procesoCaballo(i + 1, pipes, buzon);
             return -10; /*Aqui nunca se llega, aunque por sia acaso*/
@@ -173,6 +158,17 @@ int generaProcesos(infoCaballos *info){
 
 
 /* FIN DE ZONA DE FUNCION DE INICIALIZACION*/
+
+void freeEstructuraCaballos(infoCaballos *info){
+    if (info == NULL) return;
+    free(info->valoresTotales);
+    free(info->estadoActual);
+    free(info->idProcCaballos);
+    free(info->pipes);
+    free(info);
+}
+
+
 
 void cierraComunicaciones(infoCaballos *info){
     int i;
@@ -331,11 +327,7 @@ void finalizaLibera(infoCaballos *info){
         kill(info->idProcCaballos[i], SIGUSR1);
     }
     cierraComunicaciones(info);
-    free(info->valoresTotales);
-    free(info->idProcCaballos);
-    free(info->estadoActual);
-    free(info->pipes);
-    free(info);
+    freeEstructuraCaballos(info);
     return;
 }
 
