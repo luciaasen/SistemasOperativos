@@ -15,7 +15,6 @@
 /*Esructura que se pasa como argumento al thread*/
 typedef struct _Attr {
     int          cola;
-    long         tipo;
     infoApuestas *info;
 } Attr;
 
@@ -42,7 +41,7 @@ infoApuestas *info_ini(long id, int numC, int numA);
  * @param info puntero al infoApuestas indicado
  * @return NULL si error, puntero a Attr si OK
  */
-Attr *attr_ini(infoApuestas *info, int cola, int tipo);
+Attr *attr_ini(infoApuestas *info, int cola);
 
 
 /**
@@ -90,7 +89,7 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
     }
 
 
-    attr = attr_ini(info, colaApuesta, tipo);
+    attr = attr_ini(info, colaApuesta);
     if (attr == NULL) {
         free(ventanillas);
         info_free(info);
@@ -154,7 +153,7 @@ void * ventanilla(void *atributo){
     /*Recibe mensaje bloqueante - toca la estructura protegiendola - repeat*/
     /***********************************************************************/
     while (1) {
-        msgrcv(attr->cola, (struct msgbuf *) &a, sizeof(Apuesta) - sizeof(long), attr->tipo, 0);
+        msgrcv(attr->cola, (struct msgbuf *) &a, sizeof(Apuesta) - sizeof(long), attr->info->id, 0);
         apostador = getApostador(&a);
         caballo   = getCaballo(&a);
         cuantia   = getCuantia(&a);
@@ -207,7 +206,7 @@ int imprimeResApuestas(infoApuestas *r, int prim, int sec, int terc){
     return 0;
 }
 
-Attr *attr_ini(infoApuestas *info, int cola, int tipo){
+Attr *attr_ini(infoApuestas *info, int cola){
     Attr *attr;
 
     if (cola < 0 || tipo < 0 || info == NULL) {
@@ -219,7 +218,6 @@ Attr *attr_ini(infoApuestas *info, int cola, int tipo){
     }
     attr->info = info;
     attr->cola = cola;
-    attr->tipo = tipo;
     return attr;
 }
 
