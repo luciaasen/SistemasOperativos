@@ -4,12 +4,11 @@
 #define F        "/bin/cat"
 #define MTYPE    199
 
-typedef struct _Apuesta{
-    char nombre[20];
-    int numC;
+typedef struct _Apuesta {
+    long   id;
+    char   nombre[20];
+    int    numC;
     double cuantia;
-    long    id;
-
 } Apuesta;
 
 /**

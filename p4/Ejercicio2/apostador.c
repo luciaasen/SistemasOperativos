@@ -14,7 +14,7 @@
 
 struct msgbuf {
     long mtype;
-    char mtext[1]; 
+    char mtext[1];
 };
 
 
@@ -27,25 +27,18 @@ void sig_handler(int signo){
     exit(0);
 }
 
-/*Esto en teoria va a enviar apuestas*/
-void envia_apuesta(int cola, Apuesta *a){
-    if(a == NULL){
-        return;
-    }
-    msgsnd(cola, (struct msgbuf *)a, sizeof(Apuesta) - sizeof(long), IPC_NOWAIT);
-}
 
 int generador(int nApostadores, int nCaballos, int colaApuesta, long tipo){
     int i, apostador;
-    Apuesta *a;
+    int flag;
 
     /*CdE + cambio manejador*/
     /************************/
-    if(nApostadores < 1 || nCaballos < 1 || colaApuesta < 1){
+    if (nApostadores < 1 || nCaballos < 1 || colaApuesta < 1) {
         exit(-1);
     }
-    
-    if(signal(SIGINT, sig_handler) == SIG_ERR){
+
+    if (signal(SIGINT, sig_handler) == SIG_ERR) {
         perror("Error en el manejador");
         exit(0);
     }
@@ -53,41 +46,38 @@ int generador(int nApostadores, int nCaballos, int colaApuesta, long tipo){
     /*Genera y envia apuestas aleatoriasm parara cuando le llegue una senial*/
     /************************************************************************/
     i = 0;
-    while(1){
-        apostador = i%nApostadores;
-        a = apuesta_ini(tipo, apostador, nCaballos);
-        if(a == NULL){
+    while (1) {
+        apostador = i % nApostadores;
+        flag      = apuestaEnvia(tipo, apostador, nCaballos, colaApuesta);
+        if (flag == -1) {
             printf("Error en creacion apuesta %d\n", i);
             exit(-1);
         }
-        envia_apuesta(colaApuesta, a);
         i++;
         usleep(10000);
     }
 }
 
-Apuesta *apuesta_ini(long id, int idApostador, int nCaballos){     
-    Apuesta *a;
-    if(nCaballos < 1){
-        return NULL;
+int apuestaEnvia(long tipo, int idApostador, int nCaballos, int cola){
+    Apuesta a;
+    if (nCaballos < 1) {
+        return -1;
     }
-    
-    a = (Apuesta *)malloc(sizeof(Apuesta));
-    if(a == NULL){
-        return NULL;
-    }
-    sprintf(a->nombre, "Apostador-%d", idApostador);
-    a->numC = rand()%nCaballos;
-    a->cuantia = rand();
-    a->id = id;    
-    return a;
+
+    sprintf(a.nombre, "Apostador-%d", idApostador);
+    a.numC    = rand() % nCaballos;
+    a.cuantia = rand();
+    a.id      = tipo;
+    msgsnd(cola, (struct msgbuf *) &a, sizeof(Apuesta) - sizeof(long), IPC_NOWAIT);
+
+    return 1;
 }
 
 
 /* Estos 3 getters solo son llamados desde lineas del codigo
    donde ya hemos previaente comprobado que a no es un puntero
    nulo, por eso no hacemos el control de errores
-*/
+ */
 int getApostador(Apuesta *a){
     int apostador;
     sscanf(a->nombre, "Apostador-%d", &apostador);
