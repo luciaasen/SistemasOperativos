@@ -3,6 +3,8 @@
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <sys/types.h>
+#include <signal.h>
+#include <unistd.h>
 
 #include "apostador.h"
 
@@ -11,7 +13,7 @@ struct _Apuesta{
     char nombre[20];
     int numC;
     double cuantia;
-}
+};
 
 
 struct msgbuf {
@@ -62,12 +64,9 @@ int generador(int nApostadores, int nCaballos, int colaApuesta, int tipo){
             printf("Error en creacion apuesta %d\n", i);
             exit(-1);
         }
-        if(envia_apuesta(colaApuesta, tipo, a) == -1){
-            printf("Error en el envio de la apuesta %d\n", i);
-            exit(-1);
-        }
+        envia_apuesta(colaApuesta, tipo, a);
         i++;
-        sleep(0.1);
+        usleep(10000);
     }
 }
 
@@ -81,7 +80,7 @@ Apuesta *apuesta_ini(int idApostador, int nCaballos){
     if(a == NULL){
         return NULL;
     }
-    sprintf(a->nombre, "Apostador-%d", &idApostador);
+    sprintf(a->nombre, "Apostador-%d", idApostador);
     a->numC = rand()%nCaballos;
     a->cuantia = rand();    
     return a;
@@ -107,5 +106,5 @@ double getCuantia(Apuesta *a){
 }
 
 Apuesta *getApuesta(Mensaje m){
-    return m->a;
+    return m.a;
 }
