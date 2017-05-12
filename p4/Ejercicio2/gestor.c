@@ -120,7 +120,7 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
     /*********************************************************/
     printf("La funcion gestor apuestas intenta recibir de cola %d tipo %d, pid %d\n", colaMain, tipo, getpid());
 
-    if (msgrcv(colaMain, (struct msgbuf *) &recibido, sizeof(mens) - sizeof(long), tipo, 0) == -1) {
+    if (msgrcv(colaMain, (struct msgbuf *) &recibido, sizeof(mens) - sizeof(long), STOP_TIPO, 0) == -1) {
         perror("Error en la recepcion de mensaje de parada\n");
         return NULL;
     }
@@ -132,6 +132,7 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
 
     /*Envio mensaje al main con la info de las apuestas*/
     /***************************************************/
+    info->id = RESULTADO_TIPO;
     msgsnd(colaMain, (struct msgbuf *) info, sizeof(infoApuestas) - sizeof(long), IPC_NOWAIT);
     free(attr);     /*Solo libero el puntero, el infoApuestas de dentro que envia el mensaje no, vd?*/
     exit(0);
