@@ -41,7 +41,7 @@ int main(int argc, char **argv){
     esperaImprime();
     /*NOTIFICA A LAS APUESTAS DE QUE SE ACABO EL TIEMPO, RECIBE RESULTADOS*/
     resApuestas = paraApuestas(ret);
-
+   
     printf("Inicia la carrera.\n");
     signal(SIGINT, manejador);
     wrapperCarrera(infoC, resApuestas);

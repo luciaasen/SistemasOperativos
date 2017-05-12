@@ -21,6 +21,7 @@
         int numC;
         int numA;
     };
+    
 
     /*Esructura que se pasa como argumento al thread*/
     typedef struct _Attr{
@@ -120,7 +121,7 @@
         /*Lanza hilos*/
         /*************/
         for(i = 0; i < numV; i++){
-            if(pthread_create(ventanillas + i, NULL, ventanillas, (void*) attr) != 0){
+            if(pthread_create(ventanillas + i, NULL, ventanilla, (void*) attr) != 0){
                 printf("Error en la creacion del hilo %d\n", i);
                 attr_free(attr);            
                 for(j = 0; j < i; j++){
@@ -135,7 +136,10 @@
 
         /*Espero hasta que recibo mensaje del main, cierro libero*/ 
         /*************************************************************************************/
+        printf("La funcion gestor apuestas intenta recibir de cola %d tipo %d\n", colaMain, tipo);
+          
         msgrcv(colaMain, (struct msgbuf *)&recibido, sizeof(mens) - sizeof(long), tipo, 0);
+        printf("recibe");
         for(i = 0; i < numV; i++){
             pthread_cancel(ventanillas[i]);
         }
@@ -193,6 +197,9 @@
         /********************************/
         cotizaciones = r->info->cotizacion;
         printf("Cotizaciones:\n");
+        if(r->info != NULL){
+            printf(" numcaballos %d\n", r->info->numC);        
+        }
         for(i = 0; i < r->info->numC; i++){
             printf("\tCaballo %d -> cotizacion %lf\n", i+1, cotizaciones[i]);
         }
@@ -310,7 +317,8 @@
             info->apostado[i] = 1;
         }
         info->total = numC;
-
+        printf("En info ini numC %d\n", numC);
+        
         return info;
     }
 

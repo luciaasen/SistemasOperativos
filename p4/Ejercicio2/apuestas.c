@@ -105,10 +105,14 @@ MensajeRes *paraApuestas(Ret *r){
             return NULL;
         }
         m.type = r->tipo;
+        printf("La funcion para apuestas envia a cola %d tipo %d\n", r->cola, r->tipo);
+        
         msgsnd(r->cola, (struct msgbuf*)&m, sizeof(mens) - sizeof(long), IPC_NOWAIT);
         kill(r->pidApostador, SIGINT);
         waitpid(r->pidGestor, NULL, 0);
+        printf("La funcion para apuestas intenta recibir de cola %d tipo %d\n", r->cola, r->tipo);
         msgrcv(r->cola, (struct msgbuf *)resultados, sizeof(MensajeRes) - sizeof(long), r->tipo, 0);
+        printf("Hola after receive de paraApeustas\n");
         return resultados;
     }
 }

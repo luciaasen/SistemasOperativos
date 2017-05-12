@@ -40,12 +40,12 @@ void envia_apuesta(int cola, int tipo, Apuesta *a){
 }
 
 int generador(int nApostadores, int nCaballos, int colaApuesta, int tipo){
-    int cola, i, apostador;
+    int i, apostador;
     Apuesta *a;
 
     /*CdE + cambio manejador*/
     /************************/
-    if(nApostadores < 1 || nCaballos < 1 || cola < 1){
+    if(nApostadores < 1 || nCaballos < 1 || colaApuesta < 1){
         exit(-1);
     }
     
