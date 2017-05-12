@@ -4,7 +4,7 @@ all: monitor
 	rm *.o
 
 monitor: $(OBJ)
-	gcc -o $@ $^ 
+	gcc -o $@ $^  -lpthread
 
 monitor_lib.o : monitor_lib.c monitor_lib.h
 	gcc -c monitor_lib.c

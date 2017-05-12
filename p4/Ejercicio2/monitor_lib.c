@@ -45,12 +45,15 @@ void esperaImprime(){
 
 
 
-void wrapperCarrera(infoCaballos *infoC){
+void wrapperCarrera(infoCaballos *infoC, MensajeRes *resApuestas){
     while (hayGanador(infoC) == FALSE) {
         sleep(1); /*comentar esta linea para eliminar delay*/
         siguienteRonda(infoC);
         actualizaRonda(infoC);
         imprimeRonda(infoC);
+        imprimeApuestas(resApuestas);
     }
     imprimeResultados(infoC);
+    /*IMPRIME LOS RESULTADOS DE LA CARRERA*/
+    /*imprimeResApuestas(resApuestas,idPrimerLugar(infoC),idSegundoLugar(infoC),idTercerLugar(infoC));*/
 }
