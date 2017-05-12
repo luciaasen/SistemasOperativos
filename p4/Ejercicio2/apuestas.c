@@ -24,7 +24,7 @@ struct msgbuf {
     char mtext[1];
 };
 
-Ret *apuestas(int numC, int numV, int numA){
+Ret *apuestas(int numC, int numV, int numA, infoCaballos *infoC){
     int colaMain, colaApuesta, key;
     int pidGestor, pidApostador;
     Ret *ret = (Ret *) malloc(sizeof(Ret));
@@ -82,6 +82,7 @@ Ret *apuestas(int numC, int numV, int numA){
         free(ret);
         return NULL;
     }else if (pidApostador == 0) {
+        freeEstructuraCaballos(infoC); /*Liberacion de memoria duplicada*/
         if (generador(numA, numC, colaApuesta, ret->tipo) == -1) {
             free(ret);
             exit(-1);
@@ -94,12 +95,12 @@ Ret *apuestas(int numC, int numV, int numA){
             perror("Error en el fork para el gestor\n");
             return NULL;
         }else if (pidGestor == 0) {
+            freeEstructuraCaballos(infoC);    /*Liberacion de memoria duplicada*/
             if (gestorApuestas(colaApuesta, colaMain, ret->tipo, numC, numA, numV) == NULL) {
                 free(ret);
                 exit(-1);
             }
             free(ret);
-            
         }else{
             ret->pidGestor = pidGestor;
             return ret;

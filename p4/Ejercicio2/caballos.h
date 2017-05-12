@@ -95,4 +95,12 @@ void forzarFin(infoCaballos *info);
  */
 void finalizaLibera(infoCaballos *info);
 
+
+/**
+ * Esta funcion libera UNICAMENTE la estructura de informacion sobre caballos
+ * @param info puntero a liberar
+ */
+void freeEstructuraCaballos(infoCaballos *info);
+
+
 #endif

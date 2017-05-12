@@ -2,9 +2,10 @@
 #define APUESTAS_H
 #include "gestor.h"
 #include "apostador.h"
+#include "caballos.h"
 
-#define STOP_TIPO 43
-#define RESULTADO_TIPO 59
+#define STOP_TIPO         43
+#define RESULTADO_TIPO    59
 
 /*Estructura con valores de colas y pids para que el monitor pueda mandar a callar
    a las apuestas*/
@@ -25,7 +26,7 @@ typedef struct _mens {
  * @param numA num apostadores
  * @return estructura con la informacion de: cola y tipo de mensajes para parar la gestion de apuestas, y los pid a los que esperar
  */
-Ret *apuestas(int numC, int numV, int numA);
+Ret *apuestas(int numC, int numV, int numA, infoCaballos *infoC);
 
 /**
  * Envia el mensaje de parada con la cola y el tipo de r
