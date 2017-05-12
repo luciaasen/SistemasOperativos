@@ -36,25 +36,24 @@ Ret *apuestas(int numC, int numV, int numA){
     }
     /*Crea cola main*/
     srand(time(NULL) * getpid());
-    key = rand();    
+    key = rand();
     //key = ftok(PHI, LAMBDA);
-    colaMain = msgget(key, 0777);
-    if(colaMain == -1){
-
+    colaMain = msgget(key, 0660);
+    if (colaMain == -1) {
         perror("Error en la creacion de colaMain\n");
-        if(errno == EACCES){
+        if (errno == EACCES) {
             perror("EACCESS\n");
         }
-        if(errno == EIDRM){
+        if (errno == EIDRM) {
             perror("EIDRM\n");
         }
-        if(errno == EINVAL){
+        if (errno == EINVAL) {
             perror("EINVAL\n");
         }
-        if(errno == ENOMEM){
+        if (errno == ENOMEM) {
             perror("ENOMEM\n");
         }
-        if(errno == EINVAL){
+        if (errno == EINVAL) {
             perror("EINVAL\n");
         }
         free(ret);
@@ -103,6 +102,7 @@ Ret *apuestas(int numC, int numV, int numA){
 }
 
 infoApuestas *paraApuestas(Ret *r){
+    /*TODO: FALTA FREE AL RET??*/
     mens         m;
     infoApuestas *resultados;
 
@@ -116,6 +116,7 @@ infoApuestas *paraApuestas(Ret *r){
             return NULL;
         }
         m.type = r->tipo;
+        m.c[0] = 'c';
         printf("La funcion para apuestas envia a cola %d tipo %d\n", r->cola, r->tipo);
 
         msgsnd(r->cola, (struct msgbuf *) &m, sizeof(mens) - sizeof(long), IPC_NOWAIT);
