@@ -151,14 +151,14 @@
     }
 
 
-    int ventanilla(void *atributo){
+    vod * ventanilla(void *atributo){
         Apuesta *a;
         Attr *attr; 
         int apostador, caballo;
         double cuantia;
         Mensaje mensaje;
         if(atributo == NULL){
-            return -1;
+            return NULL;
         }
         attr = (Attr *) atributo;
         
@@ -179,6 +179,7 @@
             attr->info->cotizacion[caballo] = attr->info->total/attr->info->apostado;
             Up_Semaforo(attr->infoMutex, 0, 0);
         }
+        return NULL;
     }
 
     int imprimeApuestas(MensajeRes *r){
@@ -192,7 +193,7 @@
         cotizaciones = r->info->cotizacion;
         printf("Cotizaciones:\n");
         for(i = 0; i < r->info->numC; i++){
-            printf("\tCaballo %d -> cotizacion ½lf\n", i+1, cotizaciones[i]);
+            printf("\tCaballo %d -> cotizacion %lf\n", i+1, cotizaciones[i]);
         }
         return 0;
     }
@@ -208,7 +209,7 @@
         /************************************/
         printf("Ganancia apostadores:\n");
         for(i = 0; i < r->info->numA; i++){
-            ganancia = dinero[prim][j] + dinero[sec][j] + dinero[terc][j];
+            ganancia = dinero[prim][i] + dinero[sec][i] + dinero[terc][i];
             if(ganancia > 0){
                 printf("\tApostador %d -> ganancia %lf\n", i, ganancia);
             }
@@ -216,10 +217,10 @@
         return 0;        
     }
 
-    Attr *attr_ini(int semid, infoApuestas *info, int cola){
+    Attr *attr_ini(int semid, infoApuestas *info, int cola, int tipo){
         Attr *attr;
 
-        if(semid < 0 || cola < 0 || info == NULL){
+        if(semid < 0 || cola < 0 || tipo < 0 || info == NULL){
             return NULL;
         }
         attr = (Attr*)malloc(sizeof(Attr));
@@ -229,6 +230,7 @@
         attr->infoMutex = semid;
         attr->info = info;
         attr->cola = cola;
+        attr->tipo = tipo;
         return attr;
     }
 
@@ -291,9 +293,7 @@
                 free(info->dinero[i]);
             }
             free(info->dinero);
-            for(j = 0; j < numC; j++){
-                free(info->apostado[j]);
-            }
+            
             free(info->apostado);
             free(info);
             return NULL;
