@@ -1,4 +1,4 @@
-OBJ = monitor_lib.o monitor.o caballos.o apuestas.o gestor.o apostador.o semaforos.o
+OBJ = monitor_lib.o monitor.o caballos.o apuestas.o gestor.o apostador.o 
 
 FLAG= -c -Wall -g 
 
@@ -25,9 +25,5 @@ apostador.o : apostador.c apostador.h
 
 apuestas.o : apuestas.c apuestas.h apostador.h gestor.h
 	gcc $(FLAG) apuestas.c	
-	
-semaforos.o : semaforos.c semaforos.h
-	gcc $(FLAG) semaforos.c
-    
 clean:
 	rm monitor

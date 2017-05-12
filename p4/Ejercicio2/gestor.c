@@ -1,15 +1,14 @@
-    #include "apostador.h"
-    #include "apuestas.h"
-    #include "semaforos.h"
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <pthread.h>
-    #include <unistd.h>
-    #include <sys/msg.h>
+#include "apostador.h"
+#include "apuestas.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <sys/msg.h>
 
-    #include "gestor.h"
+#include "gestor.h"
 
-    #define SEM_TIPO    37
+#define SEM_TIPO    37
 
 
 /*Esructura que se pasa como argumento al thread*/
@@ -68,18 +67,18 @@ void* ventanilla(void *atributo);
 void info_free(infoApuestas *info);
 
 
-infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, int numA, int numV){
-    infoApuestas info;
+int gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, int numA, int numV){
+    infoApuestas info = { 0 };
     Attr         * attr;
     int          i, j;
     pthread_t    *ventanillas;
-    mens         recibido, semaforo;
+    mens         recibido = { 0 }, semaforo = { 0 };
 
     /*Crea semaforos, reserva ventanillas,crea infoApuestas y Argumento para los threads*/
     /***********************************************************************************/
     ventanillas = (pthread_t *) malloc(numV * sizeof(pthread_t));
     if (ventanillas == NULL) {
-        return NULL;
+        return -1;
     }
 
     /*Inicializacion del info*/
@@ -100,7 +99,7 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
     attr = attr_ini(&info, colaApuesta);
     if (attr == NULL) {
         free(ventanillas);
-        return NULL;
+        return -1;
     }
 
     /*crear + enviar mensaje semtpo */
@@ -115,22 +114,23 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
             printf("Error en la creacion del hilo %d\n", i);
             attr_free(attr);
             for (j = 0; j < i; j++) {
+                pthread_detach(ventanillas[i]);    /*Liberacion de memoria en cerrado*/
                 pthread_cancel(ventanillas[j]);
             }
             free(ventanillas);
-            return NULL;
+            return -1;
         }
     }
 
     /*Espero hasta que recibo mensaje del main, cierro libero*/
     /*********************************************************/
-    
+
     if (msgrcv(colaMain, (struct msgbuf *) &recibido, sizeof(mens) - sizeof(long), STOP_TIPO, 0) == -1) {
         perror("Error en la recepcion de mensaje de parada\n");
-        return NULL;
+        return -1;
     }
     for (i = 0; i < numV; i++) {
-        pthread_detach(ventanillas[i]);
+        pthread_detach(ventanillas[i]); /*Liberacion de memoria en cerrado*/
         pthread_cancel(ventanillas[i]);
     }
     free(ventanillas);
@@ -138,11 +138,9 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
     /*Envio mensaje al main con la info de las apuestas*/
     /***************************************************/
     info.id = RESULTADO_TIPO;
-    msgsnd(colaMain, (struct msgbuf *)&info, sizeof(infoApuestas) - sizeof(long), IPC_NOWAIT);
+    msgsnd(colaMain, (struct msgbuf *) &info, sizeof(infoApuestas) - sizeof(long), IPC_NOWAIT);
     free(attr);     /*Solo libero el puntero, el infoApuestas de dentro que envia el mensaje no, vd?*/
-    msgctl (colaApuesta, IPC_RMID, (struct msqid_ds *)NULL);
-    exit(0);
-    return attr->info;
+    return 1;
 }
 
 
@@ -187,7 +185,7 @@ int imprimeApuestas(infoApuestas *r){
     printf("\nCOTIZACIONES:\n");
     /*if (r != NULL) {
         printf("numcaballos %d \n", r->numC);
-    }*/
+       }*/
     for (i = 0; i < r->numC; i++) {
         printf("\tCaballo %d -> cotizacion %lf\n", i + 1, cotizaciones[i]);
     }

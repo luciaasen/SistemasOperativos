@@ -25,7 +25,7 @@ struct msgbuf {
 };
 
 Ret *apuestas(int numC, int numV, int numA, infoCaballos *infoC){
-    int colaMain, colaApuesta, key;
+    int colaMain, colaApuesta, key, aux;
     int pidGestor, pidApostador;
     Ret *ret = (Ret *) malloc(sizeof(Ret));
 
@@ -75,7 +75,7 @@ Ret *apuestas(int numC, int numV, int numA, infoCaballos *infoC){
 
     /*Lanza hijos: un gestor y un apostador, guardo sus pids para poder cargarmelos*/
     /*******************************************************************************/
-    /*TODO: EN LA SIGUIENTE ESTRUCTURA IF ELSE, EL RET NO SE LIBERA BIEN*/
+
     pidApostador = fork();
     if (pidApostador == -1) {
         perror("Error en el fork para apostador\n");
@@ -83,11 +83,14 @@ Ret *apuestas(int numC, int numV, int numA, infoCaballos *infoC){
         return NULL;
     }else if (pidApostador == 0) {
         freeEstructuraCaballos(infoC); /*Liberacion de memoria duplicada*/
-        if (generador(numA, numC, colaApuesta, ret->tipo) == -1) {
-            free(ret);
+        aux = ret->tipo;
+        free(ret);
+        if (generador(numA, numC, colaApuesta, aux) == -1) {
             exit(-1);
         }
-        free(ret);
+        /*Para eliminar el warning innecesario:*/
+        /*La linea de ejecucion nunca llega aqui*/
+        return NULL;
     }else{
         ret->pidApostador = pidApostador;
         pidGestor         = fork();
@@ -96,11 +99,12 @@ Ret *apuestas(int numC, int numV, int numA, infoCaballos *infoC){
             return NULL;
         }else if (pidGestor == 0) {
             freeEstructuraCaballos(infoC);    /*Liberacion de memoria duplicada*/
-            if (gestorApuestas(colaApuesta, colaMain, ret->tipo, numC, numA, numV) == NULL) {
+            if (gestorApuestas(colaApuesta, colaMain, ret->tipo, numC, numA, numV) == -1) {
                 free(ret);
                 exit(-1);
             }
             free(ret);
+            exit(0);
         }else{
             ret->pidGestor = pidGestor;
             return ret;
@@ -109,8 +113,7 @@ Ret *apuestas(int numC, int numV, int numA, infoCaballos *infoC){
 }
 
 infoApuestas *paraApuestas(Ret *r){
-    /*TODO: FALTA FREE AL RET??*/
-    mens         m;
+    mens         m = { 0 };
     infoApuestas *resultados, ret;
     int          i, j;
 
@@ -149,9 +152,6 @@ infoApuestas *paraApuestas(Ret *r){
         }
 
         /*fin de la copia*/
-        /*Libero la cola que comparten main y gestor, colaMain*/
-        //msgctl (r->cola, IPC_RMID, (struct msqid_ds *)NULL);
-
         free(r);
         return resultados;
     }

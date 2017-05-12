@@ -1,9 +1,9 @@
 #ifndef GESTOR_H
 #define GESTOR_H
 
-typedef struct _infoApuestas{
+typedef struct _infoApuestas {
     /*Tipo del mensaje que recogera el main*/
-    long id;
+    long   id;
     /*dinero[i][j] contiene el dinero que se da al apostador j si gana el caballo i*/
     double dinero[10][10];
     /*cotizacion por caballo*/
@@ -12,8 +12,8 @@ typedef struct _infoApuestas{
     double apostado[10];
     /*Total dinero apostado, no necesaria pero si comoda*/
     double total;
-    int numC;
-    int numA;
+    int    numC;
+    int    numA;
 }infoApuestas;
 
 /**
@@ -30,7 +30,7 @@ typedef struct _infoApuestas{
  * @param tipo tipo de mensaje a usar
  * @return  estructura con la info de las apuestas
  */
-infoApuestas * gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, int numA, int numV);
+int gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, int numA, int numV);
 
 /**
  * Imprime cotizaciones de todos los caballos

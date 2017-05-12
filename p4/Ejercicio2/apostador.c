@@ -59,7 +59,7 @@ int generador(int nApostadores, int nCaballos, int colaApuesta, long tipo){
 }
 
 int apuestaEnvia(long tipo, int idApostador, int nCaballos, int cola){
-    Apuesta a;
+    Apuesta a = { 0 };
     if (nCaballos < 1) {
         return -1;
     }
