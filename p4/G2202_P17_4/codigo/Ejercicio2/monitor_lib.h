@@ -10,7 +10,7 @@
 #define OK           1
 #define ERROR        0
 #define MAX_ARGS     10
-#define WAIT_TIME    3
+#define WAIT_TIME    15
 
 
 
