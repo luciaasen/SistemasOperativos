@@ -24,6 +24,7 @@
     /*Esructura que se pasa como argumento al thread*/
     typedef struct _Attr{
         int cola;
+        int tipo;
         int infoMutex;
         infoApuestas *info;
     } Attr;
@@ -51,7 +52,7 @@
      * @param info puntero al infoApuestas indicado
      * @return NULL si error, puntero a Attr si OK
      */
-    Attr *attr_ini(int semid, infoApuestas *info);
+    Attr *attr_ini(int semid, infoApuestas *info, int cola);
 
     
     /**
@@ -107,7 +108,7 @@
             return NULL;
         }
         
-        attr= attr_ini(semid, info, colaApuesta);
+        attr= attr_ini(semid, info, colaApuesta, tipo);
         if(attr == NULL){
             free(ventanillas);
             Borrar_Semaforo(semid);
@@ -120,7 +121,7 @@
         for(i = 0; i < numV; i++){
             if(pthread_create(ventanillas + i, NULL, ventanillas, (void*) attr) != 0){
                 printf("Error en la creacion del hilo %d\n", i);
-                attr_free(attr, numC);            
+                attr_free(attr);            
                 for(j = 0; j < i; j++){
                     pthread_cancel(ventanillas[j]);
                 }
@@ -153,7 +154,7 @@
     int ventanilla(void *atributo){
         Apuesta *a;
         Attr *attr; 
-        int apostador, caballo,;
+        int apostador, caballo;
         double cuantia;
         Mensaje mensaje;
         if(atributo == NULL){
@@ -164,7 +165,7 @@
         /*Recibe mensaje bloqueante - toca la estructura protegiendola - repeat*/
         /***********************************************************************/
         while(1){
-            msgrcv(attr->cola, (struct msgbuf *)&mensaje, sizeof(Mensaje) - sizeof(long), 0);
+            msgrcv(attr->cola, (struct msgbuf *)&mensaje, sizeof(Mensaje) - sizeof(long), attr->tipo, 0);
             a = getApuesta(mensaje);            
 
             apostador = getApostador(a);
@@ -265,7 +266,7 @@
         for(i = 0; i < numC; i++){
             info->dinero[i] = (double *)malloc(numA*sizeof(double));
             if(info->dinero[i] == NULL){
-                for(j = 0; j < i; k++){
+                for(j = 0; j < i; j++){
                     free(info->dinero[j]);
                 }
                 free(info->dinero);
