@@ -67,6 +67,7 @@ void* ventanilla(void *atributo);
 void info_free(infoApuestas *info);
 
 
+
 int gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, int numA, int numV){
     infoApuestas info = { 0 };
     Attr         * attr;
@@ -114,7 +115,6 @@ int gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, int numA, 
             printf("Error en la creacion del hilo %d\n", i);
             attr_free(attr);
             for (j = 0; j < i; j++) {
-                pthread_detach(ventanillas[i]);    /*Liberacion de memoria en cerrado*/
                 pthread_cancel(ventanillas[j]);
             }
             free(ventanillas);
@@ -130,7 +130,6 @@ int gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, int numA, 
         return -1;
     }
     for (i = 0; i < numV; i++) {
-        pthread_detach(ventanillas[i]); /*Liberacion de memoria en cerrado*/
         pthread_cancel(ventanillas[i]);
     }
     free(ventanillas);
