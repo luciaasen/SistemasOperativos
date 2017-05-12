@@ -15,7 +15,6 @@
 /*Esructura que se pasa como argumento al thread*/
 typedef struct _Attr {
     int          cola;
-    long         tipo;
     infoApuestas *info;
 } Attr;
 
@@ -42,7 +41,7 @@ infoApuestas *info_ini(long id, int numC, int numA);
  * @param info puntero al infoApuestas indicado
  * @return NULL si error, puntero a Attr si OK
  */
-Attr *attr_ini(infoApuestas *info, int cola, int tipo);
+Attr *attr_ini(infoApuestas *info, int cola);
 
 
 /**
@@ -97,7 +96,8 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
     }
     /*Fin de inicializacion*/
 
-    attr = attr_ini(&info, colaApuesta, tipo);
+
+    attr = attr_ini(&info, colaApuesta);
     if (attr == NULL) {
         free(ventanillas);
         return NULL;
@@ -126,7 +126,7 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
     /*********************************************************/
     printf("La funcion gestor apuestas intenta recibir de cola %d tipo %d, pid %d\n", colaMain, tipo, getpid());
 
-    if (msgrcv(colaMain, (struct msgbuf *) &recibido, sizeof(mens) - sizeof(long), tipo, 0) == -1) {
+    if (msgrcv(colaMain, (struct msgbuf *) &recibido, sizeof(mens) - sizeof(long), STOP_TIPO, 0) == -1) {
         perror("Error en la recepcion de mensaje de parada\n");
         return NULL;
     }
@@ -138,8 +138,8 @@ infoApuestas *gestorApuestas(int colaApuesta, int colaMain, int tipo, int numC, 
 
     /*Envio mensaje al main con la info de las apuestas*/
     /***************************************************/
-
-    msgsnd(colaMain, (struct msgbuf *) &info, sizeof(infoApuestas) - sizeof(long), IPC_NOWAIT);
+    info.id = RESULTADO_TIPO;
+    msgsnd(colaMain, (struct msgbuf *)&info, sizeof(infoApuestas) - sizeof(long), IPC_NOWAIT);
     free(attr);     /*Solo libero el puntero, el infoApuestas de dentro que envia el mensaje no, vd?*/
     exit(0);
     return attr->info;
@@ -160,7 +160,7 @@ void * ventanilla(void *atributo){
     /*Recibe mensaje bloqueante - toca la estructura protegiendola - repeat*/
     /***********************************************************************/
     while (1) {
-        msgrcv(attr->cola, (struct msgbuf *) &a, sizeof(Apuesta) - sizeof(long), attr->tipo, 0);
+        msgrcv(attr->cola, (struct msgbuf *) &a, sizeof(Apuesta) - sizeof(long), attr->info->id, 0);
         apostador = getApostador(&a);
         caballo   = getCaballo(&a);
         cuantia   = getCuantia(&a);
@@ -213,10 +213,10 @@ int imprimeResApuestas(infoApuestas *r, int prim, int sec, int terc){
     return 0;
 }
 
-Attr *attr_ini(infoApuestas *info, int cola, int tipo){
+Attr *attr_ini(infoApuestas *info, int cola){
     Attr *attr;
 
-    if (cola < 0 || tipo < 0 || info == NULL) {
+    if (cola < 0 || info == NULL) {
         return NULL;
     }
     attr = (Attr *) malloc(sizeof(Attr));
@@ -225,7 +225,6 @@ Attr *attr_ini(infoApuestas *info, int cola, int tipo){
     }
     attr->info = info;
     attr->cola = cola;
-    attr->tipo = tipo;
     return attr;
 }
 

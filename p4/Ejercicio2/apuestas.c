@@ -39,6 +39,7 @@ Ret *apuestas(int numC, int numV, int numA){
     key = rand();
     //key = ftok(PHI, LAMBDA);
     colaMain = msgget(key, 0660);
+
     if (colaMain == -1) {
         perror("Error en la creacion de colaMain\n");
         if (errno == EACCES) {
@@ -115,15 +116,16 @@ infoApuestas *paraApuestas(Ret *r){
         if (resultados == NULL) {
             return NULL;
         }
-        m.type = r->tipo;
+
+        m.type = STOP_TIPO;
         m.c[0] = 'c';
         printf("La funcion para apuestas envia a cola %d tipo %d\n", r->cola, r->tipo);
 
         msgsnd(r->cola, (struct msgbuf *) &m, sizeof(mens) - sizeof(long), IPC_NOWAIT);
         kill(r->pidApostador, SIGINT);
         waitpid(r->pidGestor, NULL, 0);
-        printf("La funcion para apuestas intenta recibir de cola %d tipo %d\n", r->cola, r->tipo);
-        msgrcv(r->cola, (struct msgbuf *) resultados, sizeof(infoApuestas) - sizeof(long), r->tipo, 0);
+        printf("La funcion para apuestas intenta recibir resultados de cola %d tipo %d\n", r->cola, r->tipo);
+        msgrcv(r->cola, (struct msgbuf *) resultados, sizeof(infoApuestas) - sizeof(long), RESULTADO_TIPO, 0);
         printf("Hola after receive de paraApeustas\n");
         return resultados;
     }
