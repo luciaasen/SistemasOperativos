@@ -186,7 +186,7 @@ int imprimeApuestas(infoApuestas *r){
     cotizaciones = r->cotizacion;
     printf("Cotizaciones:\n");
     if (r != NULL) {
-        printf("numcaballos %d\n", r->numC);
+        printf("numcaballos %d \n", r->numC);
     }
     for (i = 0; i < r->numC; i++) {
         printf("\tCaballo %d -> cotizacion %lf\n", i + 1, cotizaciones[i]);
@@ -207,7 +207,7 @@ int imprimeResApuestas(infoApuestas *r, int prim, int sec, int terc){
     for (i = 0; i < r->numA; i++) {
         ganancia = r->dinero[prim - 1][i] + r->dinero[sec - 1][i] + r->dinero[terc - 1][i];
         if (ganancia > 0) {
-            printf("\tApostador %d -> ganancia %lf\n", i, ganancia);
+            printf("\tApostador %d -> ganancia %lf\n", i + 1, ganancia);
         }
     }
     return 0;

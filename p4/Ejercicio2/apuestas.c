@@ -124,7 +124,7 @@ infoApuestas *paraApuestas(Ret *r){
         msgsnd(r->cola, (struct msgbuf *) &m, sizeof(mens) - sizeof(long), IPC_NOWAIT);
         kill(r->pidApostador, SIGINT);
         waitpid(r->pidGestor, NULL, 0);
-        printf("La funcion para apuestas intenta recibir resultados de cola %d tipo %d\n", r->cola, r->tipo);
+        printf("%d ha muerto, paraApuestas intenta recibir resultados de cola %d tipo %d\n", r->pidGestor, r->cola, r->tipo);
         msgrcv(r->cola, (struct msgbuf *) resultados, sizeof(infoApuestas) - sizeof(long), RESULTADO_TIPO, 0);
         printf("Hola after receive de paraApeustas\n");
         return resultados;
